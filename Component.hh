@@ -12,16 +12,17 @@ class   Component {
   };
 
   std::string   _name;
+  std::string   _type;
   state         _value;
 
  public:
-  Component(std::string = "");
+  Component(std::string = "", std::string = "");
   ~Component();
 
   std::string   getName() const;
+  std::string   getType() const;
   state         getValue() const;
 
-  void  setName(const std::string&);
   void  setValue(const state &);
 };
 
