@@ -17,7 +17,7 @@
 #include <iostream>
 #include <string>
 
-void print_test();
+void test_print();
 
 class Error : public std::exception {
 public:

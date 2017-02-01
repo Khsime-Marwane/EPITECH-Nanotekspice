@@ -9,7 +9,7 @@
 // Last update Wed Feb  1 06:29:37 2017 Marwane
 //
 
-#include "../../include/Errors.hh"
+#include "Errors.hh"
 
 int main() {
   test_print();

@@ -5,11 +5,12 @@
 ## Login   <marwane.khsime@epitech.eu@epitech.eu>
 ##
 ## Started on  Wed Feb  1 03:59:07 2017 Marwane Khsime
-## Last update Wed Feb  1 06:32:10 2017 Marwane Khsime
+## Last update Wed Feb  1 07:16:43 2017 Marwane Khsime
 ##
 
+CPPFLAGS			+= -I./../include/
 CPPFLAGS			+= -c -W -Wall -Werror -std=c++11
-LIBNAME				= -L./../libnanotekspice.a -l./../libnanotekspice.a
+LIBNAME				= ./../libnanotekspice.a
 
 CPP						= g++
 
@@ -25,7 +26,7 @@ NAME 					= nanotekspice_test
 
 $(NAME):			$(OBJS)
 							make -C ./../
-							$(CPP) $(OBJS) -o $(NAME) $(LDFLAGS)
+							$(CPP) $(OBJS) -o $(NAME) $(LIBNAME)
 
 all:					$(NAME)
 
