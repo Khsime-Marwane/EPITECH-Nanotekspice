@@ -12,6 +12,9 @@
 #include "Errors.hh"
 
 int main() {
+  Error err(0, "", 0);
+
+  (void)err;
   test_print();
   return 0;
 }

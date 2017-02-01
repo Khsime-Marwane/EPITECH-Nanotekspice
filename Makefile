@@ -5,34 +5,37 @@
 ## Login   <marwane.khsime@epitech.eu@epitech.eu>
 ##
 ## Started on  Wed Feb  1 03:59:07 2017 Marwane Khsime
-## Last update Wed Feb  1 04:58:16 2017 Marwane Khsime
+## Last update Wed Feb  1 08:31:37 2017 Marwane
 ##
 
 CPPFLAGS	+= -c -W -Wall -Werror -std=c++11
 CPPFLAGS	+= -I./include/
 
-RM				= rm -rf
+RM		= rm -rf
 
 SRCDIR		= ./src/
 
-SRC				= $(SRCDIR)C4001
+SRC		= $(SRCDIR)C4001
 
-OBJS			=	$(SRC:.cpp=.o)
+OBJS		= $(SRC:.cpp=.o)
 
-NAME 			= libnanotekspice.a
+NAME 		= libnanotekspice.a
 
 $(NAME):	$(OBJS)
-					ar rc $(NAME) $(OBJS)
-					ranlib $(NAME)
+		ar rc $(NAME) $(OBJS)
+		ranlib $(NAME)
 
-all:	$(NAME)
+all:		$(NAME)
 
 clean:
-			$(RM) $(OBJS)
+		$(RM) $(OBJS)
 
-fclean: clean
-			$(RM) $(NAME)
+fclean: 	clean
+		$(RM) $(NAME)
 
-re: fclean all
+re: 		fclean all
 
-.PHONY:	all clean fclean re
+test:
+		./__tests__/./run.sh
+
+.PHONY:		all clean fclean re
