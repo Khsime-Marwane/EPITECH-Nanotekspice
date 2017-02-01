@@ -17,6 +17,8 @@
 #include <iostream>
 #include <string>
 
+void print_test();
+
 class Error : public std::exception {
 public:
   /// Constructor
