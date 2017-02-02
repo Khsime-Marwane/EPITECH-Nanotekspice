@@ -9,7 +9,11 @@
 // Last update Wed Feb  1 02:17:04 2017 Marwane Khsime
 //
 
-#ifndef _CHIPSET4001_HH_
-#define _CHIPSET4001_HH_
+#ifndef _C4001_HH_
+#define _C4001_HH_
 
-#endif /* end of include guard: _CHIPSET4001_HH_ */
+#include "IComponent.hh"
+#include "cpp_nanotekspice_parser_hhp"
+#include <string>
+
+#endif /* end of include guard: _C4001_HH_ */

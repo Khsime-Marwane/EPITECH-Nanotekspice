@@ -5,7 +5,7 @@
 ## Login   <marwane.khsime@epitech.eu@epitech.eu>
 ##
 ## Started on  Wed Feb  1 03:59:07 2017 Marwane Khsime
-## Last update Wed Feb  1 08:31:37 2017 Marwane
+## Last update Wed Feb  1 08:33:06 2017 Marwane
 ##
 
 CPPFLAGS	+= -c -W -Wall -Werror -std=c++11
@@ -35,7 +35,7 @@ fclean: 	clean
 
 re: 		fclean all
 
-test:
+tests:
 		./__tests__/./run.sh
 
 .PHONY:		all clean fclean re
