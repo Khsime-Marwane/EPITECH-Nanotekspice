@@ -8,7 +8,7 @@
 ## Last update Thu Feb  2 05:55:43 2017 Marwane
 ##
 
-CPPFLAGS	+= -c -W -Wall -Werror -std=c++11
+CPPFLAGS	+= -c -W -Wall -Wextra -Werror -std=c++11
 CPPFLAGS	+= -I./include/
 
 RM			= rm -rf
