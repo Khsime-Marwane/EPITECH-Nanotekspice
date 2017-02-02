@@ -8,9 +8,16 @@
 
 #include "Parser.hpp"
 
-Parser::Parser() : nts::IParser() {
+Parser::Parser(char *file_content) {
 
-    // Create the tree's root
+  std::ifstream file_c(file_content);
+  std::string   line;
+  if (file.is_open())
+    while (getline(file, line))
+      this->file.push_back(line);
+  file_c.close();
+
+  // Create the tree's root
     this->treeRoot = new nts::t_ast_node(new std::vector<nts::t_ast_node* >);
     this->treeRoot->lexeme = "Default";
     this->treeRoot->type = nts::ASTNodeType::DEFAULT;

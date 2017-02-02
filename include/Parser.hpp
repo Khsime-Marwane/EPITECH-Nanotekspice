@@ -10,6 +10,7 @@
 # define _PARSER_HPP_
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "IParser.hpp"
 
@@ -23,7 +24,7 @@
 class   Parser : public nts::IParser {
 public:
 
-Parser();
+Parser(char *file_content);
 virtual ~Parser();
 
 nts::t_ast_node *getRoot() const;
@@ -32,7 +33,7 @@ void parseTree(nts::t_ast_node& root);
 nts::t_ast_node *createTree();
 
 
-private:
+ public:
 nts::t_ast_node *treeRoot;
 std::vector<std::string> file;
 };
