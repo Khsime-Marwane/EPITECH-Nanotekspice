@@ -15,7 +15,7 @@ RM		= rm -rf
 
 SRCDIR		= ./src/
 
-SRC		= $(SRCDIR)C4001
+SRC		= $(SRCDIR)Parser.cpp
 
 OBJS		= $(SRC:.cpp=.o)
 
