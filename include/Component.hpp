@@ -1,8 +1,8 @@
-#ifndef COMPONENT_H_
-#define COMPONENT_H_
+#ifndef _COMPONENT_HPP_
+#define _COMPONENT_HPP_
 
 #include <iostream>
-#include "IComponent.hh"
+#include "IComponent.hpp"
 
 class   Component {
 
@@ -21,4 +21,4 @@ class   Component {
   void  setValue(const nts::Tristate &);
 };
 
-#endif
+#endif /* _COMPONENT_HPP_ */

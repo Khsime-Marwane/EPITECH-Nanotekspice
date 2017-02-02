@@ -9,8 +9,8 @@
 // Last update Tue Jan 31 20:33:36 2017 Marwane Khsime
 //
 
-#ifndef _ERRORS_HH_
-#define _ERRORS_HH_
+#ifndef _ERRORS_HPP_
+#define _ERRORS_HPP_
 
 #include <exception>
 #include <fstream>
@@ -43,4 +43,4 @@ private:
   int level;
 };
 
-#endif /* end of include guard: _ERRORS_HH_ */
+#endif /* end of include guard: _ERRORS_HPP_ */

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Component.hh"
+#include "Component.hpp"
 
 Component::Component(std::string name, std::string type)
 {

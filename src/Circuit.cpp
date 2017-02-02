@@ -1,4 +1,4 @@
-#include "Circuit.hh"
+#include "Circuit.hpp"
 
 Circuit::Circuit(int id)
 {

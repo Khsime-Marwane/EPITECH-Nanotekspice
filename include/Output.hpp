@@ -9,11 +9,11 @@
 // Last update Wed Feb  1 09:49:17 2017 Marwane Khsime
 //
 
-#ifndef _OUTPUT_HH_
-#define _OUTPUT_HH_
+#ifndef _OUTPUT_HPP_
+#define _OUTPUT_HPP_
 
-#include "IComponent.hh"
-#include "cpp_nanotekspice_parser_hhp"
+#include "IComponent.hpp"
+#include "IParser.hpp"
 
 #include <iostream>
 #include <string>
@@ -39,4 +39,4 @@ private:
 };
 }
 
-#endif /* end of include guard: _OUTPUT_HH_ */
+#endif /* end of include guard: _OUTPUT_HPP_ */

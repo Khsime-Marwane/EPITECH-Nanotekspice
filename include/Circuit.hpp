@@ -1,9 +1,9 @@
-#ifndef CIRCUIT_H_
-#define CIRCUIT_H_
+#ifndef _CIRCUIT_HPP_
+#define _CIRCUIT_HPP_
 
 #include <vector>
 #include <iostream>
-#include "Component.hh"
+#include "Component.hpp"
 
 class   Circuit
 {
@@ -20,4 +20,4 @@ class   Circuit
   int     getId();
 };
 
-#endif
+#endif  /* _CIRCUIT_HPP_ */

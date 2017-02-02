@@ -6,10 +6,10 @@
 // Login   <marwane.khsime@epitech.eu@epitech.eu>
 //
 // Started on  Wed Feb  1 02:16:32 2017 Marwane Khsime
-// Last update Wed Feb  1 02:16:37 2017 Marwane Khsime
+// Last update Thu Feb  2 04:19:53 2017 Marwane
 //
 
-#include "Errors.hh"
+#include "Errors.hpp"
 #include <iostream>
 #include <string>
 
