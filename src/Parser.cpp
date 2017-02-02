@@ -97,7 +97,7 @@ nts::t_ast_node *Parser::createTree() {
               tmp->value = (*it);
               this->sections_t->children->push_back(tmp);
             }
-          if ((*it).find('#') >= 0 && (*it).find('#') <= (*it).length())
+          if ((*it).find('#') <= (*it).length())
             {
               nts::t_ast_node *tmp = new nts::t_ast_node(NULL);
               tmp->type = nts::ASTNodeType::STRING;
