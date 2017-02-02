@@ -13,8 +13,20 @@ Parser::Parser(char *file_content) {
   std::ifstream file_c(file_content);
   std::string   line;
   if (file_c.is_open())
-    while (getline(file_c, line))
-      this->file.push_back(line);
+    {
+      while (getline(file_c, line))
+        {
+          int pos_end = line.length();
+          if (line.find('#') > 0 && line.find('#') <= line.length())
+            {
+              pos_end = line.find('#');
+              this->file.push_back(line.substr(0, pos_end));
+              this->feed(line.substr(pos_end));
+            }
+          else
+            this->file.push_back(line);
+        }
+    }
   file_c.close();
 
   // Create the tree's root
