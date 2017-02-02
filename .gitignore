@@ -1,9 +1,10 @@
 .idea/
 *~
 *#
-CMakeLists.txt
+CMakeLi	sts.txt
 cmake*
 a.out
 *.a
 *.o
 vscode
+vgcore.*
