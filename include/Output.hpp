@@ -21,7 +21,7 @@
 
 namespace nts {
 
-class Output : IComponent {
+class Output : nts::IComponent {
 
 public:
   Output();
@@ -34,7 +34,7 @@ public:
 
 private:
   nts::Tristate value;
-  IComponent *pins[1];
+  nts::IComponent *pins[1];
   std::pair<size_t, size_t> links;
 };
 }

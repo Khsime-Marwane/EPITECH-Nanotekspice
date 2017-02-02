@@ -6,15 +6,14 @@
 // Login   <marwane.khsime@epitech.eu>
 //
 // Started on  Wed Feb  1 05:24:08 2017 Marwane
-// Last update Wed Feb  1 06:29:37 2017 Marwane
+// Last update Thu Feb  2 05:54:38 2017 Marwane
 //
 
-#include "Errors.hh"
+#include "Parser.hpp"
 
 int main() {
-  Error err(0, "", 0);
+  Parser	p;
 
-  (void)err;
-  test_print();
+  (void)p;
   return 0;
 }
