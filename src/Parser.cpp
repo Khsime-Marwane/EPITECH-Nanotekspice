@@ -6,7 +6,7 @@
 // Last Modified time: 2017-02-02 04:44:16
 //
 
-#include "../include/Parser.hpp"
+#include "Parser.hpp"
 
 Parser::Parser() : nts::IParser() {
 
@@ -27,7 +27,8 @@ Parser::~Parser() {
 }
 
 void    Parser::feed(std::string const& input) {
-    (void)input;
+    if (!input.empty())
+        this->file.push_back(input);
 }
 
 void    Parser::parseTree(nts::t_ast_node &root) {

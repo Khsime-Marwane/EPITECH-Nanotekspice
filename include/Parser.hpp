@@ -34,6 +34,7 @@ nts::t_ast_node *createTree();
 
 private:
 nts::t_ast_node *treeRoot;
+std::vector<std::string> file;
 };
 
 #endif /* _PARSER_HPP_ */
