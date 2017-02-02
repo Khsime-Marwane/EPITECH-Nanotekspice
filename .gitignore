@@ -3,3 +3,7 @@
 *#
 CMakeLists.txt
 cmake*
+a.out
+*.a
+*.o
+vscode
