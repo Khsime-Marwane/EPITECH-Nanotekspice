@@ -128,7 +128,7 @@ void  Parser::loadFile_c(char *file_content)
       file_c.close();
     } catch (badExtensionFile const &e) {
       std::cerr << "Error : " << e.what() << std::endl;
-      std::abort();
+      exit(0);
     }
 }
 
