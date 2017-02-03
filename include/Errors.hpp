@@ -22,25 +22,30 @@ void test_print();
 class Error : public std::exception {
 public:
   /// Constructor
-  Error(int _errorID, const std::string &_message, int _level) throw()
-      : errorID(_errorID), message(_message), level(_level) {}
+  Error(const std::string &_message, int _level) throw()
+      : message(_message), level(_level) {}
   /// Destructor
   virtual ~Error() throw() {}
 
 public:
   /// Get the description of the error
-  virtual const char *what() const throw() { return this->message.c_str(); }
+  const char *what() const throw() { return this->message.c_str(); }
 
   /// Get the level of the error
   int getErrorLevel() const throw() { return this->level; }
 
 private:
-  /// ID of the error
-  int errorID;
   /// Description of the error
   std::string message;
   /// Level of the error
   int level;
+};
+
+class badExtensionFile : public Error
+{
+ public:
+  badExtensionFile(const std::string &_message, int _level) : Error(_message, _level){}
+  virtual ~badExtensionFile() throw(){}
 };
 
 #endif /* end of include guard: _ERRORS_HPP_ */

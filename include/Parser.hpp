@@ -17,13 +17,18 @@
 class   Parser : public nts::IParser {
  public:
 
-  Parser(char *file_content);
+  Parser(int  ac, char **av);
   virtual ~Parser();
 
   nts::t_ast_node *getRoot() const;
   void feed(std::string const& input);
   void parseTree(nts::t_ast_node& root);
   nts::t_ast_node *createTree();
+
+ private:
+  void  loadFile_c(char *file_content);
+  void  loadComp_values(int ac, char **av);
+  void  setDefaultTree();
 
  public:
   nts::t_ast_node *treeRoot;
