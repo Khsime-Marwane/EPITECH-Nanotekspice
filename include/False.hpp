@@ -1,5 +1,5 @@
 //
-// Output.hh for Output in
+// False.hh for False in
 // /home/marwane/Projets/Epitech/CPP/cpp_nanotekspice/include/
 //
 // Made by Marwane Khsime
@@ -9,8 +9,8 @@
 // Last update Wed Feb  1 09:49:17 2017 Marwane Khsime
 //
 
-#ifndef _OUTPUT_HPP_
-#define _OUTPUT_HPP_
+#ifndef _FALSE_HPP_
+#define _FALSE_HPP_
 
 #include <iostream>
 #include <string>
@@ -19,11 +19,11 @@
 #include "IComponent.hpp"
 #include "Errors.hpp"
 
-class Output : nts::IComponent {
+class False : nts::IComponent {
 
 public:
-  Output();
-  virtual ~Output();
+  False();
+  virtual ~False();
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
@@ -39,4 +39,4 @@ private:
   std::pair<size_t, size_t> links;
 };
 
-#endif /* end of include guard: _OUTPUT_HPP_ */
+#endif /* end of include guard: _FALSE_HPP_ */
