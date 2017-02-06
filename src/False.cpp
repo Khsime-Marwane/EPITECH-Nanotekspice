@@ -24,8 +24,7 @@ nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
   }
-  throw Error("ERROR : [True COMPONENT | COMPUTING] : impossible to compute a True component.\n");
-  return nts::Tristate::UNDEFINED;
+  return this->value;
 }
 
 nts::Tristate True::getValue() const { return this->value; }
@@ -42,9 +41,9 @@ void True::SetLink(size_t pin_num_this, nts::IComponent &component,
   this->links.first = pin_num_this;
   this->links.second = pin_num_target;
   this->pins[0] = &component;
-  try {
-    this->pins[0]->SetLink(this->links.second, *this, this->links.first);
-  } catch (const std::exception& err) {
-    throw err;
-  }
+  // try {
+  //   this->pins[0]->SetLink(this->links.second, *this, this->links.first);
+  // } catch (const std::exception& err) {
+  //   throw err;
+  // }
 }

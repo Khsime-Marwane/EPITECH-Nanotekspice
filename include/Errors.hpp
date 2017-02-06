@@ -17,8 +17,6 @@
 #include <iostream>
 #include <string>
 
-void test_print();
-
 class Error : public std::exception {
 public:
   /// Constructor
@@ -27,8 +25,10 @@ public:
   /// Destructor
   virtual ~Error() throw() {}
 
+public:
   /// Get the description of the error
-  virtual const char *what() const throw() { return this->message.c_str(); }
+  const char *what() const throw() { return this->message.c_str(); }
+
 
 private:
   /// Description of the error
@@ -42,17 +42,4 @@ class badExtensionFile : public Error
   virtual ~badExtensionFile() throw(){}
 };
 
-class undefinedComponent : public Error
-{
- public:
-  undefinedComponent(const std::string &_message) : Error(_message){}
-  virtual ~undefinedComponent() throw(){}
-};
-
-class unknownSection : public Error
-{
- public:
-  unknownSection(const std::string &_message) : Error(_message){}
-  virtual ~unknownSection() throw(){}
-};
 #endif /* end of include guard: _ERRORS_HPP_ */

@@ -19,7 +19,7 @@
 #include "IComponent.hpp"
 #include "Errors.hpp"
 
-class Input : nts::IComponent {
+class Input : public nts::IComponent {
 
 public:
   Input();
