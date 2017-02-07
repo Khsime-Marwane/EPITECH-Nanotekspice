@@ -122,7 +122,7 @@ nts::t_ast_node  *Parser::generateTree()
           if (regParse->exec((*it).c_str(), regParse->str_comment))
             this->strings_t->children->push_back(regParse->getString());
           if (!regParse->checkLine((*it).c_str()))
-              throw incorrectLine("Line : " + std::to_string(i) + " is incorrect");
+            throw incorrectLine("Line : " + std::to_string(i) + " is incorrect");
         }
       return (this->treeRoot);
     }
