@@ -1,3 +1,4 @@
+#include <regex>
 #include "RegParse.hpp"
 
 RegParse::RegParse()
@@ -38,37 +39,13 @@ void  RegParse::generateAllowedVec()
 
 bool RegParse::exec(const char* str_request, const char* str_regex)
 {
-  int err;
-  regex_t preg;
-  err = regcomp(&preg, str_regex, REG_EXTENDED | REG_NEWLINE);
-  if (err == 0)
+  std::smatch m;
+  std::string tmp(str_request);
+  if (std::regex_match(tmp, m, std::regex(str_regex)))
     {
-      int match;
-      size_t nmatch = 0;
-      regmatch_t *pmatch = NULL;
-      nmatch = preg.re_nsub;
-      pmatch = (regmatch_t*)(malloc(sizeof (*pmatch) * nmatch));
-      if (pmatch)
-        {
-          match = regexec(&preg, str_request, nmatch, pmatch, 0);
-          regfree(&preg);
-          if (match == 0)
-            {
-              char *res = NULL;
-              int start = pmatch[0].rm_so;
-              int end = pmatch[0].rm_eo;
-              size_t size = end - start;
-              res = (char*)(malloc(sizeof(*res) * (size + 1)));
-              if (res)
-                {
-                  strncpy(res, &str_request[start], size);
-                  res[size] = '\0';
-                  this->str_match = res;
-                  free(res);
-                  return (true);
-                }
-            }
-        }
+      std::smatch::iterator it = m.begin();
+      this->str_match = *it;
+      return (true);
     }
   return (false);
 }
