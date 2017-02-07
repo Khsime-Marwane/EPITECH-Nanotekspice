@@ -82,16 +82,15 @@ void    C4071::SetLink(size_t pin_num_this,
   if (pin_num_this != 1) {
     throw Error("ERROR : [C4071 COMPONENT | LINK] : pin does not exist.\n");
   }
-  std::cout << "OK ?" << std::endl;
-  this->links[pin_num_this].first = pin_num_this;
-  this->links[pin_num_this].second = pin_num_target;
-  this->pins[pin_num_this] = &component;
-  std::cout << "OK" << std::endl;
-  try {
-    this->pins[pin_num_this]->SetLink(this->links[pin_num_this].second, *this, this->links[pin_num_this].first);
-    std::cout << "coucou" << std::endl;
-  } catch (const std::exception& err) {
-    throw err;
+  if (!this->pins[pin_num_this]) {
+    this->links[pin_num_this].first = pin_num_this;
+    this->links[pin_num_this].second = pin_num_target;
+    this->pins[pin_num_this] = &component;
+    try {
+        this->pins[pin_num_this]->SetLink(this->links[pin_num_this].second, *this, this->links[pin_num_this].first);
+    } catch (const std::exception& err) {
+        throw err;
+    }
   }
 }
 

@@ -38,12 +38,14 @@ void True::SetLink(size_t pin_num_this, nts::IComponent &component,
   if (pin_num_this != 1) {
     throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
   }
-  this->links.first = pin_num_this;
-  this->links.second = pin_num_target;
-  this->pins[0] = &component;
-  // try {
-  //   this->pins[0]->SetLink(this->links.second, *this, this->links.first);
-  // } catch (const std::exception& err) {
-  //   throw err;
-  // }
+  if (!this->pins[pin_num_this]) {
+    this->links.first = pin_num_this;
+    this->links.second = pin_num_target;
+    this->pins[0] = &component;
+    try {
+      this->pins[0]->SetLink(this->links.second, *this, this->links.first);
+    } catch (const std::exception& err) {
+      throw err;
+    }
+  }
 }
