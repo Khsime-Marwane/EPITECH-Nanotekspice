@@ -42,4 +42,11 @@ class badExtensionFile : public Error
   virtual ~badExtensionFile() throw(){}
 };
 
+class incorrectLine : public Error
+{
+ public:
+  incorrectLine(const std::string &_message) : Error(_message){}
+  virtual ~incorrectLine() throw(){}
+};
+
 #endif /* end of include guard: _ERRORS_HPP_ */

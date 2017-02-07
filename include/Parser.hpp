@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include "IParser.hpp"
+#include "RegParse.hpp"
 
 class   Parser : public nts::IParser {
  public:
@@ -29,9 +30,9 @@ class   Parser : public nts::IParser {
   void  loadFile_c(char *file_content);
   void  loadComp_values(int ac, char **av);
   void  setDefaultTree();
-  void  generateAllowedVec();
   nts::t_ast_node  *generateTree();
   void  checkNormFile();
+  RegParse  *regParse;
 
  public:
   nts::t_ast_node *treeRoot;
@@ -43,8 +44,6 @@ class   Parser : public nts::IParser {
   nts::t_ast_node *links_t;
   nts::t_ast_node *linksend_t;
   nts::t_ast_node *sections_t;
-  std::vector<std::string>  allowed_chips;
-  std::vector<std::string>  allowed_comps;
 };
 
 #endif /* _PARSER_HPP_ */

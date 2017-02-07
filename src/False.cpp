@@ -11,6 +11,7 @@
 
 #include "True.hpp"
 
+// TODO: Ajouter les exit (catch std::exception)
 True::True() {
   this->value = nts::Tristate::TRUE;
   this->pins[0] = NULL;
