@@ -1,5 +1,5 @@
 //
-// False.cpp for False in
+// True.cpp for True in
 // /home/marwane/Projets/Epitech/CPP/cpp_nanotekspice/src/
 //
 // Made by Marwane Khsime
@@ -9,34 +9,35 @@
 // Last update Thu Feb  2 04:19:35 2017 Marwane
 //
 
-#include "False.hpp"
+#include "True.hpp"
 
-False::False() {
-  this->value = nts::Tristate::FALSE;
+// TODO: Ajouter les exit (catch std::exception)
+True::True() {
+  this->value = nts::Tristate::TRUE;
   this->pins[0] = NULL;
   this->links.first = 0;
   this->links.second = 0;
 }
 
-False::~False() {}
+True::~True() {}
 
-nts::Tristate False::Compute(size_t pin_num_this) {
+nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [FALSE COMPONENT | COMPUTING] : pin does not exist.\n");
+    throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
   }
   return this->value;
 }
 
-nts::Tristate False::getValue() const { return this->value; }
+nts::Tristate True::getValue() const { return this->value; }
 
-void False::Dump() const {
-    std::cout << "[FALSE COMPONENT] | Value : " << this->value << std::endl;
+void True::Dump() const {
+    std::cout << "[True COMPONENT] | Value : " << this->value << std::endl;
 }
 
-void False::SetLink(size_t pin_num_this, nts::IComponent &component,
+void True::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [FALSE COMPONENT | LINK] : pin does not exist.\n");
+    throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
   }
   if (!this->pins[pin_num_this]) {
     this->links.first = pin_num_this;

@@ -19,7 +19,7 @@
 #include "IComponent.hpp"
 #include "Errors.hpp"
 
-class True : nts::IComponent {
+class True : public nts::IComponent {
 
 public:
   True();
