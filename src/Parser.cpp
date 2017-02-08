@@ -102,12 +102,18 @@ nts::t_ast_node  *Parser::generateTree()
   if (this->file.size() > 0) {
       std::string section;
       int i = 1;
+      int chipsets = 0;
+      int links = 0;
       for (std::vector<std::string>::iterator it = this->file.begin(); it != this->file.end(); ++it, ++i)
         {
           if (section == ".chipsets:" && (*it).find('#') != 0 && regParse->execComps((*it).c_str()))
-            this->comps_t->children->push_back(regParse->getComps());
+            {
+              chipsets = 1;
+              this->comps_t->children->push_back(regParse->getComps());
+            }
           if (section == ".links:" && (*it).find('#') != 0 && regParse->exec((*it).c_str(), regParse->regex_links))
             {
+              links = 1;
               this->links_t->children->push_back(regParse->getLinks());
               this->linksend_t->children->push_back(regParse->getLinks_end());
             }
@@ -123,6 +129,12 @@ nts::t_ast_node  *Parser::generateTree()
             this->strings_t->children->push_back(regParse->getString());
           if (!regParse->checkLine((*it).c_str()))
             throw incorrectLine("Line : " + std::to_string(i) + " is incorrect");
+        }
+      if (!chipsets || !links)
+        {
+          std::cout << "chipset : " << chipsets << " | links : " << links << std::endl;
+          std::string tmp = (!chipsets) ? "chipset" : "links";
+          throw missingSection("No " + tmp + " section");
         }
       return (this->treeRoot);
     }

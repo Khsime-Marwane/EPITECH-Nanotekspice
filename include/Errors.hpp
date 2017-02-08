@@ -49,4 +49,11 @@ class incorrectLine : public Error
   virtual ~incorrectLine() throw(){}
 };
 
+class missingSection : public Error
+{
+ public:
+  missingSection(const std::string &_message) : Error(_message){}
+  virtual ~missingSection() throw(){}
+};
+
 #endif /* end of include guard: _ERRORS_HPP_ */
