@@ -56,4 +56,17 @@ class missingSection : public Error
   virtual ~missingSection() throw(){}
 };
 
+class sameName : public Error
+{
+ public:
+  sameName(const std::string &_message) : Error(_message){}
+  virtual ~sameName() throw(){}
+};
+
+class missingInput : public Error
+{
+ public:
+  missingInput(const std::string &_message) : Error(_message){}
+  virtual ~missingInput() throw(){}
+};
 #endif /* end of include guard: _ERRORS_HPP_ */

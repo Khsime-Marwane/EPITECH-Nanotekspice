@@ -33,6 +33,7 @@ class   Parser : public nts::IParser {
   nts::t_ast_node  *generateTree();
   void  checkNormFile();
   RegParse  *regParse;
+  void  checkTree();
 
  public:
   nts::t_ast_node *treeRoot;

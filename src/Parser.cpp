@@ -31,6 +31,7 @@ void    Parser::parseTree(nts::t_ast_node &root) {
 nts::t_ast_node *Parser::createTree() {
   nts::t_ast_node *tmp;
   tmp = this->generateTree();
+  this->checkTree();
   return (tmp);
 }
 
@@ -139,4 +140,22 @@ nts::t_ast_node  *Parser::generateTree()
       return (this->treeRoot);
     }
   return NULL;
+}
+
+void  Parser::checkTree()
+{
+  int same = 0;
+  int i = 0;
+  for (std::map<std::string, int>::iterator it = this->comp_values.begin(); it != this->comp_values.end(); ++it, ++i)
+    {
+      for (std::vector<struct nts::s_ast_node*>::iterator it2 = this->comps_t->children->begin(); it2 != this->comps_t->children->end(); ++it2)
+        {
+          if (it->first == (*it2)->value && !same)
+            same++;
+          else if (it->first == (*it2)->value  && same)
+              throw sameName("Several components share the same name");
+        }
+    }
+  if (i < regParse->nb_inputs || !same)
+    throw missingInput("Missing input value on command line");
 }
