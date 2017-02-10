@@ -7,7 +7,7 @@
 //
 
 #include <algorithm>
-#include "Parser.hpp"
+#include "../include/Parser.hpp"
 #include "Errors.hpp"
 
 Parser::Parser(int ac, char **av) {
@@ -15,23 +15,63 @@ Parser::Parser(int ac, char **av) {
   this->loadFile_c(av[1]);
   this->loadComp_values(ac,av);
   this->setDefaultTree();
+
+  this->availableCircuits = {
+    "4001", "4008", "4011", "4013", "4017",
+    "4030", "4040", "4069", "4071", "4081",
+    "4094", "4514", "4081", "2716"
+  };
 }
 
 Parser::~Parser() {}
 
+// FEED Part
 void    Parser::feed(std::string const& input) {
   if (!input.empty())
     this->file.push_back(input);
 }
 
+// PARSE TREE PART
 void    Parser::parseTree(nts::t_ast_node &root) {
-  (void)root;
+  // Basic Checks
+  if (basicChecks(root)) return ;
+
+  // Build Circuit and check logic errors
+  if (createCircuit(root)) return ;
 }
 
+bool    Parser::basicChecks(const nts::t_ast_node &root) {
+  if (!root.children || root.children->size() != 6) return true;
+  if (!root.children->at(2)->children->size() ||
+      !root.children->at(3)->children->size() ||
+      !root.children->at(4)->children->size()) return true;
+  if (!doesContainOneCircuit(*root.children->at(2)->children)) return true;
+  return false;
+}
+
+bool    Parser::doesContainOneCircuit(std::vector<nts::t_ast_node *> &components) {
+  unsigned int count = 0;
+
+  for (std::vector<nts::t_ast_node *>::iterator it = components.begin(); it != components.end(); ++it) {
+        std::cout << (*it)->lexeme << std::endl;
+    if (std::find(this->availableCircuits.begin(),
+                  this->availableCircuits.end(),
+                  (*it)->lexeme) != this->availableCircuits.end())
+      count++;
+  }
+  if (count != 1) throw Error("No circuit found or there is more than one.\n");
+  return count == 1 ? true : false;
+}
+
+bool    Parser::createCircuit(nts::t_ast_node &root) {
+  (void)root;
+  return true; 
+}
+
+// CREATE TREE PART
 nts::t_ast_node *Parser::createTree() {
   nts::t_ast_node *tmp;
   tmp = this->generateTree();
-  this->checkTree();
   return (tmp);
 }
 
@@ -140,22 +180,4 @@ nts::t_ast_node  *Parser::generateTree()
       return (this->treeRoot);
     }
   return NULL;
-}
-
-void  Parser::checkTree()
-{
-  int same = 0;
-  int i = 0;
-  for (std::map<std::string, int>::iterator it = this->comp_values.begin(); it != this->comp_values.end(); ++it, ++i)
-    {
-      for (std::vector<struct nts::s_ast_node*>::iterator it2 = this->comps_t->children->begin(); it2 != this->comps_t->children->end(); ++it2)
-        {
-          if (it->first == (*it2)->value && !same)
-            same++;
-          else if (it->first == (*it2)->value  && same)
-              throw sameName("Several components share the same name");
-        }
-    }
-  if (i < regParse->nb_inputs || !same)
-    throw missingInput("Missing input value on command line");
 }

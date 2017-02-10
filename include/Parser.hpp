@@ -12,8 +12,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 #include "IParser.hpp"
 #include "RegParse.hpp"
+#include "Factory.hpp"
+
+// TODO : Pourquoi pas créer une classe CreateTree et ParseTree pour mieux
+// segmenter le code et la classe Parser
 
 class   Parser : public nts::IParser {
  public:
@@ -27,6 +32,7 @@ class   Parser : public nts::IParser {
   nts::t_ast_node *createTree();
 
  private:
+  // createTree's methods
   void  loadFile_c(char *file_content);
   void  loadComp_values(int ac, char **av);
   void  setDefaultTree();
@@ -35,8 +41,19 @@ class   Parser : public nts::IParser {
   RegParse  *regParse;
   void  checkTree();
 
+  // parseTree's methods
+  bool    basicChecks(const nts::t_ast_node &root);
+  bool    doesContainOneCircuit(std::vector<nts::t_ast_node *> &components);
+  bool    createCircuit(nts::t_ast_node &root);
+
  public:
+
   nts::t_ast_node *treeRoot;
+  nts::IComponent *circuit;
+
+  Factory factory;
+  std::vector<std::string> availableCircuits;  
+
   std::vector<std::string> file;
   std::map<std::string, int>  comp_values;
   nts::t_ast_node *strings_t;

@@ -21,7 +21,6 @@ Factory::~Factory() {
 }
 
 nts::IComponent *Factory::create(const std::string &component) {
-
     if (this->constructors.find(component) == this->constructors.end())
         return NULL;
     return this->constructors[component]();
