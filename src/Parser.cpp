@@ -7,7 +7,7 @@
 //
 
 #include <algorithm>
-#include "../include/Parser.hpp"
+#include "Parser.hpp"
 #include "Errors.hpp"
 
 Parser::Parser(int ac, char **av) {
@@ -72,6 +72,7 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
 nts::t_ast_node *Parser::createTree() {
   nts::t_ast_node *tmp;
   tmp = this->generateTree();
+  this->checkTree();
   return (tmp);
 }
 
@@ -113,6 +114,8 @@ void  Parser::loadComp_values(int ac, char **av)
         {
           std::string tmp(av[i]);
           int pos = tmp.find('=');
+          if ((pos + 1 == (int)tmp.length()) || checkComp_value(tmp.substr(pos + 1).c_str()))
+            throw missingInput("Missing input value on command line");
           this->comp_values.insert(std::pair<std::string, int>(tmp.substr(0 ,pos), atoi(tmp.substr(pos + 1).c_str())));
         }
     }
@@ -180,4 +183,70 @@ nts::t_ast_node  *Parser::generateTree()
       return (this->treeRoot);
     }
   return NULL;
+}
+
+void  Parser::checkTree()
+{
+  int same = 0;
+  int i = 0;
+  for (std::map<std::string, int>::iterator it = this->comp_values.begin(); it != this->comp_values.end(); ++it, ++i)
+    {
+      int same2 = 0;
+      for (std::vector<struct nts::s_ast_node*>::iterator it2 = this->comps_t->children->begin(); it2 != this->comps_t->children->end(); ++it2)
+        {
+          if (it->first == (*it2)->value && same < regParse->nb_inputs && !same2)
+            {
+              same++;
+              same2 = 1;
+            }
+          else if (it->first == (*it2)->value  && same2)
+              throw sameName("Several components share the same name");
+        }
+      if (!same2)
+        throw unknownInput("Unknown input specified by command line");
+    }
+  if (i < regParse->nb_inputs || !same)
+    throw missingInput("Missing input value on command line");
+  this->checkLinks();
+}
+
+void  Parser::checkLinks()
+{
+  for (std::vector<struct nts::s_ast_node*>::iterator it = this->links_t->children->begin(); it != this->links_t->children->end(); ++it)
+    {
+      int same = 0;
+      for (std::vector<struct nts::s_ast_node*>::iterator it2 = this->comps_t->children->begin(); it2 != this->comps_t->children->end(); ++it2)
+        {
+          if ((*it)->lexeme == (*it2)->value)
+            same = 1;
+        }
+      if (!same)
+        throw unknownLink("This link is unknown : " + (*it)->lexeme);
+    }
+  for (std::vector<struct nts::s_ast_node*>::iterator it = this->linksend_t->children->begin(); it != this->linksend_t->children->end(); ++it)
+    {
+      int same = 0;
+      for (std::vector<struct nts::s_ast_node*>::iterator it2 = this->comps_t->children->begin(); it2 != this->comps_t->children->end(); ++it2)
+        {
+          if ((*it)->lexeme == (*it2)->value)
+            same = 1;
+        }
+      if (!same)
+        throw unknownLink("This link is unknown : " + (*it)->lexeme);
+    }
+}
+
+bool  Parser::checkComp_value(const char* str)
+{
+  int i = 0;
+
+  while (str[i])
+    i++;
+  if (i == 1)
+    {
+      if (!(str[0] >= '0' && str[0] <= '1'))
+        throw incorrectValue("input value is incorrect");
+      return (false);
+    }
+  return (true);
 }

@@ -69,4 +69,25 @@ class missingInput : public Error
   missingInput(const std::string &_message) : Error(_message){}
   virtual ~missingInput() throw(){}
 };
+
+class unknownInput : public Error
+{
+ public:
+  unknownInput(const std::string &_message) : Error(_message){}
+  virtual ~unknownInput() throw(){}
+};
+
+class incorrectValue : public Error
+{
+ public:
+  incorrectValue(const std::string &_message) : Error(_message){}
+  virtual ~incorrectValue() throw(){}
+};
+
+class unknownLink : public Error
+{
+ public:
+  unknownLink(const std::string &_message) : Error(_message){}
+  virtual ~unknownLink() throw(){}
+};
 #endif /* end of include guard: _ERRORS_HPP_ */

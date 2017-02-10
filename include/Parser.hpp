@@ -40,6 +40,8 @@ class   Parser : public nts::IParser {
   void  checkNormFile();
   RegParse  *regParse;
   void  checkTree();
+  void  checkLinks();
+  bool  checkComp_value(const char*);
 
   // parseTree's methods
   bool    basicChecks(const nts::t_ast_node &root);
