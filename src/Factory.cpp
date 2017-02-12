@@ -6,7 +6,7 @@
 // Last Modified time: 2017-02-08 15:26:44
 //
 
-#include "../include/Factory.hpp"
+#include "Factory.hpp"
 
 Factory::Factory() {
     this->basicConstructors["true"] = std::bind(&Factory::createTrue, this);
