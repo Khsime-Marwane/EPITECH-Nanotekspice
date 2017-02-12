@@ -63,9 +63,8 @@ nts::Tristate   C4071::computeInput(size_t pin_num_this) {
 nts::Tristate   C4071::computeOutput(size_t pin_num_this) {
     if (!(pin_num_this == 3 || pin_num_this == 4 || pin_num_this == 10 || pin_num_this == 11))
         throw Error("[C4071 ComputeOutput] : Invalid Output Pin selected.\n");
-    OR_Function(this->pins[this->outputLinks[pin_num_this].first]->Compute(),
-                this->pins[this->outputLinks[pin_num_this].second]->Compute());
-    return nts::Tristate::UNDEFINED;
+    return OR_Function(this->pins[this->outputLinks[pin_num_this].first - 1]->Compute(),
+                this->pins[this->outputLinks[pin_num_this].second - 1]->Compute());
 }
 
 nts::Tristate   C4071::computeV(size_t pin_num_this) {
@@ -79,15 +78,15 @@ nts::Tristate   C4071::computeV(size_t pin_num_this) {
 void    C4071::SetLink(size_t pin_num_this,
                 nts::IComponent &component,
                 size_t pin_num_target) {
-  if (pin_num_this != 1) {
+  if (pin_num_this > 14 || !pin_num_this) {
     throw Error("ERROR : [C4071 COMPONENT | LINK] : pin does not exist.\n");
   }
-  if (!this->pins[pin_num_this]) {
+  if (!this->pins[pin_num_this - 1]) {
     this->links[pin_num_this].first = pin_num_this;
     this->links[pin_num_this].second = pin_num_target;
-    this->pins[pin_num_this] = &component;
+    this->pins[pin_num_this - 1] = &component;
     try {
-        this->pins[pin_num_this]->SetLink(this->links[pin_num_this].second, *this, this->links[pin_num_this].first);
+        this->pins[pin_num_this - 1]->SetLink(this->links[pin_num_this].second, *this, this->links[pin_num_this].first);
     } catch (const std::exception& err) {
         throw err;
     }
@@ -96,6 +95,7 @@ void    C4071::SetLink(size_t pin_num_this,
 
 void    C4071::Dump() const {
     std::cout << "[CHIPSET 4071] :" << std::endl;
+
     for (unsigned int i = 0; i < 14; i++) {
         std::cout << "Pin [" << i + 1 << "] : ";
         if (this->pins[i]) std::cout << (int)this->pins[i]->Compute(1) << std::endl;

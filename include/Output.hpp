@@ -29,9 +29,9 @@ public:
                        size_t pin_num_target);
   virtual void Dump() const;
   nts::Tristate getValue() const;
+  nts::Tristate value;
 
 private:
-  nts::Tristate value;
   nts::IComponent *pins[1];
 
   // The first value correspond to the n° of the pin of this component,

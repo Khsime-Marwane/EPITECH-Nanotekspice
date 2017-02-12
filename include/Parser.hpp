@@ -45,6 +45,7 @@ class   Parser : public nts::IParser {
   bool    basicChecks(const nts::t_ast_node &root);
   bool    doesContainOneCircuit(std::vector<nts::t_ast_node *> &components);
   bool    createCircuit(nts::t_ast_node &root);
+  const std::string getCircuitType(std::vector<nts::t_ast_node *> &components);
 
  public:
 

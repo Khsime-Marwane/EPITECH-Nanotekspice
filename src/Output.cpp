@@ -24,7 +24,8 @@ nts::Tristate Output::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [OUTPUT COMPONENT | COMPUTING] : pin does not exist.\n");
   }
-  this->value = this->pins[0]->Compute(this->links.second);
+  // if (this->value == nts::Tristate::UNDEFINED)
+  //   throw Error("ERROR : [OUTPUT COMPONENT | COMPUTING] : Undefined value used.\n");
   return this->value;
 }
 
@@ -39,7 +40,7 @@ void Output::SetLink(size_t pin_num_this, nts::IComponent &component,
   if (pin_num_this != 1) {
     throw Error("ERROR : [OUTPUT COMPONENT | LINK] : pin does not exist.\n");
   }
-  if (!this->pins[pin_num_this]) {
+  if (!this->pins[0]) {
     this->links.first = pin_num_this;
     this->links.second = pin_num_target;
     this->pins[0] = &component;

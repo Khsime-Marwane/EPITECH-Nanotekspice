@@ -53,7 +53,6 @@ bool    Parser::doesContainOneCircuit(std::vector<nts::t_ast_node *> &components
   unsigned int count = 0;
 
   for (std::vector<nts::t_ast_node *>::iterator it = components.begin(); it != components.end(); ++it) {
-        std::cout << (*it)->lexeme << std::endl;
     if (std::find(this->availableCircuits.begin(),
                   this->availableCircuits.end(),
                   (*it)->lexeme) != this->availableCircuits.end())
@@ -63,9 +62,44 @@ bool    Parser::doesContainOneCircuit(std::vector<nts::t_ast_node *> &components
   return count == 1 ? true : false;
 }
 
+const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &components) {
+  unsigned int index = 0;
+  std::string ret;
+
+  for (std::vector<nts::t_ast_node *>::iterator it = components.begin(); it != components.end(); ++it, ++index) {
+    if (std::find(this->availableCircuits.begin(),
+                  this->availableCircuits.end(),
+                  (*it)->lexeme) != this->availableCircuits.end()) {
+        ret = (*it)->lexeme;
+        components.erase(components.begin() + index);
+        return ret;
+      }
+  }
+  return "";
+}
+
 bool    Parser::createCircuit(nts::t_ast_node &root) {
-  (void)root;
-  return true; 
+  // For debug
+  // std::cout << "\nBEFORE" << std::endl;
+  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
+  //   std::cout << (*it)->lexeme << std::endl;
+  // }
+
+  this->circuit = this->factory.create(getCircuitType(*root.children->at(2)->children));
+
+  // For debug
+  // std::cout << "\nAFTER" << std::endl;
+  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
+  //   std::cout << (*it)->lexeme << std::endl;
+  // }
+
+  // Circuit Créer, reste à le remplir et à checker les erreurs.
+  this->circuit->SetLink(1, *this->factory.create("input", nts::Tristate::TRUE), 1);
+  this->circuit->SetLink(2, *this->factory.create("input", nts::Tristate::FALSE), 1);
+  this->circuit->SetLink(3, *this->factory.create("output"), 1);
+  this->circuit->Compute(3);
+  this->circuit->Dump();
+  return true;
 }
 
 // CREATE TREE PART
@@ -180,4 +214,12 @@ nts::t_ast_node  *Parser::generateTree()
       return (this->treeRoot);
     }
   return NULL;
+}
+
+int main(int argc, char **argv) {
+  Parser  parser(argc, argv);
+
+  parser.createTree();
+  parser.parseTree(*parser.getRoot());
+  return 0;
 }

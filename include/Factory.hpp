@@ -28,12 +28,14 @@ class   Factory {
         ~Factory();
 
         nts::IComponent *create(const std::string &);
+        nts::IComponent *create(const std::string &, size_t);
     private:
-        std::map<const std::string, std::function<nts::IComponent *(void)> > constructors;
+        std::map<const std::string, std::function<nts::IComponent *(void)> > basicConstructors;
+        std::map<const std::string, std::function<nts::IComponent *(size_t)> > advancedConstructors;
 
         nts::IComponent *createFalse() const;
         nts::IComponent *createTrue() const;
-        nts::IComponent *createInput() const;
+        nts::IComponent *createInput(size_t value = nts::Tristate::UNDEFINED) const;
         nts::IComponent *createOutput() const;
         nts::IComponent *createC4071() const;
 

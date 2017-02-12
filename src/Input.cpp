@@ -12,8 +12,8 @@
 #include "Input.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Input::Input() {
-  this->value = nts::Tristate::UNDEFINED;
+Input::Input(size_t  _value) {
+  this->value = _value == 0 ? nts::Tristate::FALSE : nts::Tristate::TRUE;
   this->pins[0] = NULL;
   this->links.first = 0;
   this->links.second = 0;
@@ -25,8 +25,8 @@ nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
   }
-  if (this->getValue() == nts::Tristate::UNDEFINED)
-    throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : Undefined value used.\n");
+  // if (this->value == nts::Tristate::UNDEFINED)
+  //   throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : Undefined value used.\n");
   return this->value;
 }
 
@@ -41,7 +41,7 @@ void Input::SetLink(size_t pin_num_this, nts::IComponent &component,
   if (pin_num_this != 1) {
     throw Error("ERROR : [INPUT COMPONENT | LINK] : pin does not exist.\n");
   }
-  if (!this->pins[pin_num_this]) {
+  if (!this->pins[0]) {
     this->links.first = pin_num_this;
     this->links.second = pin_num_target;
     this->pins[0] = &component;

@@ -9,21 +9,29 @@
 #include "../include/Factory.hpp"
 
 Factory::Factory() {
-    this->constructors["true"] = std::bind(&Factory::createTrue, this);
-    this->constructors["false"] = std::bind(&Factory::createFalse, this);
-    this->constructors["input"] = std::bind(&Factory::createInput, this);
-    this->constructors["output"] = std::bind(&Factory::createOutput, this);
-    this->constructors["4071"] = std::bind(&Factory::createC4071, this);
+    this->basicConstructors["true"] = std::bind(&Factory::createTrue, this);
+    this->basicConstructors["false"] = std::bind(&Factory::createFalse, this);
+    this->basicConstructors["output"] = std::bind(&Factory::createOutput, this);
+    this->basicConstructors["4071"] = std::bind(&Factory::createC4071, this);
+    
+    this->advancedConstructors["input"] = std::bind(&Factory::createInput, this, std::placeholders::_1);
 }
 
 Factory::~Factory() {
 
 }
 
-nts::IComponent *Factory::create(const std::string &component) {
-    if (this->constructors.find(component) == this->constructors.end())
+nts::IComponent *Factory::create(const std::string &component,
+                                 size_t _value) {
+    if (this->advancedConstructors.find(component) == this->advancedConstructors.end())
         return NULL;
-    return this->constructors[component]();
+    return this->advancedConstructors[component](_value);
+}
+
+nts::IComponent *Factory::create(const std::string &component) {
+    if (this->basicConstructors.find(component) == this->basicConstructors.end())
+        return NULL;
+    return this->basicConstructors[component]();
 }
 
 nts::IComponent *Factory::createFalse() const {
@@ -36,9 +44,9 @@ nts::IComponent *Factory::createTrue() const {
     return new True;
 }
 
-nts::IComponent *Factory::createInput() const {
+nts::IComponent *Factory::createInput(size_t value) const {
     std::cout << "Create INPUT" << std::endl;
-    return new Input;
+    return new Input(value);
 }
 
 nts::IComponent *Factory::createOutput() const {

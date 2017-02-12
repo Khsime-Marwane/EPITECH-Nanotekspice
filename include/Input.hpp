@@ -22,7 +22,7 @@
 class Input : public nts::IComponent {
 
 public:
-  Input();
+  Input(size_t _value);
   virtual ~Input();
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
