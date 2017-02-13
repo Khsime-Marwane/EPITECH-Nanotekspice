@@ -12,7 +12,8 @@
 #include "True.hpp"
 
 // TODO: Ajouter les exit (catch std::exception)
-True::True() {
+True::True(const std::string &name) {
+  this->name = name;
   this->value = nts::Tristate::TRUE;
   this->pins[0] = NULL;
   this->links.first = 0;
@@ -21,6 +22,16 @@ True::True() {
 
 True::~True() {}
 
+std::string True::getName() const {
+  return this->name;
+}
+
+std::string True::getType() const {
+  return "true";
+}
+
+nts::Tristate True::getValue() const { return this->value; }
+
 nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
@@ -28,7 +39,6 @@ nts::Tristate True::Compute(size_t pin_num_this) {
   return this->value;
 }
 
-nts::Tristate True::getValue() const { return this->value; }
 
 void True::Dump() const {
     std::cout << "[True COMPONENT] | Value : " << this->value << std::endl;

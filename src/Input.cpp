@@ -12,7 +12,8 @@
 #include "Input.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Input::Input(size_t  _value) {
+Input::Input(const std::string &name, size_t  _value) {
+  this->name = name;
   this->value = _value == 0 ? nts::Tristate::FALSE : nts::Tristate::TRUE;
   this->pins[0] = NULL;
   this->links.first = 0;
@@ -20,6 +21,14 @@ Input::Input(size_t  _value) {
 }
 
 Input::~Input() {}
+
+std::string Input::getName() const {
+  return this->name;
+}
+
+std::string Input::getType() const {
+  return "input";
+}
 
 nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {

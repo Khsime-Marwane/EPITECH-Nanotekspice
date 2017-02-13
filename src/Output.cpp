@@ -11,7 +11,8 @@
 
 #include "Output.hpp"
 
-Output::Output() {
+Output::Output(const std::string &name) {
+  this->name = name;
   this->value = nts::Tristate::UNDEFINED;
   this->pins[0] = NULL;
   this->links.first = 0;
@@ -19,6 +20,16 @@ Output::Output() {
 }
 
 Output::~Output() {}
+
+std::string Output::getName() const {
+  return this->name;
+}
+
+std::string Output::getType() const {
+  return "output";
+}
+
+nts::Tristate Output::getValue() const { return this->value; }
 
 nts::Tristate Output::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
@@ -28,8 +39,6 @@ nts::Tristate Output::Compute(size_t pin_num_this) {
   //   throw Error("ERROR : [OUTPUT COMPONENT | COMPUTING] : Undefined value used.\n");
   return this->value;
 }
-
-nts::Tristate Output::getValue() const { return this->value; }
 
 void Output::Dump() const {
     std::cout << "[Output] | Value : " << this->value << std::endl;

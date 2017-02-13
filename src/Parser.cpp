@@ -85,7 +85,7 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
   //   std::cout << (*it)->lexeme << std::endl;
   // }
 
-  this->circuit = this->factory.create(getCircuitType(*root.children->at(2)->children));
+  this->circuit = this->factory.create("toto", getCircuitType(*root.children->at(2)->children));
 
   // For debug
   // std::cout << "\nAFTER" << std::endl;
@@ -94,9 +94,9 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
   // }
 
   // Circuit Créer, reste à le remplir et à checker les erreurs.
-  this->circuit->SetLink(1, *this->factory.create("input", nts::Tristate::TRUE), 1);
-  this->circuit->SetLink(2, *this->factory.create("input", nts::Tristate::FALSE), 1);
-  this->circuit->SetLink(3, *this->factory.create("output"), 1);
+  this->circuit->SetLink(1, *this->factory.create("premierInput", "input", nts::Tristate::TRUE), 1);
+  this->circuit->SetLink(2, *this->factory.create("secondInput", "input", nts::Tristate::FALSE), 1);
+  this->circuit->SetLink(3, *this->factory.create("ZeOutput", "output"), 1);
   this->circuit->Compute(3);
   this->circuit->Dump();
   return true;

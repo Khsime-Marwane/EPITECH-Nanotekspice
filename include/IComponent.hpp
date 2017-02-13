@@ -10,6 +10,10 @@ public:
   /// Compute value of the precised pin
   virtual nts::Tristate Compute(size_t pin_num_this = 1) = 0;
 
+  virtual std::string getName() const = 0;
+  virtual std::string getType() const = 0;
+  virtual nts::Tristate getValue() const = 0;
+
   /// Set the value of the pin
   virtual void  SetTristate(size_t pin_num_this,
                             nts::Tristate _value) = 0;

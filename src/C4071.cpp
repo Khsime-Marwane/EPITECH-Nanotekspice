@@ -11,7 +11,9 @@
 
 #include "../include/C4071.hpp"
 
-C4071::C4071() {
+C4071::C4071(const std::string &name) {
+    this->name = name;
+
     for (unsigned int i = 0; i < 14; i++) this->pins[i] = NULL;
 
     // Assign Functions to mapPins
@@ -42,6 +44,19 @@ C4071::C4071() {
 
 C4071::~C4071() {
 
+}
+
+std::string     C4071::getName() const {
+    return this->name;
+}
+
+std::string     C4071::getType() const {
+    return "4071";
+}
+
+nts::Tristate   C4071::getValue() const {
+    std::cout << "Warning : Impossible to get a value from a chipset with much more than 1 pin." << std::endl;
+    return nts::Tristate::UNDEFINED;
 }
 
 nts::Tristate   C4071::OR_Function(nts::Tristate first,

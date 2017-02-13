@@ -21,11 +21,14 @@
 class   C4071 : public nts::IComponent {
 
 public:
-C4071();
+C4071(const std::string &name);
 virtual ~C4071();
 
 // Basics
 virtual nts::Tristate Compute(size_t pin_num_this = 1);
+virtual std::string getName() const;
+virtual std::string getType() const;
+virtual nts::Tristate getValue() const;
 virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target);
 virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
@@ -38,6 +41,7 @@ nts::Tristate   computeOutput(size_t pin_num_this);
 nts::Tristate   computeV(size_t pin_num_this);
 
 private:
+std::string     name;
 nts::IComponent *pins[14];
 std::map<size_t, std::function<nts::Tristate(size_t)> > mapPins;
 std::map<size_t, std::pair<size_t, size_t> > outputLinks;
