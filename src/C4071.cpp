@@ -63,8 +63,13 @@ nts::Tristate   C4071::computeInput(size_t pin_num_this) {
 nts::Tristate   C4071::computeOutput(size_t pin_num_this) {
     if (!(pin_num_this == 3 || pin_num_this == 4 || pin_num_this == 10 || pin_num_this == 11))
         throw Error("[C4071 ComputeOutput] : Invalid Output Pin selected.\n");
-    return OR_Function(this->pins[this->outputLinks[pin_num_this].first - 1]->Compute(),
+    if (!this->pins[this->outputLinks[pin_num_this].first] ||
+        !this->pins[this->outputLinks[pin_num_this].second])
+        throw Error("[C4071 ComputeOutput] : A Door is incomplete, an output needs two inputs\n");
+    nts::Tristate newValue = OR_Function(this->pins[this->outputLinks[pin_num_this].first - 1]->Compute(),
                 this->pins[this->outputLinks[pin_num_this].second - 1]->Compute());
+    this->pins[pin_num_this - 1]->SetTristate(1, newValue);
+    return newValue;
 }
 
 nts::Tristate   C4071::computeV(size_t pin_num_this) {
@@ -73,6 +78,10 @@ nts::Tristate   C4071::computeV(size_t pin_num_this) {
     err += pin_num_this == 7 ? "VSS.\n" : "VDD.\n";
     throw Error(err);
     return nts::Tristate::UNDEFINED;
+}
+
+void    C4071::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+    this->pins[pin_num_this - 1]->SetTristate(1, _value);
 }
 
 void    C4071::SetLink(size_t pin_num_this,

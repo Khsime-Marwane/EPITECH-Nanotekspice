@@ -25,13 +25,14 @@ public:
   Output();
   virtual ~Output();
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
+  virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
   virtual void Dump() const;
   nts::Tristate getValue() const;
-  nts::Tristate value;
 
 private:
+  nts::Tristate value;
   nts::IComponent *pins[1];
 
   // The first value correspond to the n° of the pin of this component,

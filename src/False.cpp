@@ -33,6 +33,11 @@ void False::Dump() const {
     std::cout << "[FALSE COMPONENT] | Value : " << this->value << std::endl;
 }
 
+void  False::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+  (void)_value;
+  (void)pin_num_this;
+}
+
 void False::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {

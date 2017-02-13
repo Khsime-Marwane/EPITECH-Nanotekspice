@@ -35,6 +35,11 @@ void Output::Dump() const {
     std::cout << "[Output] | Value : " << this->value << std::endl;
 }
 
+void  Output::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+  this->value = _value;
+  (void)pin_num_this;
+}
+
 void Output::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
