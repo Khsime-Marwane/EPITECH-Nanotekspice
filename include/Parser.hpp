@@ -52,8 +52,12 @@ class   Parser : public nts::IParser {
  public:
 
   nts::t_ast_node *treeRoot;
-  nts::IComponent *circuit;
 
+  // Circuits
+  std::map<std::string, nts::IComponent *> circuits;
+  std::vector<nts::IComponent *> outputs;
+
+  // Factory
   Factory factory;
   std::vector<std::string> availableCircuits;  
 

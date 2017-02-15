@@ -7,7 +7,7 @@
 //
 
 #include <algorithm>
-#include "Parser.hpp"
+#include "../include/Parser.hpp"
 #include "Errors.hpp"
 
 Parser::Parser(int ac, char **av) {
@@ -85,20 +85,28 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
   //   std::cout << (*it)->lexeme << std::endl;
   // }
 
-  this->circuit = this->factory.create("toto", getCircuitType(*root.children->at(2)->children));
+  for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin();
+       it != root.children->at(2)->children->end(); ++it) {
 
-  // For debug
-  // std::cout << "\nAFTER" << std::endl;
-  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
-  //   std::cout << (*it)->lexeme << std::endl;
-  // }
+        nts::IComponent *newComponent;
 
-  // Circuit Créer, reste à le remplir et à checker les erreurs.
-  this->circuit->SetLink(1, *this->factory.create("premierInput", "input", nts::Tristate::TRUE), 1);
-  this->circuit->SetLink(2, *this->factory.create("secondInput", "input", nts::Tristate::FALSE), 1);
-  this->circuit->SetLink(3, *this->factory.create("ZeOutput", "output"), 1);
-  this->circuit->Compute(3);
-  this->circuit->Dump();
+        if ((*it)->lexeme == "input") {
+          std::cout << "[****INPUT****], name : " << (*it)->value << ", value : " << this->comp_values[(*it)->value] << std::endl;
+          if (this->comp_values.find((*it)->value) == this->comp_values.end()) {
+            throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.\n");
+          }
+          newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
+          this->circuits.insert(std::pair<std::string, nts::IComponent *>((*it)->value, newComponent));
+        } else 
+        {
+          newComponent = this->factory.create((*it)->value, (*it)->lexeme);
+          this->circuits.insert(std::pair<std::string, nts::IComponent *>((*it)->value, newComponent));
+          if ((*it)->lexeme == "output") {
+            std::cout << "[****OUTPUT****], name : " << (*it)->value << std::endl;
+            this->outputs.push_back(newComponent);
+          }
+        }
+  }
   return true;
 }
 
@@ -165,7 +173,7 @@ void  Parser::setDefaultTree()
   for (int i = 0; i < 6; i++) {
       this->treeRoot->children->push_back(new nts::t_ast_node(new std::vector<nts::t_ast_node*>));
       this->treeRoot->children->at(i)->type = (nts::ASTNodeType)i;
-    }
+  }
 
   this->strings_t = this->treeRoot->children->at(0);
   this->newlines_t = this->treeRoot->children->at(1);
