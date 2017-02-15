@@ -12,9 +12,9 @@
 #include "Input.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Input::Input(const std::string &name, size_t  _value) {
+Input::Input(const std::string &name, int  _value) {
   this->name = name;
-  this->value = _value == 0 ? nts::Tristate::FALSE : nts::Tristate::TRUE;
+  this->value = (nts::Tristate)_value;
   this->pins[0] = NULL;
   this->links.first = 0;
   this->links.second = 0;

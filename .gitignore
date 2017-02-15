@@ -1,7 +1,7 @@
 .idea/
 *~
 *#
-CMakeLi	sts.txt
+CMakeLists.txt
 cmake*
 a.out
 *.a

@@ -22,7 +22,7 @@
 class Input : public nts::IComponent {
 
 public:
-  Input(const std::string &name, size_t _value);
+  Input(const std::string &name, int _value);
   virtual ~Input();
   virtual std::string getName() const;
   virtual std::string getType() const;

@@ -292,6 +292,7 @@ bool  Parser::checkComp_value(const char* str)
     }
   return (true);
 }
+/*
 
 int main(int argc, char **argv) {
   Parser  parser(argc, argv);
@@ -299,4 +300,4 @@ int main(int argc, char **argv) {
   parser.createTree();
   parser.parseTree(*parser.getRoot());
   return 0;
-}
+}*/
