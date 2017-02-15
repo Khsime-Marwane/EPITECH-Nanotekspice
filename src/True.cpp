@@ -12,9 +12,9 @@
 #include "True.hpp"
 
 // TODO: Ajouter les exit (catch std::exception)
-True::True(const std::string &name) {
-  this->name = name;
-  this->value = nts::Tristate::TRUE;
+True::True(const std::string &name) : AComponent(name, "true") {
+
+  this->_value = nts::Tristate::TRUE;
   this->pins[0] = NULL;
   this->links.first = 0;
   this->links.second = 0;
@@ -22,39 +22,35 @@ True::True(const std::string &name) {
 
 True::~True() {}
 
-std::string True::getName() const {
-  return this->name;
-}
-
-std::string True::getType() const {
-  return "true";
-}
-
-nts::Tristate True::getValue() const { return this->value; }
-
 nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
   }
-  return this->value;
+  return this->_value;
 }
 
+void  True::computeAll() {
+  // Nothing to do here
+}
 
 void True::Dump() const {
-    std::cout << "[True COMPONENT] | Value : " << this->value << std::endl;
+    std::cout << "[True COMPONENT] | Value : " << this->_value << std::endl;
 }
 
 void  True::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+  // Impossible to change the value of a True component
   (void)_value;
   (void)pin_num_this;
 }
 
 void True::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
+
   if (pin_num_this != 1) {
     throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
   }
-  if (!this->pins[pin_num_this]) {
+
+  if (!this->pins[0]) {
     this->links.first = pin_num_this;
     this->links.second = pin_num_target;
     this->pins[0] = &component;

@@ -17,13 +17,14 @@
 #include <functional>
 
 #include "IComponent.hpp"
+#include "Errors.hpp"
 
 class   AComponent : public nts::IComponent {
 
 public:
 
 // Constructor and Destructor
-AComponent();
+AComponent(const std::string &name, const std::string &type);
 ~AComponent();
 
 // Methods from IComponent Interface
@@ -46,7 +47,7 @@ std::string getType() const;
 nts::Tristate   getValue() const;
 
 
-private:
+protected:
 const std::string   _name;
 const std::string   _type;
 nts::Tristate       _value;

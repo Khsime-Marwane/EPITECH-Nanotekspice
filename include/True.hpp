@@ -16,26 +16,23 @@
 #include <string>
 #include <utility>
 
-#include "IComponent.hpp"
-#include "Errors.hpp"
+#include "AComponent.hpp"
 
-class True : public nts::IComponent {
+class True : public AComponent {
 
 public:
   True(const std::string &name);
   virtual ~True();
-  virtual std::string getName() const;
-  virtual std::string getType() const;
-  virtual nts::Tristate getValue() const;
+
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
+  virtual void computeAll();
   virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
   virtual void Dump() const;
 
 private:
-  std::string name;
-  nts::Tristate value;
+  // Pin of the component
   nts::IComponent *pins[1];
 
   // The first value correspond to the n° of the pin of this component,
