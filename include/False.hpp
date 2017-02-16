@@ -12,30 +12,23 @@
 #ifndef _FALSE_HPP_
 #define _FALSE_HPP_
 
-#include <iostream>
-#include <string>
-#include <utility>
+#include "AComponent.hpp"
 
-#include "IComponent.hpp"
-#include "Errors.hpp"
-
-class False : public nts::IComponent {
+class False : public AComponent {
 
 public:
   False(const std::string &name);
   virtual ~False();
-  virtual std::string getName() const;
-  virtual std::string getType() const;
-  virtual nts::Tristate getValue() const;
+
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
+  virtual void computeAll();
   virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
   virtual void Dump() const;
 
 private:
-  std::string name;
-  nts::Tristate value;
+  // Pin of the component  
   nts::IComponent *pins[1];
 
   // The first value correspond to the n° of the pin of this component,
