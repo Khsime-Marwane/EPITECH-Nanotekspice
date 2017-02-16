@@ -29,10 +29,6 @@ nts::Tristate True::Compute(size_t pin_num_this) {
   return this->_value;
 }
 
-void  True::computeAll() {
-  // Nothing to do here
-}
-
 void True::Dump() const {
     std::cout << "[True COMPONENT] | Value : " << this->_value << std::endl;
 }

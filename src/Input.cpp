@@ -12,9 +12,8 @@
 #include "Input.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Input::Input(const std::string &name, int  _value) {
-  this->name = name;
-  this->value = (nts::Tristate)_value;
+Input::Input(const std::string &name, int  _value) : AComponent(name, "input") {
+  this->_value = (nts::Tristate)_value;
   this->pins[0] = NULL;
   this->links.first = 0;
   this->links.second = 0;
@@ -22,31 +21,21 @@ Input::Input(const std::string &name, int  _value) {
 
 Input::~Input() {}
 
-std::string Input::getName() const {
-  return this->name;
-}
-
-std::string Input::getType() const {
-  return "input";
-}
-
 nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
   }
   // if (this->value == nts::Tristate::UNDEFINED)
   //   throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : Undefined value used.\n");
-  return this->value;
+  return this->_value;
 }
-
-nts::Tristate Input::getValue() const { return this->value; }
 
 void Input::Dump() const {
-    std::cout << "[INPUT COMPONENT] | Value : " << this->value << std::endl;
+    std::cout << "[INPUT COMPONENT] | Value : " << this->_value << std::endl;
 }
 
-void  Input::SetTristate(size_t pin_num_this, nts::Tristate _value) {
-  this->value = _value;
+void  Input::SetTristate(size_t pin_num_this, nts::Tristate value) {
+  this->_value = value;
   (void)pin_num_this;
 }
 

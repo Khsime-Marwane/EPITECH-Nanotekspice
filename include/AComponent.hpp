@@ -37,7 +37,7 @@ virtual void            Dump() const = 0;
 virtual void  SetTristate(size_t pin_num_this,
                   nts::Tristate value) = 0;
 // Compute all gates in the component.
-virtual void  computeAll() = 0;
+virtual void  computeAll();
 
 // Get the name of the component.
 std::string getName() const;

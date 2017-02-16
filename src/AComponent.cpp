@@ -30,13 +30,6 @@ nts::Tristate   AComponent::getValue() const {
     return this->_value;
 }
 
-int main() {
-    AComponent *test = new True("test");
-    AComponent *toto = new True("titi");
-
-
-    test->SetLink(1, *toto, 1);
-    (void)test;
-    (void)toto;
-    return 0;
+void  True::computeAll() {
+  // Nothing to do here
 }
