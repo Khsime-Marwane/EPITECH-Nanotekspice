@@ -5,7 +5,7 @@
 #include <map>
 #include <cstdlib>
 #include "Parser.hpp"
-#include "IComponent.hpp"
+#include "AComponent.hpp"
 #include "Gate.hpp"
 #include "RegParse.hpp"
 
@@ -41,12 +41,19 @@ int   main(int  ac, char *av[])
        for (std::vector<struct nts::s_ast_node*>::iterator it = test->linksend_t->children->begin(); it != test->linksend_t->children->end(); ++it)
         std::cout << "name = " << (*it)->lexeme << " | pin = " << (*it)->value << " | id = " << i++ << std::endl;*/
 
-      nts::IComponent *inp1 = new Input("inp1", 1);
-      nts::IComponent *inp2 = new Input("inp2", 0);
 
-      Gate test("AND");
-      int res = test.compute(inp1, inp2);
-      std::cout << res << std::endl;
-      //C4071  chip;
+      AComponent *inp1 = new Input("inp1", 1);
+      AComponent *inp2 = new Input("inp2", 1);
+
+      Gate test;
+      int res = test.compute("AND", inp1, inp2);
+      (void)res;
+      C4071  chip("4071");
+      chip.SetLink(1, *inp1, 1);
+      chip.SetLink(1, *inp2, 2);
+      std::cout << "pin[1] : " << chip.pins[0]->component->getValue() << std::endl;
+      std::cout << "pin[2] : " << chip.pins[1]->component->getValue() << std::endl;
+      chip.Compute(3);
+      std::cout << "pin[3] : " << chip.pins[2]->state << std::endl;
     }
 }

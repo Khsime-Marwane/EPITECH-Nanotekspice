@@ -12,6 +12,8 @@ Gate::Gate()
 
 nts::Tristate Gate::compute(std::string _type, AComponent* input1, AComponent* input2)
 {
+  std::cout << "input1 : " << input1->getValue() << std::endl;
+  std::cout << "input2 : " << input2->getValue() << std::endl;
   if ((input1 && input1->getValue() == nts::Tristate::UNDEFINED) || (input2 && input2->getValue() == nts::Tristate::UNDEFINED))
     return (nts::Tristate::UNDEFINED);
   this->_not = (_type == "NAND" || _type == "NOR" || _type == "XNOR") ? true : false;

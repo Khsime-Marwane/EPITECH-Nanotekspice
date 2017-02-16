@@ -23,15 +23,15 @@ Input::~Input() {}
 
 nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
-  }
+      throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
+    }
   // if (this->value == nts::Tristate::UNDEFINED)
   //   throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : Undefined value used.\n");
   return this->_value;
 }
 
 void Input::Dump() const {
-    std::cout << "[INPUT COMPONENT] | Value : " << this->_value << std::endl;
+  std::cout << "[INPUT COMPONENT] | Value : " << this->_value << std::endl;
 }
 
 // void  Input::SetTristate(size_t pin_num_this, nts::Tristate value) {
@@ -39,19 +39,12 @@ void Input::Dump() const {
 //   (void)pin_num_this;
 // }
 
-void Input::SetLink(size_t pin_num_this, nts::IComponent &component,
-                     size_t pin_num_target) {
+void Input::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [INPUT COMPONENT | LINK] : pin does not exist.\n");
-  }
-  if (!this->pins[0]) {
-    this->links.first = pin_num_this;
-    this->links.second = pin_num_target;
-    this->pins[0] = &component;
-    try {
-      this->pins[0]->SetLink(this->links.second, *this, this->links.first);
-    } catch (const std::exception& err) {
-      throw err;
+      throw Error("ERROR : [INPUT COMPONENT | LINK] : pin does not exist.\n");
     }
-  }
+
+  this->links.first = pin_num_this;
+  this->links.second = pin_num_target;
+  this->pins[0] = &component;
 }

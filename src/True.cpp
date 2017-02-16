@@ -24,13 +24,13 @@ True::~True() {}
 
 nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
-  }
+      throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
+    }
   return this->_value;
 }
 
 void True::Dump() const {
-    std::cout << "[True COMPONENT] | Value : " << this->_value << std::endl;
+  std::cout << "[True COMPONENT] | Value : " << this->_value << std::endl;
 }
 
 // void  True::SetTristate(size_t pin_num_this, nts::Tristate _value) {
@@ -39,25 +39,12 @@ void True::Dump() const {
 //   (void)pin_num_this;
 // }
 
-void True::SetLink(size_t pin_num_this, nts::IComponent &component,
-                     size_t pin_num_target) {
-
+void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
-  }
-
-  if (!this->pins[0]) {
-    this->links.first = pin_num_this;
-    this->links.second = pin_num_target;
-    this->pins[0] = &component;
-    try {
-      this->pins[0]->SetLink(this->links.second, *this, this->links.first);
-    } catch (const std::exception& err) {
-      throw err;
+      throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
     }
-  }
-}
 
-int main() {
-  return 0;
+  this->links.first = pin_num_this;
+  this->links.second = pin_num_target;
+  this->pins[0] = &component;
 }
