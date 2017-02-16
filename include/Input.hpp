@@ -12,12 +12,7 @@
 #ifndef _INPUT_HPP_
 #define _INPUT_HPP_
 
-#include <iostream>
-#include <string>
-#include <utility>
-
 #include "AComponent.hpp"
-#include "Errors.hpp"
 
 class Input : public AComponent {
 
