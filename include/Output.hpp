@@ -20,11 +20,14 @@ public:
   Output(const std::string &name);
   virtual ~Output();
 
+  // Inherited from IComponent
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
   virtual void Dump() const;
+
+  // Change the value of the tristate.
+  virtual void SetTristate(nts::Tristate _value);
 
 private:
   // Pin of the component.

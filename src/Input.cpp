@@ -34,10 +34,10 @@ void Input::Dump() const {
     std::cout << "[INPUT COMPONENT] | Value : " << this->_value << std::endl;
 }
 
-void  Input::SetTristate(size_t pin_num_this, nts::Tristate value) {
-  this->_value = value;
-  (void)pin_num_this;
-}
+// void  Input::SetTristate(size_t pin_num_this, nts::Tristate value) {
+//   this->_value = value;
+//   (void)pin_num_this;
+// }
 
 void Input::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {

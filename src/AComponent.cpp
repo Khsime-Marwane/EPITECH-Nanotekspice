@@ -34,6 +34,16 @@ nts::Tristate   AComponent::getValue() const {
     return this->_value;
 }
 
-void            AComponent::computeAll() {
+void            AComponent::computeAllGates() {
     // nothing to do there if it's not surcharged by inherited class.
+}
+
+void            AComponent::computeGate(size_t gate) {
+    // nothing to do there if it's not surcharged by inherited class.
+    (void)gate;
+};
+
+void            AComponent::setTristate(size_t value) {
+    // Nothing to do there if it's not an Output..
+    (void)value;
 }

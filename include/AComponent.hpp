@@ -23,35 +23,45 @@ class   AComponent : public nts::IComponent {
 
 public:
 
-// Constructor and Destructor
+// Constructor and Destructor.
 AComponent(const std::string &name, const std::string &type);
-~AComponent();
+virtual ~AComponent();
 
-// Methods from IComponent Interface
+// Methods from IComponent Interface.
 virtual nts::Tristate   Compute(size_t pin_num_this = 1) = 0;
 virtual void            SetLink(size_t pin_num_this, nts::IComponent &component,
                                 size_t pin_num_target) = 0;
 virtual void            Dump() const = 0;
 
-// Set the tristate value of the pin_num_this' pin
-virtual void  SetTristate(size_t pin_num_this,
-                  nts::Tristate value) = 0;
+// Additional :
 // Compute all gates in the component.
-virtual void  computeAll();
+virtual void            computeAllGates();
+// Compute a specif ic gate in the component (by index).
+virtual void            computeGate(size_t gate);
+// Change the value of the tristate. Currently it takes effect only for outputs.
+virtual void            setTristate(size_t value);
+
 
 // Get the name of the component.
-std::string getName() const;
+std::string     getName() const;
 // Get the type of the component.
-std::string getType() const;
+std::string     getType() const;
 // Get the value of the component (if it's special).
 nts::Tristate   getValue() const;
 
 
 protected:
+
+// Properties
 const std::string   _name;
 const std::string   _type;
 nts::Tristate       _value;
 
 };
+
+typedef struct      s_pin {
+    AComponent      *component;
+    nts::Tristate   state;
+}                   Pin;
 
 #endif // !_ACOMPONENT_HPP_

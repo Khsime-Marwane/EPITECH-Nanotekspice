@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Gate.hpp"
 
 Gate::Gate()

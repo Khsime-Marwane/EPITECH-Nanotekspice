@@ -20,7 +20,7 @@ public:
   Input(const std::string &name, int _value = -1);
   virtual ~Input();
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
+  // virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
   virtual void Dump() const;

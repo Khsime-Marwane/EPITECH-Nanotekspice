@@ -1,10 +1,7 @@
 #ifndef GATE_H_
   #define GATE_H_
 
-#include <map>
 #include <cstdlib>
-#include <functional>
-#include <utility>
 #include "AComponent.hpp"
 
 class Gate
@@ -23,4 +20,5 @@ class Gate
   nts::Tristate computeXOR(AComponent* &, AComponent* &);
   nts::Tristate computeNO(AComponent* &);
 };
+
 #endif

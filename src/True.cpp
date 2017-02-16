@@ -33,11 +33,11 @@ void True::Dump() const {
     std::cout << "[True COMPONENT] | Value : " << this->_value << std::endl;
 }
 
-void  True::SetTristate(size_t pin_num_this, nts::Tristate _value) {
-  // Impossible to change the value of a True component
-  (void)_value;
-  (void)pin_num_this;
-}
+// void  True::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+//   // Impossible to change the value of a True component
+//   (void)_value;
+//   (void)pin_num_this;
+// }
 
 void True::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
