@@ -17,7 +17,7 @@ Gate::Gate(std::string type)
     this->_not = false;
 }
 
-nts::Tristate Gate::compute(nts::IComponent* input1, nts::IComponent* input2)
+nts::Tristate Gate::compute(AComponent* input1, AComponent* input2)
 {
   if ((input1 && input1->getValue() == nts::Tristate::UNDEFINED) || (input2 && input2->getValue() == nts::Tristate::UNDEFINED))
     return (nts::Tristate::UNDEFINED);
@@ -26,7 +26,7 @@ nts::Tristate Gate::compute(nts::IComponent* input1, nts::IComponent* input2)
   return (computeNO(input1));
 }
 
-nts::Tristate Gate::computeAND(nts::IComponent* &input1, nts::IComponent* &input2)
+nts::Tristate Gate::computeAND(AComponent* &input1, AComponent* &input2)
 {
   int v1 = input1->getValue();
   int v2 = input2->getValue();
@@ -36,7 +36,7 @@ nts::Tristate Gate::computeAND(nts::IComponent* &input1, nts::IComponent* &input
   return ((nts::Tristate)(v1 & v2));
 }
 
-nts::Tristate Gate::computeOR(nts::IComponent* &input1, nts::IComponent* &input2)
+nts::Tristate Gate::computeOR(AComponent* &input1, AComponent* &input2)
 {
   int v1 = input1->getValue();
   int v2 = input2->getValue();
@@ -46,7 +46,7 @@ nts::Tristate Gate::computeOR(nts::IComponent* &input1, nts::IComponent* &input2
   return ((nts::Tristate)(v1 | v2));
 }
 
-nts::Tristate Gate::computeXOR(nts::IComponent* &input1, nts::IComponent* &input2)
+nts::Tristate Gate::computeXOR(AComponent* &input1, AComponent* &input2)
 {
   int v1 = input1->getValue();
   int v2 = input2->getValue();
@@ -56,7 +56,7 @@ nts::Tristate Gate::computeXOR(nts::IComponent* &input1, nts::IComponent* &input
   return ((nts::Tristate)(v1 ^ v2));
 }
 
-nts::Tristate Gate::computeNO(nts::IComponent* &input)
+nts::Tristate Gate::computeNO(AComponent* &input)
 {
   return ((nts::Tristate)(!input->getValue()));
 }

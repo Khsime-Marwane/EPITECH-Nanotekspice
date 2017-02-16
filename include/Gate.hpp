@@ -5,23 +5,23 @@
 #include <cstdlib>
 #include <functional>
 #include <utility>
-#include "IComponent.hpp"
+#include "AComponent.hpp"
 
 class Gate
 {
   std::string _type;
   bool        _not;
-  std::map<std::string, std::function<nts::Tristate (nts::IComponent* &, nts::IComponent* &)> > computes;
+  std::map<std::string, std::function<nts::Tristate (AComponent* &, AComponent* &)> > computes;
 
  public:
   Gate(std::string);
   ~Gate(){}
-  nts::Tristate compute(nts::IComponent* , nts::IComponent* = NULL);
+  nts::Tristate compute(AComponent* , AComponent* = NULL);
 
  private:
-  nts::Tristate computeOR(nts::IComponent* &, nts::IComponent* &);
-  nts::Tristate computeAND(nts::IComponent* &, nts::IComponent* &);
-  nts::Tristate computeXOR(nts::IComponent* &, nts::IComponent* &);
-  nts::Tristate computeNO(nts::IComponent* &);
+  nts::Tristate computeOR(AComponent* &, AComponent* &);
+  nts::Tristate computeAND(AComponent* &, AComponent* &);
+  nts::Tristate computeXOR(AComponent* &, AComponent* &);
+  nts::Tristate computeNO(AComponent* &);
 };
 #endif
