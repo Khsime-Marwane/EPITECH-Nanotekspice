@@ -9,14 +9,13 @@
 
 class Gate
 {
-  std::string _type;
   bool        _not;
   std::map<std::string, std::function<nts::Tristate (AComponent* &, AComponent* &)> > computes;
 
  public:
-  Gate(std::string);
+  Gate();
   ~Gate(){}
-  nts::Tristate compute(AComponent* , AComponent* = NULL);
+  nts::Tristate compute(std::string, AComponent* , AComponent* = NULL);
 
  private:
   nts::Tristate computeOR(AComponent* &, AComponent* &);
