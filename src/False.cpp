@@ -11,8 +11,8 @@
 
 #include "False.hpp"
 
-False::False(const std::string &name) {
-  this->name = name;
+False::False(const std::string &name) : AComponent(name, "false") {
+
   this->value = nts::Tristate::FALSE;
   this->pins[0] = NULL;
   this->links.first = 0;
@@ -21,16 +21,6 @@ False::False(const std::string &name) {
 
 False::~False() {}
 
-std::string False::getName() const {
-  return this->name;
-}
-
-std::string False::getType() const {
-  return "false";
-}
-
-nts::Tristate False::getValue() const { return this->value; }
-
 nts::Tristate False::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [FALSE COMPONENT | COMPUTING] : pin does not exist.\n");
@@ -38,11 +28,16 @@ nts::Tristate False::Compute(size_t pin_num_this) {
   return this->value;
 }
 
+void  False::computeAll() {
+  // nothing to do there.
+}
+
 void False::Dump() const {
     std::cout << "[FALSE COMPONENT] | Value : " << this->value << std::endl;
 }
 
 void  False::SetTristate(size_t pin_num_this, nts::Tristate _value) {
+  // nothing to do there.
   (void)_value;
   (void)pin_num_this;
 }
