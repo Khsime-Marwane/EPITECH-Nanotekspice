@@ -57,3 +57,7 @@ void True::SetLink(size_t pin_num_this, nts::IComponent &component,
     }
   }
 }
+
+int main() {
+  return 0;
+}
