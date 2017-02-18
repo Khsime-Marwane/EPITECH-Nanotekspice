@@ -35,30 +35,23 @@ virtual void            Dump() const = 0;
 
 // Additional :
 // Compute all gates in the component.
-virtual void            computeAllGates();
-// Compute a specif ic gate in the component (by index).
-virtual void            computeGate(size_t gate);
-// Change the value of the tristate. Currently it takes effect only for outputs.
-virtual void            setTristate(size_t value);
-
+virtual void            computeGates();
 
 // Get the name of the component.
 std::string     getName() const;
 // Get the type of the component.
 std::string     getType() const;
-// Get the value of the component (if it's special).
-nts::Tristate   getValue() const;
-
 
 protected:
 
 // Properties
 const std::string   _name;
 const std::string   _type;
-nts::Tristate       _value;
+struct s_pin        *pins;
 
 };
 
+// Pin Node
 typedef struct      s_pin {
     AComponent      *component;
     nts::Tristate   state;

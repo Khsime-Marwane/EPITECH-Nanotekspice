@@ -26,16 +26,9 @@ public:
                        size_t pin_num_target);
   virtual void Dump() const;
 
-  // Change the value of the tristate.
-  virtual void SetTristate(nts::Tristate _value);
-
 private:
   // Pin of the component.
-  nts::IComponent *pins[1];
-
-  // The first value correspond to the n° of the pin of this component,
-  // whose is linked with the n° pin of the second component (second value).
-  std::pair<size_t, size_t> links;
+  Pin *pins[1];
 };
 
 #endif /* end of include guard: _OUTPUT_HPP_ */

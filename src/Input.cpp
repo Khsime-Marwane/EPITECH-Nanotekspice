@@ -13,10 +13,9 @@
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
 Input::Input(const std::string &name, int  _value) : AComponent(name, "input") {
-  this->_value = (nts::Tristate)_value;
-  this->pins[0] = NULL;
-  this->links.first = 0;
-  this->links.second = 0;
+  this->pins[0] = new Pin;
+  this->pins[0]->component = NULL;
+  this->pins[0]->state = nts::Tristate::UNDEFINED;
 }
 
 Input::~Input() {}
@@ -25,26 +24,23 @@ nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
       throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
     }
-  // if (this->value == nts::Tristate::UNDEFINED)
-  //   throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : Undefined value used.\n");
-  return this->_value;
+  return this->pins[0]->state;
 }
 
 void Input::Dump() const {
-  std::cout << "[INPUT COMPONENT] | Value : " << this->_value << std::endl;
+  std::cout << "[INPUT COMPONENT] | Value : " << this->pins[0]->state << std::endl;
 }
 
-// void  Input::SetTristate(size_t pin_num_this, nts::Tristate value) {
-//   this->_value = value;
-//   (void)pin_num_this;
-// }
-
-void Input::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
+void Input::SetLink(size_t pin_num_this,
+                    nts::IComponent &component,
+                    size_t pin_num_target) {
   if (pin_num_this != 1) {
       throw Error("ERROR : [INPUT COMPONENT | LINK] : pin does not exist.\n");
     }
-
-  this->links.first = pin_num_this;
-  this->links.second = pin_num_target;
-  this->pins[0] = &component;
+  if (!this->pins[0]->component) {
+    // Link the chipset with the component.
+    this->pins[0]->component = dynamic_cast<AComponent * >(&component);
+    // Link the component with the chipset.
+    this->pins[0]->component->SetLink(pin_num_target, *this, pin_num_this);
+  };
 }

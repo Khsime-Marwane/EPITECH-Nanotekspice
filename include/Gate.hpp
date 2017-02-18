@@ -6,8 +6,6 @@
 
 class Gate
 {
-  bool        _not;
-  std::map<std::string, std::function<nts::Tristate (AComponent* &, AComponent* &)> > computes;
 
  public:
   Gate();
@@ -15,6 +13,9 @@ class Gate
   nts::Tristate compute(std::string, AComponent* , AComponent* = NULL);
 
  private:
+  bool        _not;
+
+  std::map<std::string, std::function<nts::Tristate (AComponent* &, AComponent* &)> > computes;
   nts::Tristate computeOR(AComponent* &, AComponent* &);
   nts::Tristate computeAND(AComponent* &, AComponent* &);
   nts::Tristate computeXOR(AComponent* &, AComponent* &);

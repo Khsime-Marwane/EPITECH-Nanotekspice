@@ -14,30 +14,26 @@
 
 class   C4071 : public AComponent {
 
- public:
+public:
+// Constructor / Destructor
   C4071(const std::string &name);
   virtual ~C4071() { }
 
 // Basics
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeAllGates();
-  virtual void computeGate(size_t gate);
+  virtual void computeGates();
   virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
                        size_t pin_num_target);
-// virtual void SetTristate(size_t pin_num_this, nts::Tristate _value);
   virtual void Dump() const;
 
-// Additionnals
-  Pin             *pins[14];
-
- private:
-  std::map<size_t, std::pair<size_t, size_t> > outputLinks;
-  std::map<size_t, std::pair<size_t, size_t> > links;
+private:
 
 // Gates
-  Gate                gate;
+  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+// Pin's Links
+  std::map<size_t, std::pair<size_t, size_t> > links;
 
-// For checking pin index parameter. return true if it's valid.
+// Check if the index of the pin exist. return true if it's valid.
   bool            pinIndexIsValid(size_t pin_num_this);
 
 };

@@ -12,11 +12,9 @@
 #include "False.hpp"
 
 False::False(const std::string &name) : AComponent(name, "false") {
-
-  this->_value = nts::Tristate::FALSE;
-  this->pins[0] = NULL;
-  this->links.first = 0;
-  this->links.second = 0;
+  this->pins[0] = new Pin;
+  this->pins[0]->component = NULL;
+  this->pins[0]->state = nts::Tristate::FALSE;
 }
 
 False::~False() {}
@@ -25,32 +23,22 @@ nts::Tristate False::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [FALSE COMPONENT | COMPUTING] : pin does not exist.\n");
   }
-  return this->_value;
+  return this->pins[0]->state;
 }
 
 void False::Dump() const {
     std::cout << "[FALSE COMPONENT] | Value : " << this->_value << std::endl;
 }
 
-// void  False::SetTristate(size_t pin_num_this, nts::Tristate _value) {
-//   // nothing to do there.
-//   (void)_value;
-//   (void)pin_num_this;
-// }
-
 void False::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [FALSE COMPONENT | LINK] : pin does not exist.\n");
   }
-  if (!this->pins[pin_num_this]) {
-    this->links.first = pin_num_this;
-    this->links.second = pin_num_target;
-    this->pins[0] = &component;
-    try {
-      this->pins[0]->SetLink(this->links.second, *this, this->links.first);
-    } catch (const std::exception& err) {
-      throw err;
-    }
+  if (!this->pins[0]->component)
+    // Link the chipset with the component.
+    this->pins[0]->component = dynamic_cast<AComponent *>(&component);
+    // Link the component with the chipset.
+    this->pins[0]->component->SetLink(pin_num_target, *this, pin_num_this);
   }
 }

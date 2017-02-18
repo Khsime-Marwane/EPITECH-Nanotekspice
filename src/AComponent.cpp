@@ -12,7 +12,6 @@
 // Constructor / Destructor
 AComponent::AComponent(const std::string &name, const std::string &type)
     : _name(name), _type(type) {
-    this->_value = nts::Tristate::UNDEFINED;
 }
 
 AComponent::~AComponent() {
@@ -29,21 +28,6 @@ std::string     AComponent::getType() const {
     return this->_type;
 }
 
-// return the value of the component (if it's a special component).
-nts::Tristate   AComponent::getValue() const {
-    return this->_value;
-}
-
-void            AComponent::computeAllGates() {
+void            AComponent::computeGates() {
     // nothing to do there if it's not surcharged by inherited class.
-}
-
-void            AComponent::computeGate(size_t gate) {
-    // nothing to do there if it's not surcharged by inherited class.
-    (void)gate;
-};
-
-void            AComponent::setTristate(size_t value) {
-    // Nothing to do there if it's not an Output..
-    (void)value;
 }
