@@ -6,8 +6,12 @@
 // Last Modified time: 2017-02-08 15:26:44
 //
 
-#include "../include/Factory.hpp"
+#include "Factory.hpp"
 
+/*
+**  Create the maps of functions in order to create properly the components send as parameter
+**  to the 'create()' function which is the constructor of component.
+*/
 Factory::Factory() {
     this->basicConstructors["true"] = std::bind(&Factory::createTrue, this, std::placeholders::_1);
     this->basicConstructors["false"] = std::bind(&Factory::createFalse, this, std::placeholders::_1);
@@ -21,6 +25,12 @@ Factory::~Factory() {
 
 }
 
+/*
+** Create() call the constructor of the type of component send as parameter, and return
+** a new instance of this class. If the type is unknown, it return NULL.
+**
+** Some specifics components (like input) need to be initialized with a value.
+*/
 nts::IComponent *Factory::create(const std::string &name,
                                  const std::string &component,
                                  size_t _value) {

@@ -11,59 +11,98 @@
 
 #include "C4071.hpp"
 
+/*
+** The component 4071 is composed of 14 pins. It has 4 OR gates
+** which works for each of them with two inputs and one output.
+*/
 C4071::C4071(const std::string &name) : AComponent(name, "chipset") {
   pins = new Pin[14];
 
+  // Create the pins of the chipset 4071 and set them.
   for (unsigned int i = 0; i < 14; i++) {
-      // this->pins[i] = new Pin();
       this->pins[i].state = nts::UNDEFINED;
       this->pins[i].component = NULL;
-      this->links[i] = std::make_pair(1, 1);
+      this->links[i] = std::make_pair(0, 0);
     }
 
   // Output pins with their inputs index.
-  this->links[3] = std::make_pair(1, 2);
-  this->links[4] = std::make_pair(5, 6);
-  this->links[10] = std::make_pair(8, 9);
-  this->links[11] = std::make_pair(12, 13);
+  this->gateLinks[3] = std::make_pair(1, 2);
+  this->gateLinks[4] = std::make_pair(5, 6);
+  this->gateLinks[10] = std::make_pair(8, 9);
+  this->gateLinks[11] = std::make_pair(12, 13);
 }
 
+/*
+** Check if the pin selected exist in the component,
+** indexes allowed there are [1, 14].
+*/
 bool            C4071::pinIndexIsValid(size_t pin_num_this) {
   return pin_num_this > 0 && pin_num_this < 15;
 }
 
+/*
+** Compute a pin of the component. If the component linked with
+** the pin selected is a succesion of computes, all of these components
+** will be computed.
+*/
 nts::Tristate   C4071::Compute(size_t pin_num_this) {
+
   if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
       if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
-        this->pins[pin_num_this - 1].state =
-          this->gate.compute("OR",
-                             pins[this->gateLinks[pin_num_this - 1].first].component,
-                             pins[this->gateLinks[pin_num_this - 1].second].component);
+
+          // Get the indexes of the pins linked with the output.
+          size_t  firstPinLinked = this->gateLinks[pin_num_this].first;
+          size_t  secondPinLinked = this->gateLinks[pin_num_this].second;
+
+          // Compute the inputs
+          nts::Tristate v1 = Compute(firstPinLinked);
+          nts::Tristate v2 = Compute(secondPinLinked);
+
+          // Call the door Or with v1 and v2 as parameters.
+          this->pins[pin_num_this - 1].state = this->gate.compute("OR", v1, v2);
       }
+
       // If the pin selected is an Input.
-      else if (this->pins[pin_num_this - 1].component)
-        this->pins[pin_num_this - 1].state = this->pins[pin_num_this - 1].component->Compute();
+      else if (this->pins[pin_num_this - 1].component) {
+        this->pins[pin_num_this - 1].state =
+          this->pins[pin_num_this - 1].component->Compute(this->links[pin_num_this - 1].second);
+      }
+      
+      // Return the value of the computed Pin.
       return (this->pins[pin_num_this - 1].state);
     }
+
+  // If the pin doesn't exist, throw an error.
   throw Error("C4071 - Compute : Invalid pin selected.\n");
   return nts::Tristate::UNDEFINED;
-}
+}   
 
+/*
+** Compute all gates (outputs) of the chipset, if it can be computed.
+*/
 void            C4071::computeGates() {
-  int           outputPins[] = { 2, 3, 9, 10 };
+  int           outputPins[] = { 3, 4, 10, 11 };
 
   for (unsigned int i = 0; i < 4; i++) {
-    if (this->pins[this->gateLinks[i].first].component &&
-        this->pins[this->gateLinks[i].second].component) {
-      this->pins[outputPins[i]].state = this->gate.compute("OR",
-                                                this->pins[this->gateLinks[i].first].component,
-                                                this->pins[this->gateLinks[i].second].component);
+    if (this->pins[this->gateLinks[outputPins[i]].first - 1].component &&
+        this->pins[this->gateLinks[outputPins[i]].second - 1].component) {
+
+      // Compute the inputs
+      nts::Tristate v1 = Compute(this->gateLinks[outputPins[i]].first);
+      nts::Tristate v2 = Compute(this->gateLinks[outputPins[i]].second);
+
+      // Call the door OR with v1 and v2 as parameters.
+      this->pins[outputPins[i] - 1].state = this->gate.compute("OR", v1, v2);
     }
   }
 }
 
+/*
+** Link a pin of the chipset with a component. When it's possible,
+** also link on the other side the pin [pin_num_target] with this chipset.
+*/
 void    C4071::SetLink(size_t pin_num_this,
                        nts::IComponent &component,
                        size_t pin_num_target) {
@@ -82,6 +121,10 @@ void    C4071::SetLink(size_t pin_num_this,
   };
 }
 
+/*
+** Display all the states of each pin of the chipset. If a pin is not linked,
+** it display 'NULL'.
+*/
 void    C4071::Dump() const {
   std::cout << "[CHIPSET 4071] :" << std::endl;
 
@@ -91,8 +134,4 @@ void    C4071::Dump() const {
         std::cout << (int)this->pins[i].state << std::endl;
       else std::cout << "NULL" << std::endl;
     }
-}
-
-int main() {
-  return 0;
 }

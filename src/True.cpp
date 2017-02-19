@@ -13,9 +13,9 @@
 
 // TODO: Ajouter les exit (catch std::exception)
 True::True(const std::string &name) : AComponent(name, "true") {
-  this->pins[0] = new Pin;
-  this->pins[0]->component = NULL;
-  this->pins[0]->state = nts::Tristate::TRUE;
+  this->pins = new Pin;
+  this->pins[0].component = NULL;
+  this->pins[0].state = nts::Tristate::TRUE;
 }
 
 True::~True() {}
@@ -35,10 +35,10 @@ void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_n
   if (pin_num_this != 1) {
       throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
     }
-  if (!this->pins[0]->component) {
+  if (!this->pins[0].component) {
     // Link the chipset with the component.
-    this->pins[0]->component = dynamic_cast<AComponent * >(&component);
+    this->pins[0].component = dynamic_cast<AComponent * >(&component);
     // Link the component with the chipset.
-    this->pins[0]->component->SetLink(pin_num_target, *this, pin_num_this);
+    this->pins[0].component->SetLink(pin_num_target, *this, pin_num_this);
   };
 }

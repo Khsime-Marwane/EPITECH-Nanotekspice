@@ -29,7 +29,9 @@ public:
 private:
 
 // Gates
+  Gate  gate;
   std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+
 // Pin's Links
   std::map<size_t, std::pair<size_t, size_t> > links;
 

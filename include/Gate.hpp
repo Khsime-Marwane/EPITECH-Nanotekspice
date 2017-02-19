@@ -4,22 +4,25 @@
 #include <cstdlib>
 #include "AComponent.hpp"
 
+/*
+** The Gate class contain all gates methods.
+*/
 class Gate
 {
 
  public:
   Gate();
   ~Gate(){}
-  nts::Tristate compute(std::string, AComponent* , AComponent* = NULL);
+  nts::Tristate compute(std::string, nts::Tristate , nts::Tristate = nts::Tristate::UNDEFINED);
 
  private:
   bool        _not;
 
-  std::map<std::string, std::function<nts::Tristate (AComponent* &, AComponent* &)> > computes;
-  nts::Tristate computeOR(AComponent* &, AComponent* &);
-  nts::Tristate computeAND(AComponent* &, AComponent* &);
-  nts::Tristate computeXOR(AComponent* &, AComponent* &);
-  nts::Tristate computeNO(AComponent* &);
+  std::map<std::string, std::function<nts::Tristate (nts::Tristate, nts::Tristate)> > computes;
+  nts::Tristate computeOR(nts::Tristate, nts::Tristate);
+  nts::Tristate computeAND(nts::Tristate, nts::Tristate);
+  nts::Tristate computeXOR(nts::Tristate, nts::Tristate);
+  nts::Tristate computeNO(nts::Tristate);
 };
 
 #endif

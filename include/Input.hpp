@@ -26,9 +26,6 @@ public:
                        size_t pin_num_target);
   virtual void Dump() const;
 
-private:
-  // Pin of the component
-  Pin *pins[1];
 };
 
 #endif /* end of include guard: _INPUT_HPP_ */

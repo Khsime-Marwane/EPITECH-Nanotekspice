@@ -28,6 +28,8 @@ std::string     AComponent::getType() const {
     return this->_type;
 }
 
+// return the state of the component (if it's special)
+
 void            AComponent::computeGates() {
     // nothing to do there if it's not surcharged by inherited class.
 }
