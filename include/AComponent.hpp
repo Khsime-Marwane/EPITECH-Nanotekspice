@@ -42,13 +42,16 @@ std::string     getName() const;
 // Get the type of the component.
 std::string     getType() const;
 
-  void  setValue(int val);
+void            setValue(int val);
 
 protected:
 
 // Properties
 const std::string   _name;
 const std::string   _type;
+
+public:
+// Pins
 struct s_pin        *pins;
 
 };

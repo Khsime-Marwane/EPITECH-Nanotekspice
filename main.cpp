@@ -22,8 +22,6 @@ int   main(int  ac, char *av[])
 
       Cli     cli(parser);
 
-//      cli.Dump();
-
       // AComponent *inp1 = new Input("input 1", 0);
       // AComponent *inp2 = new Input("input 2", 1);
       // AComponent *out = new Output("output 1");

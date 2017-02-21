@@ -62,6 +62,8 @@ nts::Tristate   C4071::Compute(size_t pin_num_this) {
 
           // Call the door Or with v1 and v2 as parameters.
           this->pins[pin_num_this - 1].state = this->gate.compute("OR", v1, v2);
+          if (this->pins[pin_num_this - 1].component)
+            this->pins[pin_num_this - 1].component->pins[0].state = this->pins[pin_num_this - 1].state;
       }
 
       // If the pin selected is an Input.
@@ -83,19 +85,10 @@ nts::Tristate   C4071::Compute(size_t pin_num_this) {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4071::computeGates() {
-  int           outputPins[] = { 3, 4, 10, 11 };
+  size_t        outputPins[] = { 3, 4, 10, 11 };
 
-  for (unsigned int i = 0; i < 4; i++) {
-    if (this->pins[this->gateLinks[outputPins[i]].first - 1].component &&
-        this->pins[this->gateLinks[outputPins[i]].second - 1].component) {
-
-      // Compute the inputs
-      nts::Tristate v1 = Compute(this->gateLinks[outputPins[i]].first);
-      nts::Tristate v2 = Compute(this->gateLinks[outputPins[i]].second);
-
-      // Call the door OR with v1 and v2 as parameters.
-      this->pins[outputPins[i] - 1].state = this->gate.compute("OR", v1, v2);
-    }
+  for (size_t i = 0; i < 4; i++) {
+    Compute(outputPins[i]);
   }
 }
 

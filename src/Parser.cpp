@@ -99,7 +99,7 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
             throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.\n");
           }
           newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
-            this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
+          this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
         } else 
         {
           newComponent = this->factory.create((*it)->value, (*it)->lexeme);
@@ -117,12 +117,17 @@ bool    Parser::linkComponents(nts::t_ast_node &root) {
   std::vector<nts::t_ast_node *> *Right = root.children->at(4)->children;
 
   for (size_t i = 0; i < Right->size(); i++) {
-    std::cout << Left->at(i)->lexeme << "   ";
-    std::cout << Right->at(i)->lexeme << std::endl;
+    size_t pin_num_this = std::stoi(Left->at(i)->value);
+    size_t pin_num_target = std::stoi(Right->at(i)->value);
+
+    std::cout << Left->at(i)->lexeme;
+    std::cout << "=>" << pin_num_this << std::endl;
+    std::cout << Right->at(i)->lexeme;
+    std::cout << "=>" << pin_num_target << std::endl;
+    this->circuit[Left->at(i)->lexeme]->SetLink(pin_num_this,
+                                                *this->circuit[Right->at(i)->lexeme],
+                                                pin_num_target);
   }
-  (void)Right;
-  (void)Left;
-  return  (true);
 }
 
 // CREATE TREE PART
