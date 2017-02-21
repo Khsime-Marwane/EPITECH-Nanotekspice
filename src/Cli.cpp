@@ -10,15 +10,41 @@
 
 Cli::Cli(const Parser &parser) {
 
-    this->circuit = parser.getCircuit();
-    this->outputs = parser.getOutputs();
+  this->regParse = new RegParse();
+  this->circuit = parser.getCircuit();
+  this->outputs = parser.getOutputs();
 
-    if (this->circuit.size() == 0 ||
-        this->outputs.size() == 0)
-        throw Error("CLI cannot be setted because the circuit is empty or there is no output.\n");
+  this->func["exit"] = std::bind(&Cli::Exit, this);
+  this->func["display"] = std::bind(&Cli::Display, this);
+  this->func["simulate"] = std::bind(&Cli::Simulate, this);
+  this->func["dump"] = std::bind(&Cli::Dump, this);
+
+  if (this->circuit.size() == 0 || this->outputs.size() == 0)
+    throw Error("CLI cannot be setted because the circuit is empty or there is no output.\n");
+  else
+    this->init();
 }
 
 Cli::~Cli() {}
+
+void    Cli::init()
+{
+  std::cout << std::endl << "=== CLI ===" << std::endl;
+  std::string cmd;
+  std::cout << "> ";
+  while (getline(std::cin, cmd))
+    {
+      if (this->func.find(cmd) != this->func.end())
+        this->func[cmd]();
+      else if (this->regParse->exec(cmd.c_str(), regParse->cli_value))
+          {
+            std::pair<std::string, int> tmp = this->regParse->getInpValue();
+            if (this->circuit.find(tmp.first) != this->circuit.end())
+              this->circuit[tmp.first]->setValue(tmp.second);
+          }
+      std::cout << "> ";
+    }
+}
 
 void    Cli::Exit() {
     exit(EXIT_SUCCESS);

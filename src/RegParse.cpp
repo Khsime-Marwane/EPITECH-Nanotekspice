@@ -7,6 +7,7 @@ RegParse::RegParse()
   this->regex_section_links = "(^.links:)(\\s)?$";
   this->regex_links = "(^.*\\:[[:digit:]]*\\s+.*\\:[[:digit:]]*)(\\s+)?$";
   this->str_comment = "(#.*)";
+  this->cli_value = "(^[_[:alnum:]]+=[0-1])$";
   this->nb_inputs = 0;
 
   this->generateAllowedVec();
@@ -63,6 +64,15 @@ bool RegParse::execComps(const char* str)
   if (state)
     return (true);
   return (false);
+}
+
+std::pair<std::string, int> RegParse::getInpValue()
+{
+  int pos = this->str_match.find('=');
+  std::string name = this->str_match.substr(0, pos);
+  int value = atoi(this->str_match.substr(pos + 1).c_str());
+
+  return (std::make_pair(name, value));
 }
 
 nts::t_ast_node* RegParse::getComps()

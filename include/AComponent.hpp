@@ -42,6 +42,8 @@ std::string     getName() const;
 // Get the type of the component.
 std::string     getType() const;
 
+  void  setValue(int val);
+
 protected:
 
 // Properties

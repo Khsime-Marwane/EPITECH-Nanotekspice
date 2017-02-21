@@ -36,6 +36,7 @@ public:
     ~Cli();
 
     // Commands avalaible
+    void    init();
     void    Exit();
     void    Display();
     void    SetInput(const std::string &name);
@@ -47,6 +48,11 @@ private:
     // Circuits
     std::map<std::string, AComponent *> circuit;
     std::vector<AComponent *> outputs;
+
+  // Functions
+  std::map<const std::string, std::function<void ()> > func;
+
+  RegParse *regParse;
 };
 
 #endif /* _CLI_HPP_ */

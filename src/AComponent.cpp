@@ -28,6 +28,11 @@ std::string     AComponent::getType() const {
     return this->_type;
 }
 
+void    AComponent::setValue(int val)
+{
+  this->pins[0].state = (nts::Tristate)val;
+}
+
 // return the state of the component (if it's special)
 
 void            AComponent::computeGates() {

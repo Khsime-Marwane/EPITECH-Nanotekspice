@@ -25,12 +25,14 @@ class RegParse {
   nts::t_ast_node *getLinks_end();
   nts::t_ast_node *getSection(std::string&);
   nts::t_ast_node *getString();
+  std::pair<std::string, int> getInpValue();
 
   int nb_inputs;
   const char *regex_section_chipsets;
   const char *regex_section_links;
   const char *regex_links;
   const char *str_comment;
+  const char *cli_value;
   std::vector<std::string>  allowed_chips;
   std::vector<std::string>  allowed_comps;
 };
