@@ -31,7 +31,7 @@ Factory::~Factory() {
 **
 ** Some specifics components (like input) need to be initialized with a value.
 */
-nts::IComponent *Factory::create(const std::string &name,
+AComponent *Factory::create(const std::string &name,
                                  const std::string &component,
                                  size_t _value) {
     if (this->advancedConstructors.find(component) == this->advancedConstructors.end())
@@ -39,33 +39,33 @@ nts::IComponent *Factory::create(const std::string &name,
     return this->advancedConstructors[component](name, _value);
 }
 
-nts::IComponent *Factory::create(const std::string &name, const std::string &component) {
+AComponent *Factory::create(const std::string &name, const std::string &component) {
     if (this->basicConstructors.find(component) == this->basicConstructors.end())
         return NULL;
     return this->basicConstructors[component](name);
 }
 
-nts::IComponent *Factory::createFalse(const std::string &name) const {
+AComponent *Factory::createFalse(const std::string &name) const {
     std::cout << "Create FALSE component named '" << name << "'" << std::endl;
     return new False(name);
 }
 
-nts::IComponent *Factory::createTrue(const std::string &name) const {
+AComponent *Factory::createTrue(const std::string &name) const {
     std::cout << "Create TRUE component named '" << name << "'" << std::endl;
     return new True(name);
 }
 
-nts::IComponent *Factory::createInput(const std::string &name, size_t value) const {
-    std::cout << "Create INPUT component named '" << name << "'" << std::endl;
+AComponent *Factory::createInput(const std::string &name, size_t value) const {
+    std::cout << "Create INPUT component named '" << name << "'" << ", value : " << value << std::endl;
     return new Input(name, value);
 }
 
-nts::IComponent *Factory::createOutput(const std::string &name) const {
+AComponent *Factory::createOutput(const std::string &name) const {
     std::cout << "Create OUTPUT component named '" << name << "'" << std::endl;
     return new Output(name);
 }
 
-nts::IComponent *Factory::createC4071(const std::string &name) const {
+AComponent *Factory::createC4071(const std::string &name) const {
     std::cout << "Create C4071 component named '" << name << "'" << std::endl;
     return new C4071(name);
 }

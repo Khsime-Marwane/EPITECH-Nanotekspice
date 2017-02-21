@@ -23,13 +23,19 @@
 class   Parser : public nts::IParser {
  public:
 
+  // Constructor / Destructor
   Parser(int  ac, char **av);
   virtual ~Parser();
 
-  nts::t_ast_node *getRoot() const;
+  // Basics
   void feed(std::string const& input);
   void parseTree(nts::t_ast_node& root);
   nts::t_ast_node *createTree();
+
+  // Getters
+  nts::t_ast_node *getRoot() const;
+  std::map<std::string, AComponent *> getCircuit() const;
+  std::vector<AComponent *> getOutputs() const;
 
  private:
   // createTree's methods
@@ -47,15 +53,17 @@ class   Parser : public nts::IParser {
   bool    basicChecks(const nts::t_ast_node &root);
   bool    doesContainOneCircuit(std::vector<nts::t_ast_node *> &components);
   bool    createCircuit(nts::t_ast_node &root);
+  bool    linkComponents(nts::t_ast_node &root);
   const std::string getCircuitType(std::vector<nts::t_ast_node *> &components);
+
 
  public:
 
   nts::t_ast_node *treeRoot;
 
   // Circuits
-  std::map<std::string, nts::IComponent *> circuits;
-  std::vector<nts::IComponent *> outputs;
+  std::map<std::string, AComponent *> circuit;
+  std::vector<AComponent *> outputs;
 
   // Factory
   Factory factory;

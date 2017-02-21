@@ -32,7 +32,7 @@
 class   Cli {
 public:
     // Constructor / Destructor
-    Cli();
+    Cli(const Parser &parser);
     ~Cli();
 
     // Commands avalaible
@@ -43,14 +43,10 @@ public:
     void    Loop();
     void    Dump();
 
-    // Getters
-
 private:
-    Parser parser;
-    
     // Circuits
-    std::map<std::string, nts::IComponent *> circuits;
-    std::vector<nts::IComponent *> outputs;
+    std::map<std::string, AComponent *> circuit;
+    std::vector<AComponent *> outputs;
 };
 
 #endif /* _CLI_HPP_ */

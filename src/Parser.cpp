@@ -25,6 +25,19 @@ Parser::Parser(int ac, char **av) {
 
 Parser::~Parser() {}
 
+// GETTERS
+std::map<std::string, AComponent *> Parser::getCircuit() const {
+  return this->circuit;
+}
+
+std::vector<AComponent *> Parser::getOutputs() const {
+  return this->outputs;
+}
+
+nts::t_ast_node *Parser::getRoot() const {
+  return this->treeRoot;
+}
+
 // FEED Part
 void    Parser::feed(std::string const& input) {
   if (!input.empty())
@@ -35,31 +48,20 @@ void    Parser::feed(std::string const& input) {
 void    Parser::parseTree(nts::t_ast_node &root) {
   // Basic Checks
   if (basicChecks(root)) return ;
-
   // Build Circuit and check logic errors
   if (createCircuit(root)) return ;
+  if (linkComponents(root)) return ;
 }
 
 bool    Parser::basicChecks(const nts::t_ast_node &root) {
+  // If the tree's base is correct.
   if (!root.children || root.children->size() != 6) return true;
+
+  // Check if there is at least one component and at least one link.
   if (!root.children->at(2)->children->size() ||
       !root.children->at(3)->children->size() ||
       !root.children->at(4)->children->size()) return true;
-  if (!doesContainOneCircuit(*root.children->at(2)->children)) return true;
   return false;
-}
-
-bool    Parser::doesContainOneCircuit(std::vector<nts::t_ast_node *> &components) {
-  unsigned int count = 0;
-
-  for (std::vector<nts::t_ast_node *>::iterator it = components.begin(); it != components.end(); ++it) {
-    if (std::find(this->availableCircuits.begin(),
-                  this->availableCircuits.end(),
-                  (*it)->lexeme) != this->availableCircuits.end())
-      count++;
-  }
-  if (count != 1) throw Error("No circuit found or there is more than one.\n");
-  return count == 1 ? true : false;
 }
 
 const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &components) {
@@ -71,7 +73,6 @@ const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &compone
                   this->availableCircuits.end(),
                   (*it)->lexeme) != this->availableCircuits.end()) {
         ret = (*it)->lexeme;
-        components.erase(components.begin() + index);
         return ret;
       }
   }
@@ -79,35 +80,48 @@ const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &compone
 }
 
 bool    Parser::createCircuit(nts::t_ast_node &root) {
-  // For debug
-  // std::cout << "\nBEFORE" << std::endl;
-  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
-  //   std::cout << (*it)->lexeme << std::endl;
-  // }
+
+  // For Debug
+  std::cout << "[COMPONENTS]" << std::endl;
+  for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
+    std::cout << (*it)->lexeme << std::endl;
+  }
+  std::cout << "\n" << std::endl;
+  // *******
 
   for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin();
        it != root.children->at(2)->children->end(); ++it) {
 
-        nts::IComponent *newComponent;
+        AComponent *newComponent;
 
         if ((*it)->lexeme == "input") {
-          std::cout << "[****INPUT****], name : " << (*it)->value << ", value : " << this->comp_values[(*it)->value] << std::endl;
           if (this->comp_values.find((*it)->value) == this->comp_values.end()) {
             throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.\n");
           }
           newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
-          this->circuits.insert(std::pair<std::string, nts::IComponent *>((*it)->value, newComponent));
+          this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
         } else 
         {
           newComponent = this->factory.create((*it)->value, (*it)->lexeme);
-          this->circuits.insert(std::pair<std::string, nts::IComponent *>((*it)->value, newComponent));
+          this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
           if ((*it)->lexeme == "output") {
-            std::cout << "[****OUTPUT****], name : " << (*it)->value << std::endl;
             this->outputs.push_back(newComponent);
           }
         }
   }
-  return true;
+  return false;
+}
+
+bool    Parser::linkComponents(nts::t_ast_node &root) {
+  std::vector<nts::t_ast_node *> *Left = root.children->at(3)->children;
+  std::vector<nts::t_ast_node *> *Right = root.children->at(4)->children;
+
+  for (size_t i = 0; i < Right->size(); i++) {
+    std::cout << Left->at(i)->lexeme << "   ";
+    std::cout << Right->at(i)->lexeme << std::endl;
+  }
+  (void)Right;
+  (void)Left;
 }
 
 // CREATE TREE PART
@@ -116,10 +130,6 @@ nts::t_ast_node *Parser::createTree() {
   tmp = this->generateTree();
   this->checkTree();
   return (tmp);
-}
-
-nts::t_ast_node *Parser::getRoot() const {
-  return this->treeRoot;
 }
 
 void  Parser::loadFile_c(char *file_content)
@@ -292,12 +302,3 @@ bool  Parser::checkComp_value(const char* str)
     }
   return (true);
 }
-/*
-
-int main(int argc, char **argv) {
-  Parser  parser(argc, argv);
-
-  parser.createTree();
-  parser.parseTree(*parser.getRoot());
-  return 0;
-}*/

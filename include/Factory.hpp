@@ -27,17 +27,17 @@ class   Factory {
         Factory();
         ~Factory();
 
-        nts::IComponent *create(const std::string &, const std::string &);
-        nts::IComponent *create(const std::string &, const std::string &, size_t);
+        AComponent *create(const std::string &, const std::string &);
+        AComponent *create(const std::string &, const std::string &, size_t);
     private:
-        std::map<const std::string, std::function<nts::IComponent *(const std::string &)> > basicConstructors;
-        std::map<const std::string, std::function<nts::IComponent *(const std::string &, size_t)> > advancedConstructors;
+        std::map<const std::string, std::function<AComponent *(const std::string &)> > basicConstructors;
+        std::map<const std::string, std::function<AComponent *(const std::string &, size_t)> > advancedConstructors;
 
-        nts::IComponent *createFalse(const std::string &) const;
-        nts::IComponent *createTrue(const std::string &) const;
-        nts::IComponent *createInput(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
-        nts::IComponent *createOutput(const std::string &) const;
-        nts::IComponent *createC4071(const std::string &) const;
+        AComponent *createFalse(const std::string &) const;
+        AComponent *createTrue(const std::string &) const;
+        AComponent *createInput(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
+        AComponent *createOutput(const std::string &) const;
+        AComponent *createC4071(const std::string &) const;
 
 };
 
