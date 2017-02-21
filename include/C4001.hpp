@@ -14,7 +14,7 @@
 
 class   C4001 : public AComponent {
 
-public:
+ public:
 // Constructor / Destructor
   C4001(const std::string &name);
   virtual ~C4001() { }
@@ -26,7 +26,7 @@ public:
                        size_t pin_num_target);
   virtual void Dump() const;
 
-private:
+ private:
 
 // Gates
   Gate  gate;
