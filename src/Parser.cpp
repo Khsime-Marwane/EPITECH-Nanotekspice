@@ -82,11 +82,11 @@ const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &compone
 bool    Parser::createCircuit(nts::t_ast_node &root) {
 
   // For Debug
-  std::cout << "[COMPONENTS]" << std::endl;
-  for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
-    std::cout << (*it)->lexeme << std::endl;
-  }
-  std::cout << "\n" << std::endl;
+  // std::cout << "[COMPONENTS]" << std::endl;
+  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
+  //   std::cout << (*it)->lexeme << std::endl;
+  // }
+  // std::cout << "\n" << std::endl;
   // *******
 
   for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin();
@@ -120,10 +120,11 @@ bool    Parser::linkComponents(nts::t_ast_node &root) {
       size_t pin_num_this = std::stoi(Left->at(i)->value);
       size_t pin_num_target = std::stoi(Right->at(i)->value);
 
-      std::cout << Left->at(i)->lexeme;
-      std::cout << "=>" << pin_num_this << std::endl;
-      std::cout << Right->at(i)->lexeme;
-      std::cout << "=>" << pin_num_target << std::endl;
+      // For Debug
+      // std::cout << Left->at(i)->lexeme;
+      // std::cout << "=>" << pin_num_this << std::endl;
+      // std::cout << Right->at(i)->lexeme;
+      // std::cout << "=>" << pin_num_target << std::endl;
       this->circuit[Left->at(i)->lexeme]->SetLink(pin_num_this,
                                                   *this->circuit[Right->at(i)->lexeme],
                                                   pin_num_target);

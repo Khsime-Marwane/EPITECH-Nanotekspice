@@ -8,34 +8,54 @@
 ## Last update Thu Feb  2 05:55:43 2017 Marwane
 ##
 
-CPPFLAGS	+= -c -W -Wall -Wextra -Werror -std=c++11
-CPPFLAGS	+= -I./include/
+CPP				= g++
 
-RM			= rm -rf
+CPPFLAGS		+= -c -W -Wall -Wextra -Werror -std=c++11
+CPPFLAGS		+= -I./include/
 
-SRCDIR		= ./src/
+RM				= rm -rf
 
-SRC			= $(SRCDIR)Parser.cpp
+SRCDIR			= ./src/
 
-OBJS		= $(SRC:.cpp=.o)
+SRC				=	$(SRCDIR)AComponent.cpp \
+					$(SRCDIR)C4001.cpp \
+					$(SRCDIR)C4011.cpp \
+					$(SRCDIR)C4030.cpp \
+					$(SRCDIR)C4071.cpp \
+					$(SRCDIR)C4081.cpp \
+					$(SRCDIR)Cli.cpp \
+					$(SRCDIR)Factory.cpp \
+					$(SRCDIR)False.cpp \
+					$(SRCDIR)Gate.cpp \
+					$(SRCDIR)Input.cpp \
+					$(SRCDIR)main.cpp \
+					$(SRCDIR)Output.cpp \
+					$(SRCDIR)Parser.cpp \
+					$(SRCDIR)RegParse.cpp \
+					$(SRCDIR)True.cpp
 
-NAME 		= libnanotekspice.a
+OBJS			= 	$(SRC:.cpp=.o)
 
-$(NAME):	$(OBJS)
-	ar rc $(NAME) $(OBJS)
-	ranlib $(NAME)
+LIBNAME 		= libnanotekspice.a
 
-all:		$(NAME)
+PROJECTNAME		= nanotekspice
+
+project: 		$(OBJS)
+				$(CPP) $(OBJS) -o $(PROJECTNAME)
+				ar rc $(LIBNAME) $(OBJS)
+				ranlib $(LIBNAME)
+
+all:			project
 
 clean:
-			$(RM) $(OBJS)
+				$(RM) $(OBJS)
 
-fclean: 	clean
-		$(RM) $(NAME)
+fclean: 		clean
+				$(RM) $(LIBNAME) $(PROJECTNAME)
 
-re: 		fclean all
+re:		 		fclean all
 
 tests:
-		./__tests__/./run.sh
+				./__tests__/./run.sh
 
-.PHONY:		all clean fclean re
+.PHONY:			all clean fclean re

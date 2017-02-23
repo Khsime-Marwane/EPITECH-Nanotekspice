@@ -77,7 +77,7 @@ nts::Tristate   C4081::Compute(size_t pin_num_this) {
     }
 
   // If the pin doesn't exist, throw an error.
-  throw Error("C4081 - Compute : Invalid pin selected.\n");
+  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
   return nts::Tristate::UNDEFINED;
 }   
 
@@ -110,7 +110,7 @@ void    C4081::SetLink(size_t pin_num_this,
                        size_t pin_num_target) {
 
   if (!pinIndexIsValid(pin_num_this))
-    throw Error("ERROR : [C4081 COMPONENT | LINK] : pin does not exist.\n");
+    throw Error(("ERROR : [ " + this->_name + " | LINK] : pin does not exist.\n"));
 
   if (!this->pins[pin_num_this - 1].component) {
     // Save the indexes

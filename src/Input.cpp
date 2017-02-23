@@ -22,13 +22,13 @@ Input::~Input() {}
 
 nts::Tristate Input::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [INPUT COMPONENT | COMPUTING] : pin does not exist.\n");
-    }
+    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+  }
   return this->pins[0].state;
 }
 
 void Input::Dump() const {
-  std::cout << "[INPUT COMPONENT] | Value : " << this->pins[0].state << std::endl;
+  std::cout << this->_name << "=" << this->pins[0].state << std::endl;
 }
 
 void Input::SetLink(size_t pin_num_this,

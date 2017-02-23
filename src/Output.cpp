@@ -21,13 +21,13 @@ Output::~Output() {}
 
 nts::Tristate Output::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [OUTPUT COMPONENT | COMPUTING] : pin does not exist.\n");
+      throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
     }
   return this->pins[0].state;
 }
 
 void Output::Dump() const {
-  std::cout << "[Output] | Value : " << this->pins[0].state << std::endl;
+  std::cout << this->_name << "=" << this->pins[0].state << std::endl;
 }
 
 void Output::SetLink(size_t pin_num_this,

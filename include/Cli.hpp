@@ -9,6 +9,10 @@
 #ifndef _CLI_HPP_
 # define _CLI_HPP_
 
+#include <csignal>
+#include <cstdlib>
+#include <cstdio>
+
 #include "Parser.hpp"
 
 
@@ -29,22 +33,31 @@
 **  • dump - Call the Dump method of every IComponent
 **
 */
+#include <sstream>
+
 class   Cli {
 public:
     // Constructor / Destructor
     Cli(const Parser &parser);
     ~Cli();
 
-    // Commands avalaible
+    // The init initialize the Cli and launch it.
     void    init();
+
+    // Commands avalaible
     void    Exit();
     void    Display();
-    void    SetInput(const std::string &name);
+    void    SetInput();
     void    Simulate();
     void    Loop();
     void    Dump();
+    void    Help();
 
 private:
+    // Private Methods
+    static void    signalHandler(int signum);
+    bool           looping;
+
     // Circuits
     std::map<std::string, AComponent *> circuit;
     std::vector<AComponent *> outputs;

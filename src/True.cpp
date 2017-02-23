@@ -22,13 +22,13 @@ True::~True() {}
 
 nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [True COMPONENT | COMPUTING] : pin does not exist.\n");
-    }
+    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+  }
   return nts::Tristate::TRUE;
 }
 
 void True::Dump() const {
-  std::cout << "[True COMPONENT] | Value : true" << std::endl;
+  std::cout << this->_name << "=" << this->pins[0].state << std::endl;
 }
 
 void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {

@@ -77,7 +77,7 @@ nts::Tristate   C4001::Compute(size_t pin_num_this) {
     }
 
   // If the pin doesn't exist, throw an error.
-  throw Error("C4001 - Compute : Invalid pin selected.\n");
+  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
   return nts::Tristate::UNDEFINED;
 }   
 
@@ -110,7 +110,7 @@ void    C4001::SetLink(size_t pin_num_this,
                        size_t pin_num_target) {
 
   if (!pinIndexIsValid(pin_num_this))
-    throw Error("ERROR : [C4001 COMPONENT | LINK] : pin does not exist.\n");
+    throw Error(("ERROR : [ " + this->_name + " | LINK] : pin does not exist.\n"));
 
   if (!this->pins[pin_num_this - 1].component) {
     // Save the indexes
@@ -128,10 +128,8 @@ void    C4001::SetLink(size_t pin_num_this,
 ** it display 'NULL'.
 */
 void    C4001::Dump() const {
-  std::cout << "[CHIPSET C4001] :" << std::endl;
-
   for (unsigned int i = 0; i < 14; i++) {
-      std::cout << "Pin [" << i + 1 << "] : ";
+      std::cout << this->_name << "[" << i + 1 << "] = ";
       if (this->pins[i].component)
         std::cout << (int)this->pins[i].state << std::endl;
       else std::cout << "NULL" << std::endl;

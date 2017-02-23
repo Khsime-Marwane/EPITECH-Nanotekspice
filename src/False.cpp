@@ -21,13 +21,13 @@ False::~False() {}
 
 nts::Tristate False::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [FALSE COMPONENT | COMPUTING] : pin does not exist.\n");
+    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
   }
   return this->pins[0].state;
 }
 
 void False::Dump() const {
-    std::cout << "[FALSE COMPONENT] | Value : false" << std::endl;
+  std::cout << this->_name << "=" << this->pins[0].state << std::endl;
 }
 
 void False::SetLink(size_t pin_num_this, nts::IComponent &component,
