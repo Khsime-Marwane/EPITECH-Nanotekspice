@@ -5,24 +5,47 @@
 #include <map>
 #include <cstdlib>
 
-#include "Output.hpp"
+#include "Cli.hpp"
 
-int   main(int  ac, char *av[])
+void  Helper() {
+  std::cout <<
+  "Usage:     ./nanotekspice [FILE] [INPUTS]" << std::endl << std::endl
+  << "| CLI COMMANDS :" << std::endl
+  << "|__ display\t\tprints on stdout the value of all outputs sorted by name." << std::endl
+  << "|__ simulate\t\tlaunches a simulation." << std::endl
+  << "|__ loop\t\tlaunches simulations without prompting again until SIGINT." << std::endl
+  << "|__ dump\t\tcall the Dump method of every component." << std::endl
+  << "|__ [INPUT]=[VALUE]\tchanges the value of an input. (Not a clock)" << std::endl
+  << "|__ exit\t\tcloses the program." << std::endl
+  << "|__ help\t\tdisplay this help." << std::endl;
+}
+
+int   nanotekspice(int  ac, char *av[])
 {
-  if(ac > 1)
-    {
-      AComponent  *out = new Output("Acid rain");
-      // Parser  parser(ac, av);
+  if(ac > 1) {
+    try {
+      Parser  parser(ac, av);
 
-      // parser.createTree();
-      // parser.parseTree(*parser.getRoot());
+      parser.createTree();
+      parser.parseTree(*parser.getRoot());
 
-      // Cli     cli(parser);
+      Cli     cli(parser);
 
-      // cli.init();
-      (void)out;
+      cli.init();
+    } 
+    catch(std::exception err) {
+      std::cout << err.what() << std::endl;
+      return EXIT_FAILURE;
     }
-  (void)ac;
-  (void)av;
-  return (0);
+  } else {
+    Helper();
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
+}
+
+int   main(int argc, char *argv[]) {
+  if (nanotekspice(argc, argv) == EXIT_FAILURE)
+    return EXIT_FAILURE;
+  return EXIT_SUCCESS;
 }
