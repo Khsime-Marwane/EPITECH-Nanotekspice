@@ -10,7 +10,6 @@
 # define _C4030_HPP_
 
 #include "AComponent.hpp"
-#include "Gate.hpp"
 
 class   C4030 : public AComponent {
 

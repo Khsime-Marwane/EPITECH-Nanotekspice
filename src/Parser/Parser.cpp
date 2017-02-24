@@ -7,7 +7,7 @@
 //
 
 #include <algorithm>
-#include "../include/Parser.hpp"
+#include "Parser.hpp"
 #include "Errors.hpp"
 
 Parser::Parser(int ac, char **av) {

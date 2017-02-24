@@ -8,54 +8,61 @@
 ## Last update Thu Feb  2 05:55:43 2017 Marwane
 ##
 
-CPP				= g++
+CPP				= 	g++
 
-CPPFLAGS		+= -c -W -Wall -Wextra -Werror -std=c++11
-CPPFLAGS		+= -I./include/
+CPPFLAGS		+= 	-c -W -Wall -Wextra -Werror -std=c++11
+CPPFLAGS		+= 	-I./include/
 
-RM				= rm -rf
+RM				= 	rm -rf
 
-SRCDIR			= ./src/
+SRCDIR			= 	./src
 
-SRC				=	$(SRCDIR)AComponent.cpp \
-					$(SRCDIR)C4001.cpp \
-					$(SRCDIR)C4011.cpp \
-					$(SRCDIR)C4030.cpp \
-					$(SRCDIR)C4071.cpp \
-					$(SRCDIR)C4081.cpp \
-					$(SRCDIR)Cli.cpp \
-					$(SRCDIR)Factory.cpp \
-					$(SRCDIR)False.cpp \
-					$(SRCDIR)Gate.cpp \
-					$(SRCDIR)Input.cpp \
-					$(SRCDIR)main.cpp \
-					$(SRCDIR)Output.cpp \
-					$(SRCDIR)Parser.cpp \
-					$(SRCDIR)RegParse.cpp \
-					$(SRCDIR)True.cpp
+COMPONENTSDIR	= 	$(SRCDIR)/Components
+PARSERDIR		= 	$(SRCDIR)/Parser
+FACTORYDIR		= 	$(SRCDIR)/Factory
+GATEDIR			= 	$(SRCDIR)/Gate
+CLIDIR			= 	$(SRCDIR)/Cli
+
+SRC				=	$(SRCDIR)/main.cpp					\
+					$(CLIDIR)/Cli.cpp					\
+					$(COMPONENTSDIR)/AComponent.cpp		\
+					$(COMPONENTSDIR)/C4001.cpp			\
+					$(COMPONENTSDIR)/C4011.cpp			\
+					$(COMPONENTSDIR)/C4030.cpp			\
+					$(COMPONENTSDIR)/C4071.cpp			\
+					$(COMPONENTSDIR)/C4081.cpp			\
+					$(COMPONENTSDIR)/False.cpp			\
+					$(COMPONENTSDIR)/Input.cpp			\
+					$(COMPONENTSDIR)/Output.cpp			\
+					$(COMPONENTSDIR)/True.cpp			\
+					$(FACTORYDIR)/Factory.cpp			\
+					$(GATEDIR)/Gate.cpp					\
+					$(PARSERDIR)/Parser.cpp				\
+					$(PARSERDIR)/RegParse.cpp			\
 
 OBJS			= 	$(SRC:.cpp=.o)
 
-LIBNAME 		= libnanotekspice.a
+LIBNAME 		= 	libnanotekspice.a
 
-PROJECTNAME		= nanotekspice
+PROJECTNAME		= 	nanotekspice
 
-project: 		$(OBJS)
-				$(CPP) $(OBJS) -o $(PROJECTNAME)
-				ar rc $(LIBNAME) $(OBJS)
-				ranlib $(LIBNAME)
+project: 			$(OBJS)
+					$(CPP) $(OBJS) -o $(PROJECTNAME)
+					ar rc $(LIBNAME) $(OBJS)
+					ranlib $(LIBNAME)
+					$(RM) $(OBJS)
 
-all:			project
+all:				project
 
 clean:
-				$(RM) $(OBJS)
+					$(RM) $(OBJS)
 
-fclean: 		clean
-				$(RM) $(LIBNAME) $(PROJECTNAME)
+fclean: 			clean
+					$(RM) $(LIBNAME) $(PROJECTNAME)
 
-re:		 		fclean all
+re:		 			fclean all
 
 tests:
-				./__tests__/./run.sh
+					./__tests__/./run.sh
 
-.PHONY:			all clean fclean re
+.PHONY:				all clean fclean re

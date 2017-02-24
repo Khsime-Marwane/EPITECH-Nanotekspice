@@ -6,7 +6,7 @@
 // Last Modified time: 2017-02-16 00:25:01
 //
 
-#include "../include/AComponent.hpp"
+#include "AComponent.hpp"
 #include "True.hpp"
 
 // Constructor / Destructor

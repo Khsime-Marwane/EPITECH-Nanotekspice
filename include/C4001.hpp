@@ -10,7 +10,6 @@
 # define _C4001_HPP_
 
 #include "AComponent.hpp"
-#include "Gate.hpp"
 
 class   C4001 : public AComponent {
 

@@ -2,7 +2,10 @@
   #define GATE_H_
 
 #include <cstdlib>
-#include "AComponent.hpp"
+#include <string>
+#include <functional>
+#include "IParser.hpp"
+#include "IComponent.hpp"
 
 /*
 ** The Gate class contain all gates methods.

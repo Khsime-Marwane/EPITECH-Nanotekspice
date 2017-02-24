@@ -18,6 +18,7 @@
 
 #include "IComponent.hpp"
 #include "Errors.hpp"
+#include "Gate.hpp"
 
 class   AComponent : public nts::IComponent {
 

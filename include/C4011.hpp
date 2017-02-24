@@ -10,7 +10,6 @@
 # define _C4011_HPP_
 
 #include "AComponent.hpp"
-#include "Gate.hpp"
 
 class   C4011 : public AComponent {
 

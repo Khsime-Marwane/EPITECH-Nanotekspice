@@ -1,3 +1,11 @@
+//
+// Author: Marwane Khsime 
+// Date: 2017-02-23 02:39:39 
+//
+// Last Modified by:   Marwane Khsime 
+// Last Modified time: 2017-02-23 02:39:39
+//
+
 #include "Gate.hpp"
 
 Gate::Gate()

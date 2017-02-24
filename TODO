@@ -1,2 +1,21 @@
 // TODO : changer les valeurs des exit par 84
 // TODO : Revoir les messages d'erreurs (numéro du pin etc ..)
+
+[✓] • 4001 : Four NOR gates.
+[❌] • 4008 : 4bits adder.
+[✓] • 4011 : Four NAND gates.
+[❌] • 4013 : Dual Flip Flop.
+[❌] • 4017 : 10bits Johnson decade.
+[✓] • 4030 : Four XOR gates.
+[❌] • 4040 : 12 bits counter.
+[❌] • 4069 : Six INVERTER gates.    Marwane
+[✓] • 4071 : Four OR gates.
+[✓] • 4081 : Four AND gates.
+[❌] • 4094 : 8bits shift register.
+[❌] • 4514 : 4bits decoder.
+[❌] • 4801 : Random access memory.
+[❌] • 2716 : Read only memory. 2716 must takes a value when declared. In the .chipsets:
+section, you must precise a file that will contain the data written in the ROM: 2716
+rom(cp_m.dat)
+
+Focus mandion
