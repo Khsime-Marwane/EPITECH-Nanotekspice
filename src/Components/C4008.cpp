@@ -70,15 +70,13 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
           // Compute the inputs
           nts::Tristate v1 = Compute(firstPinLinked);
           nts::Tristate v2 = Compute(secondPinLinked);
-          nts::Tristate cinp  = Compute(9);
+          nts::Tristate cinp = (this->pins[13].component->getStateAtPin(1) == nts::Tristate::UNDEFINED) ? Compute(9) : Compute(14);
 
 
           // Call the door Or with v1 and v2 as parameters.
           this->pins[pin_num_this - 1].state = this->gate.compute("SUM", v1, v2, cinp);
-          this->pins[8].state = this->gate.compute("SUMC", v1, v2, cinp);
           this->pins[13].state = this->gate.compute("SUMC", v1, v2, cinp);
-
-          std::cout << "CIN VALUE : " <<  this->pins[13].state << std::endl;
+          this->pins[13].component->setStateAtPin(1, this->gate.compute("SUMC", v1, v2, cinp));
 
           if (this->pins[pin_num_this - 1].component)
             this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
@@ -194,7 +192,7 @@ void    C4008::SetLink(size_t pin_num_this,
 void    C4008::Dump() const {
 
 std::cout << _name << std::endl;
-  for (unsigned int i = 0; i < 14; i++) {
+  for (unsigned int i = 0; i < 16; i++) {
       std::cout << this->_name << "[" << i + 1 << "] = ";
       if (this->pins[i].component)
         std::cout << (int)this->pins[i].state << std::endl;
