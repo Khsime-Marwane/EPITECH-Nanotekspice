@@ -4,6 +4,7 @@
 CMakeLists.txt
 cmake*
 a.out
+nanotekspice
 *.a
 *.o
 vscode

@@ -27,6 +27,8 @@ SRC				=	$(SRCDIR)/main.cpp					\
 					$(CLIDIR)/Cli.cpp					\
 					$(COMPONENTSDIR)/AComponent.cpp		\
 					$(COMPONENTSDIR)/C4001.cpp			\
+					$(COMPONENTSDIR)/C4008.cpp			\
+					$(COMPONENTSDIR)/C4069.cpp			\
 					$(COMPONENTSDIR)/C4011.cpp			\
 					$(COMPONENTSDIR)/C4030.cpp			\
 					$(COMPONENTSDIR)/C4071.cpp			\
@@ -65,4 +67,4 @@ re:		 			fclean all
 tests:
 					./__tests__/./run.sh
 
-.PHONY:				all clean fclean re
+.PHONY:				mall clean fclean re

@@ -20,12 +20,14 @@
 #include "True.hpp"
 #include "Output.hpp"
 #include "Input.hpp"
-#include "Clock.hpp"
 #include "C4071.hpp"
 #include "C4081.hpp"
 #include "C4001.hpp"
 #include "C4030.hpp"
 #include "C4011.hpp"
+#include "C4069.hpp"
+#include "C4008.hpp"
+
 
 class   Factory {
  public:
@@ -41,14 +43,14 @@ class   Factory {
   AComponent *createFalse(const std::string &) const;
   AComponent *createTrue(const std::string &) const;
   AComponent *createInput(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
-  AComponent *createClock(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
   AComponent *createOutput(const std::string &) const;
   AComponent *createC4071(const std::string &) const;
   AComponent *createC4081(const std::string &) const;
   AComponent *createC4001(const std::string &) const;
   AComponent *createC4030(const std::string &) const;
   AComponent *createC4011(const std::string &) const;
-
+  AComponent *createC4069(const std::string &) const;
+  AComponent *createC4008(const std::string &) const;
 };
 
 #endif /* _FACTORY_HPP_ */

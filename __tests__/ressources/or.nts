@@ -2,7 +2,7 @@
 # One or gate
 
 .chipsets:
-clock		a
+input		a
 input		b
 output		s
 4071		gate

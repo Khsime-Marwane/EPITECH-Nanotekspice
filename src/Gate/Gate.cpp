@@ -1,23 +1,18 @@
-//
-// Author: Marwane Khsime 
-// Date: 2017-02-23 02:39:39 
-//
-// Last Modified by:   Marwane Khsime 
-// Last Modified time: 2017-02-23 02:39:39
-//
-
 #include "Gate.hpp"
 
 Gate::Gate()
 {
   // Create the map of functions. It's useful to call properly the associated function of the type
   // sent as parameter to the compute function.
-  this->computes["AND"] = std::bind(&Gate::computeAND, this, std::placeholders::_1, std::placeholders::_2);
-  this->computes["OR"] = std::bind(&Gate::computeOR, this, std::placeholders::_1, std::placeholders::_2);
-  this->computes["XOR"] = std::bind(&Gate::computeXOR, this, std::placeholders::_1, std::placeholders::_2);
-  this->computes["NAND"] = std::bind(&Gate::computeAND, this, std::placeholders::_1, std::placeholders::_2);
-  this->computes["NOR"] = std::bind(&Gate::computeOR, this, std::placeholders::_1, std::placeholders::_2);
-  this->computes["XNOR"] = std::bind(&Gate::computeXOR, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["AND"] = std::bind(&Gate::computeAND, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["OR"] = std::bind(&Gate::computeOR, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["XOR"] = std::bind(&Gate::computeXOR, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["NAND"] = std::bind(&Gate::computeAND, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["NOR"] = std::bind(&Gate::computeOR, this, std::placeholders::_1, std::placeholders::_2);
+  this->basiComputes["XNOR"] = std::bind(&Gate::computeXOR, this, std::placeholders::_1, std::placeholders::_2);
+
+  this->AdvanceComputes["SUM"] = std::bind(&Gate::computeSUM, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+  this->AdvanceComputes["SUMC"] = std::bind(&Gate::computeSUMC, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 }
 
 /*
@@ -26,7 +21,7 @@ Gate::Gate()
 ** to undefined because we don't use it. If among the values needed, one or more is
 ** UNDEFINED, or if the _type is unknown, it return UNDEFINED.
 */
-nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v2)
+nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v2, nts::Tristate v3)
 {
   this->_not = (_type == "NAND" || _type == "NOR" || _type == "XNOR") ? true : false;
 
@@ -34,7 +29,11 @@ nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v
     return (computeNO(v1));
   if ((v1 == nts::Tristate::UNDEFINED) || (v2 == nts::Tristate::UNDEFINED))
     return (nts::Tristate::UNDEFINED);
-  return (computes.find(_type)->second(v1, v2));
+  if (basiComputes.find(_type) != basiComputes.end())
+    return (basiComputes.find(_type)->second(v1, v2));
+  if (AdvanceComputes.find(_type) != AdvanceComputes.end())
+    return (AdvanceComputes.find(_type)->second(v1, v2, v3));
+  return (nts::Tristate::UNDEFINED);
 }
 
 /*
@@ -48,8 +47,8 @@ nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v
 nts::Tristate Gate::computeAND(nts::Tristate v1, nts::Tristate v2)
 {
   if (_not)
-    return ((nts::Tristate)(!(v1 & v2)));
-  return ((nts::Tristate)(v1 & v2));
+    return ((nts::Tristate)(!(v1 && v2)));
+  return ((nts::Tristate)(v1 && v2));
 }
 
 /*
@@ -91,4 +90,14 @@ nts::Tristate Gate::computeXOR(nts::Tristate v1, nts::Tristate v2)
 nts::Tristate Gate::computeNO(nts::Tristate v)
 {
   return ((nts::Tristate)(!v));
+}
+
+nts::Tristate Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
+{
+  return (computeXOR(computeXOR(v1, v2), cinp));
+}
+
+nts::Tristate Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
+{
+  return (computeOR(computeAND(computeXOR(v1, v2), cinp), computeAND(v1, v2)));
 }
