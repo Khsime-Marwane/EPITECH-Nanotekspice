@@ -5,23 +5,23 @@
 ## Login   <marwane.khsime@epitech.eu@epitech.eu>
 ##
 ## Started on  Wed Feb  1 03:59:07 2017 Marwane Khsime
-## Last update Thu Feb  2 05:55:43 2017 Marwane
+## Last update Sat Feb 25 17:56:15 2017 Marwane
 ##
 
-CPP				= 	g++
+CPP				=	g++
 
-CPPFLAGS		+= 	-c -W -Wall -Wextra -Werror -std=c++11
-CPPFLAGS		+= 	-I./include/
+CPPFLAGS		+=	-c -W -Wall -Wextra -Werror -std=c++11
+CPPFLAGS		+=	-I./include/
 
-RM				= 	rm -rf
+RM				=	rm -rf
 
-SRCDIR			= 	./src
+SRCDIR			=	./src
 
-COMPONENTSDIR	= 	$(SRCDIR)/Components
-PARSERDIR		= 	$(SRCDIR)/Parser
-FACTORYDIR		= 	$(SRCDIR)/Factory
-GATEDIR			= 	$(SRCDIR)/Gate
-CLIDIR			= 	$(SRCDIR)/Cli
+COMPONENTSDIR	=	$(SRCDIR)/Components
+PARSERDIR		=	$(SRCDIR)/Parser
+FACTORYDIR		=	$(SRCDIR)/Factory
+GATEDIR			=	$(SRCDIR)/Gate
+CLIDIR			=	$(SRCDIR)/Cli
 
 SRC				=	$(SRCDIR)/main.cpp					\
 					$(CLIDIR)/Cli.cpp					\
@@ -33,6 +33,7 @@ SRC				=	$(SRCDIR)/main.cpp					\
 					$(COMPONENTSDIR)/C4081.cpp			\
 					$(COMPONENTSDIR)/False.cpp			\
 					$(COMPONENTSDIR)/Input.cpp			\
+					$(COMPONENTSDIR)/Clock.cpp			\
 					$(COMPONENTSDIR)/Output.cpp			\
 					$(COMPONENTSDIR)/True.cpp			\
 					$(FACTORYDIR)/Factory.cpp			\

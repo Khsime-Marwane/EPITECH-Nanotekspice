@@ -41,8 +41,10 @@ virtual void            computeGates();
 std::string     getName() const;
 // Get the type of the component.
 std::string     getType() const;
-// Set the value of the component at the pin 'target'.
-void            setStateAtPin(size_t pin, nts::Tristate state);
+// Get the value of the component at the pin 'index'
+nts::Tristate   getStateAtPin(size_t target) const;
+// Set the value of the component at the pin 'index'.
+void            setStateAtPin(size_t index, nts::Tristate state);
 
 // === VARIABLES
 protected:

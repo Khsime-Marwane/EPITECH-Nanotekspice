@@ -28,6 +28,11 @@ std::string     AComponent::getType() const {
     return this->_type;
 }
 
+// Get the state of the pin's component at the pin 'index'.
+nts::Tristate   AComponent::getStateAtPin(size_t index) const {
+    return this->pins[index - 1].state;
+}
+
 // Set the state of the pin's component at the pin 'index'.
 void    AComponent::setStateAtPin(size_t index, nts::Tristate state)
 {

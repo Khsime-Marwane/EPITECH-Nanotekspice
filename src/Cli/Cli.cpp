@@ -13,6 +13,7 @@ Cli::Cli(const Parser &parser) {
   this->regParse = new RegParse();
   this->circuit = parser.getCircuit();
   this->outputs = parser.getOutputs();
+  this->clocks = parser.getClocks();
   this->looping = false;
 
   this->func["exit"] = std::bind(&Cli::Exit, this);
@@ -90,11 +91,12 @@ void    Cli::SetInput() {
 }
 
 void    Cli::Simulate() {
-    std::map<std::string, AComponent *>::iterator it;
-
-    for (it = this->circuit.begin(); it != this->circuit.end(); it++)
-    {
+    for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
         it->second->computeGates();
+    }
+
+    for (std::vector<AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
+        (*it)->setStateAtPin(1, (nts::Tristate)!(*it)->getStateAtPin(1));
     }
 }
 

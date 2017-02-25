@@ -61,6 +61,7 @@ private:
     // Circuits
     std::map<std::string, AComponent *> circuit;
     std::vector<AComponent *> outputs;
+    std::vector<AComponent *> clocks;
 
   // Functions
   std::map<const std::string, std::function<void ()> > func;

@@ -36,6 +36,7 @@ class   Parser : public nts::IParser {
   nts::t_ast_node *getRoot() const;
   std::map<std::string, AComponent *> getCircuit() const;
   std::vector<AComponent *> getOutputs() const;
+  std::vector<AComponent *> getClocks() const;
 
  private:
   // createTree's methods
@@ -64,6 +65,7 @@ class   Parser : public nts::IParser {
   // Circuits
   std::map<std::string, AComponent *> circuit;
   std::vector<AComponent *> outputs;
+  std::vector<AComponent *> clocks;
 
   // Factory
   Factory factory;

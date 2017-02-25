@@ -34,6 +34,10 @@ std::vector<AComponent *> Parser::getOutputs() const {
   return this->outputs;
 }
 
+std::vector<AComponent *> Parser::getClocks() const {
+  return this->clocks;
+}
+
 nts::t_ast_node *Parser::getRoot() const {
   return this->treeRoot;
 }
@@ -91,12 +95,14 @@ void    Parser::createCircuit(nts::t_ast_node &root) {
 
         AComponent *newComponent;
 
-        if ((*it)->lexeme == "input") {
+        if ((*it)->lexeme == "input" || (*it)->lexeme == "clock") {
           if (this->comp_values.find((*it)->value) == this->comp_values.end()) {
             throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.");
           }
           newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
           this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
+          if ((*it)->lexeme == "clock")
+            this->clocks.push_back(newComponent);
         } else 
         {
           newComponent = this->factory.create((*it)->value, (*it)->lexeme);
@@ -276,7 +282,7 @@ void  Parser::checkTree()
               same++;
               same2 = 1;
             }
-          else if (it->first == (*it2)->value  && same2)
+          else if (it->first == (*it2)->value && same2)
               throw sameName("Several components share the same name.");
         }
       if (!same2)
