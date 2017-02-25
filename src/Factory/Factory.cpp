@@ -25,6 +25,7 @@ Factory::Factory() {
   this->basicConstructors["4008"] = std::bind(&Factory::createC4008, this, std::placeholders::_1);
 
   this->advancedConstructors["input"] = std::bind(&Factory::createInput, this, std::placeholders::_1, std::placeholders::_2);
+  this->advancedConstructors["clock"] = std::bind(&Factory::createClock, this, std::placeholders::_1, std::placeholders::_2);
 }
 
 Factory::~Factory() {}
@@ -62,6 +63,11 @@ AComponent *Factory::createTrue(const std::string &name) const {
 AComponent *Factory::createInput(const std::string &name, size_t value) const {
   // std::cout << "Create INPUT component named '" << name << "'" << ", value : " << value << std::endl;
   return new Input(name, value);
+}
+
+AComponent *Factory::createClock(const std::string &name, size_t value) const {
+  // std::cout << "Create CLOCK component named '" << name << "'" << ", value : " << value << std::endl;
+  return new Clock(name, value);
 }
 
 AComponent *Factory::createOutput(const std::string &name) const {

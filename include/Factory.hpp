@@ -20,6 +20,7 @@
 #include "True.hpp"
 #include "Output.hpp"
 #include "Input.hpp"
+#include "Clock.hpp"
 #include "C4071.hpp"
 #include "C4081.hpp"
 #include "C4001.hpp"
@@ -43,6 +44,7 @@ class   Factory {
   AComponent *createFalse(const std::string &) const;
   AComponent *createTrue(const std::string &) const;
   AComponent *createInput(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
+  AComponent *createClock(const std::string &, size_t value = nts::Tristate::UNDEFINED) const;
   AComponent *createOutput(const std::string &) const;
   AComponent *createC4071(const std::string &) const;
   AComponent *createC4081(const std::string &) const;

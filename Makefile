@@ -8,7 +8,7 @@
 ## Last update Sat Feb 25 17:56:15 2017 Marwane
 ##
 
-CPP				=	g++
+CPP				=	g++ -g3
 
 CPPFLAGS		+=	-c -W -Wall -Wextra -Werror
 CPPFLAGS		+=	-I./include/

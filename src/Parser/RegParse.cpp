@@ -92,7 +92,7 @@ nts::t_ast_node* RegParse::getComps()
   tmp->lexeme = this->str_match.substr(0, pos);
   pos = ((int)this->str_match.rfind('\t') > 0) ? this->str_match.rfind('\t') : this->str_match.rfind(' ');
   tmp->value = this->str_match.substr(pos + 1);
-  if (tmp->lexeme == "input")
+  if (tmp->lexeme == "input" || tmp->lexeme == "clock")
     this->nb_inputs++;
   return (tmp);
 }
