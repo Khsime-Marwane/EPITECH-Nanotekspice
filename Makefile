@@ -10,7 +10,7 @@
 
 CPP				=	g++
 
-CPPFLAGS		+=	-c -W -Wall -Wextra -Werror -std=c++11
+CPPFLAGS		+=	-c -W -Wall -Wextra -Werror
 CPPFLAGS		+=	-I./include/
 
 RM				=	rm -rf

@@ -16,12 +16,31 @@
 ** which works for each of them with two inputs and one output.
 */
 C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
-  pins = new Pin[15];
+  pins = new Pin[16];
 
+  PinType pinsTypeTab[16] = {
+          INPUT,    // Pin 1
+          INPUT,    // Pin 2
+          INPUT,   // Pin 3
+          INPUT,   // Pin 4
+          INPUT,    // Pin 5
+          INPUT,    // Pin 6
+          INPUT,  // Pin 7
+          IGNORED,    // Pin 8 (VSS)
+          INPUT,    // Pin 9
+          OUTPUT,   // Pin 10
+          OUTPUT,   // Pin 11
+          OUTPUT,    // Pin 12
+          OUTPUT,    // Pin 13
+          OUTPUT,    // Pin 14
+          INPUT,   // Pin 15
+          IGNORED // Pin 16 (VDD)
+  };
   // Create the pins of the chipset 4008 and set them.
-  for (unsigned int i = 0; i < 14; i++) {
+  for (unsigned int i = 0; i < 16; i++) {
       this->pins[i].state = nts::UNDEFINED;
       this->pins[i].component = NULL;
+      this->pins[i].type = pinsTypeTab[i];
       this->links[i] = std::make_pair(0, 0);
     }
 
@@ -30,14 +49,6 @@ C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
   this->gateLinks[11] = std::make_pair(5, 4);
   this->gateLinks[12] = std::make_pair(3, 2);
   this->gateLinks[13] = std::make_pair(1, 15);
-}
-
-/*
-** Check if the pin selected exist in the component,
-** indexes allowed there are [1, 14].
-*/
-bool            C4008::pinIndexIsValid(size_t pin_num_this) {
-  return pin_num_this > 0 && pin_num_this < 16;
 }
 
 /*
@@ -70,34 +81,47 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
           std::cout << "CIN VALUE : " <<  this->pins[13].state << std::endl;
 
           if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(0, this->pins[pin_num_this - 1].state);
-        }
+            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
+                                                                  this->pins[pin_num_this - 1].state);
+      }
 
-        // If the pin selected is an Input.
+      // If the pin selected is an Input.
       else if (this->pins[pin_num_this - 1].component) {
-            this->pins[pin_num_this - 1].state =
-                    this->pins[pin_num_this - 1].component->Compute(this->links[pin_num_this - 1].second);
-          }
+        this->pins[pin_num_this - 1].state =
+          this->pins[pin_num_this - 1].component->Compute(this->links[pin_num_this - 1].second);
+      }
       
       // Return the value of the computed Pin.
       return (this->pins[pin_num_this - 1].state);
     }
 
   // If the pin doesn't exist, throw an error.
-  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   return nts::Tristate::UNDEFINED;
-}   
+}
 
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4008::computeGates() {
-  int           outputPins[] = { 10, 11, 12, 13};
+  size_t        outputPins[] = { 10, 11, 12, 13};
 
   for (size_t i = 0; i < 4; i++) {
-      Compute(outputPins[i]);
-    }
+    Compute(outputPins[i]);
+  }
 }
+
+/*
+** Check if the pin selected exist in the component,
+** indexes allowed there are [1, 14].
+*/
+bool            C4008::pinIndexIsValid(size_t pin_num_this)
+{
+  if (pin_num_this == 8 || pin_num_this == 16)
+    return 0;
+  return pin_num_this > 0 && pin_num_this < 16;
+}
+
 
 /*
 ** Check if the component type match with the type expected by the pin.
@@ -119,7 +143,6 @@ bool            C4008::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_ta
   return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
 }
 
-
 /*
 ** Link a pin of the chipset with a component. When it's possible,
 ** also link on the other side the pin [pin_num_target] with this chipset.
@@ -127,40 +150,41 @@ bool            C4008::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_ta
 void    C4008::SetLink(size_t pin_num_this,
                        nts::IComponent &component,
                        size_t pin_num_target) {
+
   // Check if the index (pin_num_this) is valid.
   if (!pinIndexIsValid(pin_num_this))
-    throw Error("[ C4030 " + this->_name + " | LINK] : Invalid pin selected ("
-                + std::to_string((int)pin_num_target) + ").");
+    throw Error("[ C4008 " + this->_name + " | LINK] : Invalid pin selected ("
+                  + std::to_string((int)pin_num_target) + ").");
 
   // If we are linking pins in the same component.
   if (this == &component && !doesPinsTypesMatch(pin_num_this, pin_num_target))
-    throw Error("[ C4030 " + this->_name + " | LINK] : Impossible to link the pin "
+    throw Error("[ C4008 " + this->_name + " | LINK] : Impossible to link the pin "
+                + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  
+  // Check if the component type match with the type expected by the pin.
+  else if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this))
+    throw Error("[ C4008 " + this->_name + " | LINK] : Component type expected by the pin "
                 + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
                 + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
 
-    // Check if the component type match with the type expected by the pin.
-  else if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this))
-      throw Error("[ C4030 " + this->_name + " | LINK] : Component type expected by the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-
   // If the pin already has a component, nothing to do.
   if (!this->pins[pin_num_this - 1].component) {
+    
+    // Save the indexes
+    this->links[pin_num_this - 1].first = pin_num_this;
+    this->links[pin_num_this - 1].second = pin_num_target;
 
-      // Save the indexes
-      this->links[pin_num_this - 1].first = pin_num_this;
-      this->links[pin_num_this - 1].second = pin_num_target;
+    // Link the chipset with the component.
+    this->pins[pin_num_this - 1].component = dynamic_cast<AComponent *>(&component);
 
-      // Link the chipset with the component.
-      this->pins[pin_num_this - 1].component = dynamic_cast<AComponent *>(&component);
+    // Link the component with the chipset (do nothing if we are linking inside).
+    if (this != &component) {
+      this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
+    }
 
-      // Link the component with the chipset (do nothing if we are linking inside).
-      if (this != &component) {
-          this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
-        }
-
-      this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
-    };
+    this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
+  };
 }
 
 /*
@@ -168,6 +192,8 @@ void    C4008::SetLink(size_t pin_num_this,
 ** it display 'NULL'.
 */
 void    C4008::Dump() const {
+
+std::cout << _name << std::endl;
   for (unsigned int i = 0; i < 14; i++) {
       std::cout << this->_name << "[" << i + 1 << "] = ";
       if (this->pins[i].component)
