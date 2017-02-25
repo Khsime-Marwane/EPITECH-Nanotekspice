@@ -50,7 +50,6 @@ project: 			$(OBJS)
 					$(CPP) $(OBJS) -o $(PROJECTNAME)
 					ar rc $(LIBNAME) $(OBJS)
 					ranlib $(LIBNAME)
-					$(RM) $(OBJS)
 
 all:				project
 

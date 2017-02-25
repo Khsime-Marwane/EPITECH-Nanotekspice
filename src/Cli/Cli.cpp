@@ -81,7 +81,8 @@ void    Cli::SetInput() {
     if (this->circuit.find(tmp.first) != this->circuit.end()) {
         // Check if the component selected is an input.
         if (this->circuit[tmp.first]->getType() == "input")
-            this->circuit[tmp.first]->setValue(tmp.second);
+            // If it is, set the state of the input.
+            this->circuit[tmp.first]->setStateAtPin(1, (nts::Tristate)tmp.second);
         else // else, print an error (only inputs can be setted by cli).
             std::cout << "nanotekspice : " << tmp.first << " is not an input." << std::endl;
     } else  // If the component doesn't exist.

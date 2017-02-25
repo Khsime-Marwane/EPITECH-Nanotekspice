@@ -50,10 +50,10 @@ class   Parser : public nts::IParser {
   bool  checkComp_value(const char*);
 
   // parseTree's methods
-  bool    basicChecks(const nts::t_ast_node &root);
-  bool    doesContainOneCircuit(std::vector<nts::t_ast_node *> &components);
-  bool    createCircuit(nts::t_ast_node &root);
-  bool    linkComponents(nts::t_ast_node &root);
+  void    basicChecks(const nts::t_ast_node &root);
+  void    createCircuit(nts::t_ast_node &root);
+  void    linkComponents(nts::t_ast_node &root);
+  void    checkLinksInCircuit() const;
   const std::string getCircuitType(std::vector<nts::t_ast_node *> &components);
 
 

@@ -15,13 +15,14 @@ False::False(const std::string &name) : AComponent(name, "false") {
   this->pins = new Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::FALSE;
+  this->pins[0].type = IGNORED;
 }
 
 False::~False() {}
 
 nts::Tristate False::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   }
   return this->pins[0].state;
 }
@@ -33,7 +34,8 @@ void False::Dump() const {
 void False::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [FALSE COMPONENT | LINK] : pin does not exist.\n");
+    throw Error("ERROR : [ " + this->_name + " | LINK] : Invalid pin selected ("
+                  + std::to_string((int)pin_num_target) + ").");
   }
   if (!this->pins[0].component) {
     // Link the chipset with the component.

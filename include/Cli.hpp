@@ -42,21 +42,21 @@ public:
     ~Cli();
 
     // The init initialize the Cli and launch it.
-    void    init();
+    void        init();
 
     // Commands avalaible
-    void    Exit();
-    void    Display();
-    void    SetInput();
-    void    Simulate();
-    void    Loop();
-    void    Dump();
-    void    Help();
+    void        Exit();
+    void        Display();
+    void        SetInput();
+    void        Simulate();
+    void        Loop();
+    void        Dump();
+    void        Help();
 
 private:
     // Private Methods
-    static void    signalHandler(int signum);
-    bool           looping;
+    static void        signalHandler(int signum);
+    bool                looping;
 
     // Circuits
     std::map<std::string, AComponent *> circuit;

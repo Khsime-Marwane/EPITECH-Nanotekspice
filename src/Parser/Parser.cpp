@@ -46,22 +46,27 @@ void    Parser::feed(std::string const& input) {
 
 // PARSE TREE PART
 void    Parser::parseTree(nts::t_ast_node &root) {
+
   // Basic Checks
-  if (basicChecks(root)) return ;
+  basicChecks(root);
   // Build Circuit and check logic errors
-  if (createCircuit(root)) return ;
-  if (linkComponents(root)) return ;
+  createCircuit(root);
+  // Link Components
+  linkComponents(root);
+  // Check if all Output Components are linked.
+  checkLinksInCircuit();
 }
 
-bool    Parser::basicChecks(const nts::t_ast_node &root) {
+void    Parser::basicChecks(const nts::t_ast_node &root) {
   // If the tree's base is correct.
-  if (!root.children || root.children->size() != 6) return true;
+  if (!root.children || root.children->size() != 6)
+      throw Error("Can't parse the tree, the root is incomplete.");
 
   // Check if there is at least one component and at least one link.
   if (!root.children->at(2)->children->size() ||
       !root.children->at(3)->children->size() ||
-      !root.children->at(4)->children->size()) return true;
-  return false;
+      !root.children->at(4)->children->size())
+      throw Error("Can't parse the tree, there is no components and/or links.");
 }
 
 const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &components) {
@@ -79,15 +84,7 @@ const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &compone
   return "";
 }
 
-bool    Parser::createCircuit(nts::t_ast_node &root) {
-
-  // For Debug
-  // std::cout << "[COMPONENTS]" << std::endl;
-  // for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin(); it != root.children->at(2)->children->end(); ++it) {
-  //   std::cout << (*it)->lexeme << std::endl;
-  // }
-  // std::cout << "\n" << std::endl;
-  // *******
+void    Parser::createCircuit(nts::t_ast_node &root) {
 
   for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin();
        it != root.children->at(2)->children->end(); ++it) {
@@ -96,7 +93,7 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
 
         if ((*it)->lexeme == "input") {
           if (this->comp_values.find((*it)->value) == this->comp_values.end()) {
-            throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.\n");
+            throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.");
           }
           newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
           this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
@@ -109,27 +106,47 @@ bool    Parser::createCircuit(nts::t_ast_node &root) {
           }
         }
   }
-  return false;
 }
 
-bool    Parser::linkComponents(nts::t_ast_node &root) {
+void    Parser::linkComponents(nts::t_ast_node &root) {
   std::vector<nts::t_ast_node *> *Left = root.children->at(3)->children;
   std::vector<nts::t_ast_node *> *Right = root.children->at(4)->children;
 
   for (size_t i = 0; i < Right->size(); i++) {
-      size_t pin_num_this = std::stoi(Left->at(i)->value);
-      size_t pin_num_target = std::stoi(Right->at(i)->value);
+      size_t pin_num_this = std::stoi(Right->at(i)->value);
+      size_t pin_num_target = std::stoi(Left->at(i)->value);
 
-      // For Debug
-      // std::cout << Left->at(i)->lexeme;
-      // std::cout << "=>" << pin_num_this << std::endl;
-      // std::cout << Right->at(i)->lexeme;
-      // std::cout << "=>" << pin_num_target << std::endl;
-      this->circuit[Left->at(i)->lexeme]->SetLink(pin_num_this,
-                                                  *this->circuit[Right->at(i)->lexeme],
+      // Check if one of the components linked is unknown.
+      if (this->circuit.find(Right->at(i)->lexeme) == this->circuit.end())
+        throw Error("'" + Right->at(i)->lexeme + "' doesn't exist.");
+      if (this->circuit.find(Left->at(i)->lexeme) == this->circuit.end())
+        throw Error("'" + Left->at(i)->lexeme + "' doesn't exist.");
+
+      // Check if we are linking the same component and at the same pin
+      if (pin_num_this == pin_num_target &&
+          this->circuit[Right->at(i)->lexeme] == this->circuit[Left->at(i)->lexeme])
+            throw Error("Trying to link the component '" + Right->at(i)->lexeme +
+                        "' with itself at the same pin.");
+      this->circuit[Right->at(i)->lexeme]->SetLink(pin_num_this,
+                                                  *this->circuit[Left->at(i)->lexeme],
                                                   pin_num_target);
     }
-  return (true);
+}
+
+void      Parser::checkLinksInCircuit() const {
+  std::string errMsg;
+  bool    isError = false;
+
+  for (std::map<std::string, AComponent *>::const_iterator it = circuit.begin(); it != circuit.end(); it++) {
+    if (it->second->getType() == "output" && !it->second->pins[0].component) {
+      if (!isError) errMsg += "Some Outputs are not linked :\n";
+      errMsg += ("Output '" + it->second->getName() + "' is not linked to anything.\n");
+      isError = true;
+    }
+  }
+
+  if (isError)
+    throw Error(errMsg);
 }
 
 // CREATE TREE PART
@@ -144,7 +161,7 @@ void  Parser::loadFile_c(char *file_content)
 {
   std::string tmp(file_content);
   if (((int)tmp.find(".nts") <= 0) && (tmp.find(".nts") != (tmp.length() - 4)))
-    throw badExtensionFile("Bad extension of file");
+    throw badExtensionFile("Bad extension of file.");
 
   std::ifstream file_c(file_content);
   std::string   line;
@@ -175,7 +192,7 @@ void  Parser::loadComp_values(int ac, char **av)
           std::string tmp(av[i]);
           int pos = tmp.find('=');
           if ((pos + 1 == (int)tmp.length()) || checkComp_value(tmp.substr(pos + 1).c_str()))
-            throw missingInput("Missing input value on command line");
+            throw missingInput("Missing input value on command line.");
           this->comp_values.insert(std::pair<std::string, int>(tmp.substr(0 ,pos), atoi(tmp.substr(pos + 1).c_str())));
         }
     }
@@ -232,13 +249,13 @@ nts::t_ast_node  *Parser::generateTree()
           if (regParse->exec((*it).c_str(), regParse->str_comment))
             this->strings_t->children->push_back(regParse->getString());
           if (!regParse->checkLine((*it).c_str()))
-            throw incorrectLine("Line : " + std::to_string(i) + " is incorrect");
+            throw incorrectLine("Line : " + std::to_string(i) + " is incorrect.");
         }
       if (!chipsets || !links)
         {
           std::cout << "chipset : " << chipsets << " | links : " << links << std::endl;
           std::string tmp = (!chipsets) ? "chipset" : "links";
-          throw missingSection("No " + tmp + " section");
+          throw missingSection("No " + tmp + " section.");
         }
       return (this->treeRoot);
     }
@@ -260,13 +277,13 @@ void  Parser::checkTree()
               same2 = 1;
             }
           else if (it->first == (*it2)->value  && same2)
-              throw sameName("Several components share the same name");
+              throw sameName("Several components share the same name.");
         }
       if (!same2)
-        throw unknownInput("Unknown input specified by command line");
+        throw unknownInput("Unknown input specified by command line.");
     }
   if (i < regParse->nb_inputs || !same)
-    throw missingInput("Missing input value on command line");
+    throw missingInput("Missing input value on command line.");
   this->checkLinks();
 }
 
@@ -281,7 +298,7 @@ void  Parser::checkLinks()
             same = 1;
         }
       if (!same)
-        throw unknownLink("This link is unknown : " + (*it)->lexeme);
+        throw unknownLink("component '" + (*it)->lexeme + "' is unknown.");
     }
   for (std::vector<struct nts::s_ast_node*>::iterator it = this->linksend_t->children->begin(); it != this->linksend_t->children->end(); ++it)
     {
@@ -292,7 +309,7 @@ void  Parser::checkLinks()
             same = 1;
         }
       if (!same)
-        throw unknownLink("This link is unknown : " + (*it)->lexeme);
+        throw unknownLink("component '" + (*it)->lexeme + "' is unknown.");
     }
 }
 
@@ -305,7 +322,7 @@ bool  Parser::checkComp_value(const char* str)
   if (i == 1)
     {
       if (!(str[0] >= '0' && str[0] <= '1'))
-        throw incorrectValue("input value is incorrect");
+        throw incorrectValue("input value is incorrect.");
       return (false);
     }
   return (true);

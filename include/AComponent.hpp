@@ -22,8 +22,8 @@
 
 class   AComponent : public nts::IComponent {
 
+// === FUNCTIONS
 public:
-
 // Constructor and Destructor.
 AComponent(const std::string &name, const std::string &type);
 virtual ~AComponent();
@@ -37,14 +37,14 @@ virtual void            Dump() const = 0;
 // Additional :
 // Compute all gates in the component.
 virtual void            computeGates();
-
 // Get the name of the component.
 std::string     getName() const;
 // Get the type of the component.
 std::string     getType() const;
+// Set the value of the component at the pin 'target'.
+void            setStateAtPin(size_t pin, nts::Tristate state);
 
-void            setValue(int val);
-
+// === VARIABLES
 protected:
 
 // Properties
@@ -57,10 +57,13 @@ struct s_pin        *pins;
 
 };
 
+enum PinType { IGNORED = (-true), INPUT = 0, OUTPUT = 1 };
+
 // Pin Node
 typedef struct      s_pin {
     AComponent      *component;
     nts::Tristate   state;
+    PinType         type;
 }                   Pin;
 
 #endif // !_ACOMPONENT_HPP_

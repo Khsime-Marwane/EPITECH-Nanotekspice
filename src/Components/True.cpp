@@ -16,13 +16,14 @@ True::True(const std::string &name) : AComponent(name, "true") {
   this->pins = new Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::TRUE;
+  this->pins[0].type = IGNORED;
 }
 
 True::~True() {}
 
 nts::Tristate True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+    throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   }
   return nts::Tristate::TRUE;
 }
@@ -33,8 +34,9 @@ void True::Dump() const {
 
 void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [True COMPONENT | LINK] : pin does not exist.\n");
-    }
+    throw Error("ERROR : [ " + this->_name + " | LINK] : Invalid pin selected ("
+                  + std::to_string((int)pin_num_target) + ").");
+  }
   if (!this->pins[0].component) {
     // Link the chipset with the component.
     this->pins[0].component = dynamic_cast<AComponent * >(&component);

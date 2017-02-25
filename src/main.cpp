@@ -23,6 +23,7 @@ void  Helper() {
 int   nanotekspice(int  ac, char *av[])
 {
   if(ac > 1) {
+    // Try to launch the init.
     try {
       Parser  parser(ac, av);
 
@@ -32,12 +33,16 @@ int   nanotekspice(int  ac, char *av[])
       Cli     cli(parser);
 
       cli.init();
-    } 
-    catch(std::exception err) {
-      std::cout << err.what() << std::endl;
+    }
+
+    catch(std::exception const &err) {
+      std::cerr << "Error : " << err.what() << std::endl;
       return EXIT_FAILURE;
     }
-  } else {
+  }
+  
+  // Print the usage
+  else {
     Helper();
     return EXIT_FAILURE;
   }

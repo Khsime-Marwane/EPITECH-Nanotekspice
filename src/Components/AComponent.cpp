@@ -28,13 +28,12 @@ std::string     AComponent::getType() const {
     return this->_type;
 }
 
-void    AComponent::setValue(int val)
+// Set the state of the pin's component at the pin 'index'.
+void    AComponent::setStateAtPin(size_t index, nts::Tristate state)
 {
-  this->pins[0].state = (nts::Tristate)val;
+  this->pins[index - 1].state = state;
 }
 
-// return the state of the component (if it's special)
-
 void            AComponent::computeGates() {
-    // nothing to do there if it's not surcharged by inherited class.
+    // Nothing to do there if it's not surcharged by inherited class.
 }

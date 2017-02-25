@@ -15,13 +15,14 @@ Output::Output(const std::string &name) : AComponent(name, "output") {
   this->pins = new Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::UNDEFINED;
+  this->pins[0].type = IGNORED;
 }
 
 Output::~Output() {}
 
 nts::Tristate Output::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.\n");
+      throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
     }
   return this->pins[0].state;
 }
@@ -34,7 +35,8 @@ void Output::SetLink(size_t pin_num_this,
                      nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
-      throw Error("ERROR : [OUTPUT COMPONENT | LINK] : pin does not exist.\n");
+  throw Error("ERROR : [ " + this->_name + " | LINK] : Invalid pin selected ("
+                + std::to_string((int)pin_num_target) + ").");
   }
   if (!this->pins[0].component) {
     // Link the chipset with the component.
