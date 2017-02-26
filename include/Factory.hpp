@@ -26,6 +26,7 @@
 #include "C4001.hpp"
 #include "C4030.hpp"
 #include "C4011.hpp"
+#include "C4013.hpp"
 #include "C4069.hpp"
 #include "C4008.hpp"
 
@@ -51,6 +52,7 @@ class   Factory {
   AComponent *createC4001(const std::string &) const;
   AComponent *createC4030(const std::string &) const;
   AComponent *createC4011(const std::string &) const;
+  AComponent *createC4013(const std::string &) const;
   AComponent *createC4069(const std::string &) const;
   AComponent *createC4008(const std::string &) const;
 };

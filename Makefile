@@ -8,9 +8,9 @@
 ## Last update Sat Feb 25 17:56:15 2017 Marwane
 ##
 
-CPP				=	g++ -g3
+CPP				=	g++
 
-CPPFLAGS		+=	-c -W -Wall -Wextra -Werror
+CPPFLAGS		+=	-c -W -Wall -Wextra -Werror -std=c++11
 CPPFLAGS		+=	-I./include/
 
 RM				=	rm -rf
@@ -30,6 +30,7 @@ SRC				=	$(SRCDIR)/main.cpp					\
 					$(COMPONENTSDIR)/C4008.cpp			\
 					$(COMPONENTSDIR)/C4069.cpp			\
 					$(COMPONENTSDIR)/C4011.cpp			\
+					$(COMPONENTSDIR)/C4013.cpp			\
 					$(COMPONENTSDIR)/C4030.cpp			\
 					$(COMPONENTSDIR)/C4071.cpp			\
 					$(COMPONENTSDIR)/C4081.cpp			\

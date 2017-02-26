@@ -21,6 +21,7 @@ Factory::Factory() {
   this->basicConstructors["4081"] = std::bind(&Factory::createC4081, this, std::placeholders::_1);
   this->basicConstructors["4001"] = std::bind(&Factory::createC4001, this, std::placeholders::_1);
   this->basicConstructors["4011"] = std::bind(&Factory::createC4011, this, std::placeholders::_1);
+  this->basicConstructors["4013"] = std::bind(&Factory::createC4013, this, std::placeholders::_1);
   this->basicConstructors["4069"] = std::bind(&Factory::createC4069, this, std::placeholders::_1);
   this->basicConstructors["4008"] = std::bind(&Factory::createC4008, this, std::placeholders::_1);
 
@@ -83,6 +84,11 @@ AComponent *Factory::createC4071(const std::string &name) const {
 AComponent *Factory::createC4011(const std::string &name) const {
   // std::cout << "Create C4011 component named '" << name << "'" << std::endl;
   return new C4011(name);
+}
+
+AComponent *Factory::createC4013(const std::string &name) const {
+  // std::cout << "Create C4013 component named '" << name << "'" << std::endl;
+  return new C4013(name);
 }
 
 AComponent *Factory::createC4081(const std::string &name) const {
