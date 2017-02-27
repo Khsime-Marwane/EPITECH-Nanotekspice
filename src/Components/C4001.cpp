@@ -129,7 +129,7 @@ bool            C4001::doesComponentTypeMatch(AComponent &component,
 ** Output to an Input)
 */
 bool            C4001::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) {
-  return this->pins[pin_num_this].type == INPUT && this->pins[pin_num_target].type == OUTPUT;
+  return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
 }
 
 /*

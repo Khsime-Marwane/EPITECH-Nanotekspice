@@ -120,6 +120,8 @@ bool            C4081::doesComponentTypeMatch(AComponent &component,
                                               size_t pin_num_this,
                                               size_t pin_num_target) {
   // If the pin is an output, the component fixed must be also an output.
+  // std::cout << std::endl << _name << " a la pin " << pin_num_this << " est de type " << this->pins[pin_num_this - 1].type << std::endl;
+  // std::cout << component.getName() << " a la pin " << pin_num_target << " est de type " << component.pins[pin_num_target - 1].type << std::endl;
   return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
 }
 
@@ -129,7 +131,7 @@ bool            C4081::doesComponentTypeMatch(AComponent &component,
 ** Output to an Input)
 */
 bool            C4081::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) {
-  return this->pins[pin_num_this].type == INPUT && this->pins[pin_num_target].type == OUTPUT;
+  return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
 }
 
 /*
