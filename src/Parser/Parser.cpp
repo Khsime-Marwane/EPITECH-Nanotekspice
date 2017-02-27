@@ -288,7 +288,7 @@ void  Parser::checkTree()
       if (!same2)
         throw unknownInput("Unknown input specified by command line.");
     }
-  if (i < regParse->nb_inputs || !same)
+  if (i < regParse->nb_inputs)
     throw missingInput("Missing input value on command line.");
   this->checkLinks();
 }
