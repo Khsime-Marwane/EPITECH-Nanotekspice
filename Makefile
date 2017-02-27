@@ -37,7 +37,7 @@ $(BINDIR)/$(NAME):	$(OBJECTS)
 $(OBJECTS):		$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 			@mkdir -p $(dir $@)
 			@$(CXX) $(CXXFLAGS) -c $< -o $@
-			@echo "[\033[92m$<\033[0m]"
+			@echo "[冁][\033[92m$<\033[0m]"
 
 .PHONY: 		clean
 
@@ -48,7 +48,7 @@ clean:
 .PHONY: 		fclean
 
 fclean: 		clean
-			@$(RM) $(BINDIR)/$(NAME)
+			@$(RM) $(BINDIR)/$(NAME) $(LIBNAME)
 			@echo "\033[93mExecutable removed!\033[0m"
 
 re:	fclean $(BINDIR)/$(NAME)

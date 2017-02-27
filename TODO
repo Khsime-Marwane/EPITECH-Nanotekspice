@@ -4,7 +4,7 @@
 [✓] • 4001 : Four NOR gates.
 [✓] • 4008 : 4bits adder.
 [✓] • 4011 : Four NAND gates.
-[❌] • 4013 : Dual Flip Flop.
+[✓] • 4013 : Dual Flip Flop.
 [❌] • 4017 : 10bits Johnson decade.
 [✓] • 4030 : Four XOR gates.
 [❌] • 4040 : 12 bits counter.
