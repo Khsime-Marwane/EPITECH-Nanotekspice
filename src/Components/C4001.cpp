@@ -182,8 +182,9 @@ void    C4001::SetLink(size_t pin_num_this,
 ** it display 'NULL'.
 */
 void    C4001::Dump() const {
+  std::cout << getName() << std::endl;
   for (unsigned int i = 0; i < 14; i++) {
-      std::cout << this->_name << "[" << i + 1 << "] = ";
+      std::cout << getName() << "[" << i + 1 << "] = ";
       if (this->pins[i].component)
         std::cout << (int)this->pins[i].state << std::endl;
       else std::cout << "NULL" << std::endl;
