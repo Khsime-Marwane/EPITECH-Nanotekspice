@@ -73,7 +73,7 @@ nts::Tristate   C4001::Compute(size_t pin_num_this) {
           // Call the door Or with v1 and v2 as parameters.
           this->pins[pin_num_this - 1].state = this->gate.compute("NOR", v1, v2);
           if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this].second,
+            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
                                                                   this->pins[pin_num_this - 1].state);
       }
 
@@ -96,19 +96,10 @@ nts::Tristate   C4001::Compute(size_t pin_num_this) {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4001::computeGates() {
-  int           outputPins[] = { 3, 4, 10, 11 };
+  size_t        outputPins[] = { 3, 4, 10, 11 };
 
-  for (unsigned int i = 0; i < 4; i++) {
-    if (this->pins[this->gateLinks[outputPins[i]].first - 1].component &&
-        this->pins[this->gateLinks[outputPins[i]].second - 1].component) {
-
-      // Compute the inputs
-      nts::Tristate v1 = Compute(this->gateLinks[outputPins[i]].first);
-      nts::Tristate v2 = Compute(this->gateLinks[outputPins[i]].second);
-
-      // Call the door OR with v1 and v2 as parameters.
-      this->pins[outputPins[i] - 1].state = this->gate.compute("NOR", v1, v2);
-    }
+  for (size_t i = 0; i < 4; i++) {
+    Compute(outputPins[i]);
   }
 }
 
@@ -125,12 +116,11 @@ bool            C4001::pinIndexIsValid(size_t pin_num_this) {
 /*
 ** Check if the component type match with the type expected by the pin.
 */
-bool            C4001::doesComponentTypeMatch(AComponent &component, size_t pin) {
+bool            C4001::doesComponentTypeMatch(AComponent &component,
+                                              size_t pin_num_this,
+                                              size_t pin_num_target) {
   // If the pin is an output, the component fixed must be also an output.
-  if (this->pins[pin - 1].type == OUTPUT)
-    return component.getType() == "output";
-  // Others pins can be fixed with any type of component.
-  return true;
+  return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
 }
 
 /*
@@ -155,16 +145,18 @@ void    C4001::SetLink(size_t pin_num_this,
                   + std::to_string((int)pin_num_target) + ").");
 
   // If we are linking pins in the same component.
-  if (this == &component && !doesPinsTypesMatch(pin_num_this, pin_num_target))
-    throw Error("[ C4001 " + this->_name + " | LINK] : Impossible to link the pin "
-                + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-  
+  if (this == &component) {
+    if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
+      throw Error("[ C4001 " + this->_name + " | LINK] : Impossible to link the pin "
+                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  }
   // Check if the component type match with the type expected by the pin.
-  else if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this))
-    throw Error("[ C4001 " + this->_name + " | LINK] : Component type expected by the pin "
-                + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  else
+    if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
+      throw Error("[ C4001 " + this->_name + " | LINK] : Component type expected by the pin "
+                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
 
   // If the pin already has a component, nothing to do.
   if (!this->pins[pin_num_this - 1].component) {

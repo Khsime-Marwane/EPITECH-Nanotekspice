@@ -124,12 +124,11 @@ bool            C4008::pinIndexIsValid(size_t pin_num_this)
 /*
 ** Check if the component type match with the type expected by the pin.
 */
-bool            C4008::doesComponentTypeMatch(AComponent &component, size_t pin) {
+bool            C4008::doesComponentTypeMatch(AComponent &component,
+                                              size_t pin_num_this,
+                                              size_t pin_num_target) {
   // If the pin is an output, the component fixed must be also an output.
-  if (this->pins[pin - 1].type == OUTPUT)
-    return component.getType() == "output";
-  // Others pins can be fixed with any type of component.
-  return true;
+  return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
 }
 
 /*
@@ -155,16 +154,18 @@ void    C4008::SetLink(size_t pin_num_this,
                   + std::to_string((int)pin_num_target) + ").");
 
   // If we are linking pins in the same component.
-  if (this == &component && !doesPinsTypesMatch(pin_num_this, pin_num_target))
-    throw Error("[ C4008 " + this->_name + " | LINK] : Impossible to link the pin "
-                + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-  
+  if (this == &component) {
+    if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
+      throw Error("[ C4008 " + this->_name + " | LINK] : Impossible to link the pin "
+                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  }
   // Check if the component type match with the type expected by the pin.
-  else if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this))
-    throw Error("[ C4008 " + this->_name + " | LINK] : Component type expected by the pin "
-                + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  else
+    if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
+      throw Error("[ C4008 " + this->_name + " | LINK] : Component type expected by the pin "
+                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
 
   // If the pin already has a component, nothing to do.
   if (!this->pins[pin_num_this - 1].component) {
