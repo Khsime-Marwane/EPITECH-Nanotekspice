@@ -1,71 +1,54 @@
-##
-## Makefile for Lib Creation in /home/marwane/Projets/Epitech/CPP/cpp_nanotekspice/lib/
-##
-## Made by Marwane Khsime
-## Login   <marwane.khsime@epitech.eu@epitech.eu>
-##
-## Started on  Wed Feb  1 03:59:07 2017 Marwane Khsime
-## Last update Sat Feb 25 17:56:15 2017 Marwane
-##
+DEBUG=no
 
-CPP				=	g++
+CXX		= g++
 
-CPPFLAGS		+=	-c -W -Wall -Wextra -Werror -std=c++11
-CPPFLAGS		+=	-I./include/
+# compiling flags here
+CXXFLAGS	= -W -Wall -Wextra -Werror -std=c++11 -I./include/
 
-RM				=	rm -rf
+# if debug is set to yes, add -g3 flag
+ifeq ($(DEBUG),yes)
+	CXXFLAGS += -g3
+endif
 
-SRCDIR			=	./src
+# name of the projet
+NAME   = nanotekspice
+# name of the library
+LIBNAME = libnanotekspice.a
 
-COMPONENTSDIR	=	$(SRCDIR)/Components
-PARSERDIR		=	$(SRCDIR)/Parser
-FACTORYDIR		=	$(SRCDIR)/Factory
-GATEDIR			=	$(SRCDIR)/Gate
-CLIDIR			=	$(SRCDIR)/Cli
+# change these to proper directories where each file should be
+SRCDIR   = src
+OBJDIR   = obj
+BINDIR   = .
 
-SRC				=	$(SRCDIR)/main.cpp					\
-					$(CLIDIR)/Cli.cpp					\
-					$(COMPONENTSDIR)/AComponent.cpp		\
-					$(COMPONENTSDIR)/C4001.cpp			\
-					$(COMPONENTSDIR)/C4008.cpp			\
-					$(COMPONENTSDIR)/C4069.cpp			\
-					$(COMPONENTSDIR)/C4011.cpp			\
-					$(COMPONENTSDIR)/C4013.cpp			\
-					$(COMPONENTSDIR)/C4030.cpp			\
-					$(COMPONENTSDIR)/C4071.cpp			\
-					$(COMPONENTSDIR)/C4081.cpp			\
-					$(COMPONENTSDIR)/False.cpp			\
-					$(COMPONENTSDIR)/Input.cpp			\
-					$(COMPONENTSDIR)/Clock.cpp			\
-					$(COMPONENTSDIR)/Output.cpp			\
-					$(COMPONENTSDIR)/True.cpp			\
-					$(FACTORYDIR)/Factory.cpp			\
-					$(GATEDIR)/Gate.cpp					\
-					$(PARSERDIR)/Parser.cpp				\
-					$(PARSERDIR)/RegParse.cpp			\
+# Sources, Includes and Objects
+SOURCES  := $(wildcard $(SRCDIR)/*.cpp $(SRCDIR)/Cli/*.cpp $(SRCDIR)/Gate/*.cpp $(SRCDIR)/Components/*.cpp $(SRCDIR)/Factory/*.cpp $(SRCDIR)/Parser/*.cpp)
+INCLUDES := $(wildcard $(SRCDIR)/*.h)
+OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+RM       = rm -rf
 
-OBJS			= 	$(SRC:.cpp=.o)
+$(BINDIR)/$(NAME):	$(OBJECTS)
+			@$(CXX) -o $@ $(CXXFLAGS) $(OBJECTS)
+			@echo "\033[94mProject $(NAME) build successfully!\033[0m"
+			@ar rc $(LIBNAME) $(OBJECTS)
+			@ranlib $(LIBNAME)
+			@chmod 755 $(LIBNAME)
+			@echo "\033[94mLibrary $(LIBNAME) created successfully!\033[0m"
 
-LIBNAME 		= 	libnanotekspice.a
+$(OBJECTS):		$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+			@mkdir -p $(dir $@)
+			@$(CXX) $(CXXFLAGS) -c $< -o $@
+			@echo "[\033[92m$<\033[0m]"
 
-PROJECTNAME		= 	nanotekspice
-
-project: 			$(OBJS)
-					$(CPP) $(OBJS) -o $(PROJECTNAME)
-					ar rc $(LIBNAME) $(OBJS)
-					ranlib $(LIBNAME)
-
-all:				project
+.PHONY: 		clean
 
 clean:
-					$(RM) $(OBJS)
+			@$(RM) $(OBJDIR)
+			@echo "\033[93mCleanup complete!\033[0m"
 
-fclean: 			clean
-					$(RM) $(LIBNAME) $(PROJECTNAME)
+.PHONY: 		fclean
 
-re:		 			fclean all
+fclean: 		clean
+			@$(RM) $(BINDIR)/$(NAME)
+			@echo "\033[93mExecutable removed!\033[0m"
 
-tests:
-					./__tests__/./run.sh
-
-.PHONY:				mall clean fclean re
+re:	fclean $(BINDIR)/$(NAME)
