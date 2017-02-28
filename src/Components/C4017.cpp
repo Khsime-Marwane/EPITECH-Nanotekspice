@@ -91,6 +91,9 @@ void            C4017::reset() {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4017::computeGates() {
+  if (this->pins[14 - 1].component)
+    this->pins[14 - 1].state = this->pins[14 - 1].component->Compute(this->links[14 - 1].second);
+
   // If the reset pin is TRUE, we reset the chipset
   if (this->pins[15 - 1].state == nts::Tristate::TRUE) {
     reset();
@@ -168,7 +171,7 @@ void    C4017::SetLink(size_t pin_num_this,
       throw Error("[ C4017 " + this->_name + " | LINK] : Component type expected by the pin "
                   + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
                   + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-    if (pin_num_this == 14 && (*dynamic_cast<AComponent *>(&component)).getType() != "Clock") {
+    if (pin_num_this == 14 && (*dynamic_cast<AComponent *>(&component)).getType() != "clock") {
       throw Error("[ C4017 " + this->_name + " | LINK] : The type of the component linked with the pin 14 must be a clock.");
     }
   }
