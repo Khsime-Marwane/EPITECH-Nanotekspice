@@ -12,7 +12,7 @@
 #include "Clock.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Clock::Clock(const std::string &name, int _value) : AComponent(name, "Clock") {
+Clock::Clock(const std::string &name, int _value) : AComponent(name, "clock") {
   this->pins = new Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = (nts::Tristate)_value;
