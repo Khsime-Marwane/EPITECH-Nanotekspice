@@ -37,7 +37,7 @@ $(BINDIR)/$(NAME):	$(OBJECTS)
 $(OBJECTS):		$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 			@mkdir -p $(dir $@)
 			@$(CXX) $(CXXFLAGS) -c $< -o $@
-			@echo "[冁][\033[92m$<\033[0m]"
+			@echo "[\033[95mYankhoba\033[0m \033[93mYankhoba\033[0m .. ][\033[92m$<\033[0m]"
 
 .PHONY: 		clean
 
