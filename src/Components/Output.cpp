@@ -24,7 +24,13 @@ nts::Tristate Output::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
       throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
     }
+  if (this->pins[0].component)
+    this->pins[0].state = this->pins[0].component->Compute(this->links.second);
   return this->pins[0].state;
+}
+
+void  Output::computeGates() {
+  Compute(1);
 }
 
 void Output::Dump() const {
@@ -39,6 +45,10 @@ void Output::SetLink(size_t pin_num_this,
                 + std::to_string((int)pin_num_target) + ").");
   }
   if (!this->pins[0].component) {
+
+    // Save the Link's indexes.
+    this->links.first = pin_num_this;
+    this->links.second = pin_num_target;
     // Link the chipset with the component.
     this->pins[0].component = dynamic_cast<AComponent * >(&component);
     // Link the component with the chipset.

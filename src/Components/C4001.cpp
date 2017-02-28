@@ -70,11 +70,8 @@ nts::Tristate   C4001::Compute(size_t pin_num_this) {
           nts::Tristate v1 = Compute(firstPinLinked);
           nts::Tristate v2 = Compute(secondPinLinked);
 
-          // Call the door Or with v1 and v2 as parameters.
+          // Call the door NOR with v1 and v2 as parameters.
           this->pins[pin_num_this - 1].state = this->gate.compute("NOR", v1, v2);
-          if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
-                                                                  this->pins[pin_num_this - 1].state);
       }
 
       // If the pin selected is an Input.

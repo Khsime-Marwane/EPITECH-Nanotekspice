@@ -72,9 +72,6 @@ nts::Tristate   C4071::Compute(size_t pin_num_this) {
 
           // Call the door OR with v1 and v2 as parameters.
           this->pins[pin_num_this - 1].state = this->gate.compute("OR", v1, v2);
-          if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
-                                                                  this->pins[pin_num_this - 1].state);
       }
 
       // If the pin selected is an Input.
