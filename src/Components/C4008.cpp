@@ -84,7 +84,7 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
       }
 
       // If the pin selected is an Input.
-      else if (this->pins[pin_num_this - 1].component) {
+      else if (this->pins[pin_num_this - 1].component && this->pins[pin_num_this - 1].type == INPUT) {
         this->pins[pin_num_this - 1].state =
           this->pins[pin_num_this - 1].component->Compute(this->links[pin_num_this - 1].second);
       }
