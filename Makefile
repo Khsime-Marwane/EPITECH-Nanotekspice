@@ -1,4 +1,4 @@
-DEBUG=no
+DEBUG=yes
 
 CXX		= g++
 

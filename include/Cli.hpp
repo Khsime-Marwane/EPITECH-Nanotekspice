@@ -52,6 +52,7 @@ public:
     void        Loop();
     void        Dump();
     void        Help();
+    void        Clear();
 
 private:
     // Private Methods

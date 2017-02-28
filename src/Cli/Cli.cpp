@@ -22,6 +22,7 @@ Cli::Cli(const Parser &parser) {
   this->func["loop"] = std::bind(&Cli::Loop, this);
   this->func["dump"] = std::bind(&Cli::Dump, this);
   this->func["help"] = std::bind(&Cli::Help, this);
+  this->func["clear"] = std::bind(&Cli::Clear, this);
 
   if (this->circuit.size() == 0 || this->outputs.size() == 0)
     throw Error("CLI cannot be setted because the circuit is empty or there is no output.\n");
@@ -150,4 +151,8 @@ void    Cli::Help() {
     << "|__ [INPUT]=[VALUE]\tchanges the value of an input. (Not a clock)" << std::endl
     << "|__ exit\t\tcloses the program." << std::endl
     << "|__ help\t\tdisplay this help." << std::endl;
+}
+
+void    Cli::Clear() {
+    system("clear");
 }
