@@ -31,6 +31,7 @@
 #include "C4069.hpp"
 #include "C4008.hpp"
 #include "C4801.hpp"
+#include "C4514.hpp"
 
 class   Factory {
  public:
@@ -54,10 +55,12 @@ class   Factory {
   AComponent *createC4030(const std::string &) const;
   AComponent *createC4011(const std::string &) const;
   AComponent *createC4013(const std::string &) const;
-  AComponent *createC4017(const std::string &) const;
+  AComponxent *createC4017(const std::string &) const;
   AComponent *createC4069(const std::string &) const;
   AComponent *createC4008(const std::string &) const;
   AComponent *createC4801(const std::string &) const;
+  AComponent *createC4514(const std::string &) const;
+
 };
 
 #endif /* _FACTORY_HPP_ */
