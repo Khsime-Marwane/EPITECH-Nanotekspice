@@ -27,6 +27,8 @@ class   C4013 : public AComponent {
 
  private:
 
+  bool  tranState;
+  bool  startFromGate;
 // Gates
   Gate  gate;
   std::map<size_t, std::pair<size_t, size_t> > gateLinks;
