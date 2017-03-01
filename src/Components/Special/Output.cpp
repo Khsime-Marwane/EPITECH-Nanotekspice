@@ -12,10 +12,13 @@
 #include "Output.hpp"
 
 Output::Output(const std::string &name) : AComponent(name, "output") {
+  this->_nbPins = 1;
   this->pins = new Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::UNDEFINED;
   this->pins[0].type = IGNORED;
+  this->links[0].first = -1;
+  this->links[0].second = -1;
 }
 
 Output::~Output() {}
@@ -25,16 +28,12 @@ nts::Tristate Output::Compute(size_t pin_num_this) {
       throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
     }
   if (this->pins[0].component)
-    this->pins[0].state = this->pins[0].component->Compute(this->links.second);
+    this->pins[0].state = this->pins[0].component->Compute(this->links[0].second);
   return this->pins[0].state;
 }
 
 void  Output::computeGates() {
   Compute(1);
-}
-
-void Output::Dump() const {
-  std::cout << this->_name << "=" << this->pins[0].state << std::endl;
 }
 
 void Output::SetLink(size_t pin_num_this,
@@ -47,8 +46,8 @@ void Output::SetLink(size_t pin_num_this,
   if (!this->pins[0].component) {
 
     // Save the Link's indexes.
-    this->links.first = pin_num_this;
-    this->links.second = pin_num_target;
+    this->links[0].first = pin_num_this;
+    this->links[0].second = pin_num_target;
     // Link the chipset with the component.
     this->pins[0].component = dynamic_cast<AComponent * >(&component);
     // Link the component with the chipset.

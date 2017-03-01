@@ -17,27 +17,31 @@
 */
 C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
   this->tranState = false;
-  this->pins = new Pin[14];
+  this->_nbPins = 14;
+  this->_VSS = 7;
+  this->_VDD = 14;
 
-  PinType pinsTypeTab[14] = {
-    OUTPUT,    // Pin 1
-    OUTPUT,    // Pin 2
+  this->pins = new Pin[this->_nbPins];
+
+  PinType pinsTypeTab[this->_nbPins] = {
+    OUTPUT,  // Pin 1
+    OUTPUT,  // Pin 2
     INPUT,   // Pin 3
     INPUT,   // Pin 4
-    INPUT,    // Pin 5
-    INPUT,    // Pin 6
-    IGNORED,  // Pin 7  (VSS)
-    INPUT,    // Pin 8
-    INPUT,    // Pin 9
+    INPUT,   // Pin 5
+    INPUT,   // Pin 6
+    IGNORED, // Pin 7  (VSS)
+    INPUT,   // Pin 8
+    INPUT,   // Pin 9
     INPUT,   // Pin 10
     INPUT,   // Pin 11
-    OUTPUT,    // Pin 12
-    OUTPUT,    // Pin 13
-    IGNORED   // Pin 14 (VDD)
+    OUTPUT,  // Pin 12
+    OUTPUT,  // Pin 13
+    IGNORED  // Pin 14 (VDD)
   };
 
   // Create the pins of the chipset 4013 and set them.
-  for (unsigned int i = 0; i < 14; i++) {
+  for (unsigned int i = 0; i < this->_nbPins; i++) {
       this->pins[i].state = nts::UNDEFINED;
       this->pins[i].component = NULL;
       this->pins[i].type = pinsTypeTab[i];
@@ -132,35 +136,6 @@ void            C4013::computeGates() {
 }
 
 /*
-** Check if the pin selected exist in the component,
-** indexes allowed there are [1, 14].
-*/
-bool            C4013::pinIndexIsValid(size_t pin_num_this) {
-  if (pin_num_this == 7 || pin_num_this == 14)
-    return 0;
-  return pin_num_this > 0 && pin_num_this < 15;
-}
-
-/*
-** Check if the component type match with the type expected by the pin.
-*/
-bool            C4013::doesComponentTypeMatch(AComponent &component,
-                                              size_t pin_num_this,
-                                              size_t pin_num_target) {
-  // If the pin is an output, the component fixed must be also an output.
-  return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
-}
-
-/*
-** Check, when we are linking in the same component, if the pin used is an
-** Input and if the target is an Output (in a chipset, we can only link an
-** Output to an Input)
-*/
-bool            C4013::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) {
-  return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
-}
-
-/*
 ** Link a pin of the chipset with a component. When it's possible,
 ** also link on the other side the pin [pin_num_target] with this chipset.
 */
@@ -215,19 +190,4 @@ void    C4013::SetLink(size_t pin_num_this,
 
       this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
     };
-}
-
-/*
-** Display all the states of each pin of the chipset. If a pin is not linked,
-** it display 'NULL'.
-*/
-void    C4013::Dump() const {
-
-  std::cout << _name << std::endl;
-  for (unsigned int i = 0; i < 14; i++) {
-      std::cout << this->_name << "[" << i + 1 << "] = ";
-      if (this->pins[i].component)
-        std::cout << (int)this->pins[i].state << std::endl;
-      else std::cout << "NULL" << std::endl;
-    }
 }
