@@ -39,9 +39,9 @@ virtual void            Dump() const;
 // Check if the pin we are computing exist or is valid.  
 bool            pinIndexIsValid(size_t pin_num_this) const;
 // Check, when we are linking in the same component, if we are linking an Output to an Input.
-bool            doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target);
+bool            doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) const;
 // Check if the component type match with the type expected by the pin.
-bool            doesComponentTypeMatch(AComponent &component, size_t first, size_t second);
+bool            doesComponentTypeMatch(AComponent &component, size_t first, size_t second) const;
 // Compute all gates in the component.
 virtual void    computeGates();
 // Get the name of the component.

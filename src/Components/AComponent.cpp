@@ -65,7 +65,7 @@ bool    AComponent::pinIndexIsValid(size_t pin_num_this) const {
 ** Input and if the target is an Output (in a chipset, we can only link an
 ** Output to an Input)
 */
-bool            AComponent::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) {
+bool            AComponent::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) const {
   return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
 }
 
@@ -74,7 +74,7 @@ bool            AComponent::doesPinsTypesMatch(size_t pin_num_this, size_t pin_n
 */
 bool            AComponent::doesComponentTypeMatch(AComponent &component,
                                               size_t pin_num_this,
-                                              size_t pin_num_target) {
+                                              size_t pin_num_target) const {
   // If the pin is an output, the component fixed must be also an output.
   return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
 }
