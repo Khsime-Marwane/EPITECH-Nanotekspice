@@ -21,7 +21,7 @@ OBJDIR   = obj
 BINDIR   = .
 
 # Sources, Includes and Objects
-SOURCES  := $(wildcard $(SRCDIR)/*.cpp $(SRCDIR)/Cli/*.cpp $(SRCDIR)/Gate/*.cpp $(SRCDIR)/Components/*.cpp $(SRCDIR)/Factory/*.cpp $(SRCDIR)/Parser/*.cpp)
+SOURCES  := $(wildcard $(SRCDIR)/*.cpp $(SRCDIR)/Cli/*.cpp $(SRCDIR)/Gate/*.cpp $(SRCDIR)/Components/*.cpp $(SRCDIR)/Components/Special/*.cpp $(SRCDIR)/Factory/*.cpp $(SRCDIR)/Parser/*.cpp)
 INCLUDES := $(wildcard $(SRCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 RM       = rm -rf
