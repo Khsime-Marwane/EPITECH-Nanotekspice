@@ -19,7 +19,6 @@ Gate::Gate()
   this->AdvanceComputes["SUMC"] = std::bind(&Gate::computeSUMC, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
   this->AdvanceComputes["AND"] = std::bind(&Gate::computeAND2, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
   this->AdvanceComputes["NAND"] = std::bind(&Gate::computeAND2, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-
 }
 
 /*
@@ -113,12 +112,11 @@ nts::Tristate Gate::computeLATCH(nts::Tristate v1, nts::Tristate v2)
 
   if (inpS == nts::Tristate::FALSE && inpR == nts::Tristate::FALSE)
     {
-      this->tmpQ = tmpQ;
-      this->tmpQ2 = tmpQ;
-    } else {
-      this->tmpQ = inpS;
-      this->tmpQ2 = inpR;
+      inpS = tmpQ;
+      inpR = tmpQ2;
     }
+  this->tmpQ = inpS;
+  this->tmpQ2 = inpR;
   return (inpS);
 }
 
