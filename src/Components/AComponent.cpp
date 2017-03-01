@@ -66,7 +66,8 @@ bool    AComponent::pinIndexIsValid(size_t pin_num_this) const {
 ** Output to an Input)
 */
 bool            AComponent::doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) const {
-  return this->pins[pin_num_this - 1].type == INPUT && this->pins[pin_num_target - 1].type == OUTPUT;
+  return (this->pins[pin_num_this - 1].type == INPUT || this->pins[pin_num_this - 1].type == CLOCK) &&
+          this->pins[pin_num_target - 1].type == OUTPUT;
 }
 
 /*
@@ -76,7 +77,9 @@ bool            AComponent::doesComponentTypeMatch(AComponent &component,
                                               size_t pin_num_this,
                                               size_t pin_num_target) const {
   // If the pin is an output, the component fixed must be also an output.
-  return this->pins[pin_num_this - 1].type == INPUT || component.pins[pin_num_target - 1].type != OUTPUT;
+  return    this->pins[pin_num_this - 1].type == CLOCK ||
+            this->pins[pin_num_this - 1].type == INPUT ||
+            component.pins[pin_num_target - 1].type != OUTPUT;
 }
 
 /*
@@ -89,22 +92,30 @@ void            AComponent::SetLink(size_t pin_num_this,
 
   // Check if the index (pin_num_this) is valid.
   if (!pinIndexIsValid(pin_num_this))
-    throw Error("[" + this->getType() + " | LINK] : Invalid pin selected ("
+    throw Error("[" + this->_type + " " + this->_name + " | LINK] : Invalid pin selected ("
                   + std::to_string((int)pin_num_target) + ").");
   // If we are linking pins in the same component.
   if (this == &component) {
     if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
-      throw Error("[" + this->_name + " | LINK] : Impossible to link the pin "
+      throw Error("[" + this->_type + " " + this->_name + " | LINK] : Impossible to link the pin "
                   + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
                   + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
   }
 
-  // Check if the component type match with the type expected by the pin.
-  else
+  // Else if we are linking bewteen two distincts components.
+  else {
+      // Check if the component type match with the type expected by the pin.
     if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
-      throw Error("[" + this->getType() + " | LINK] : Component type expected by the pin "
+      throw Error("[" + this->_type + " " + this->_name + " | LINK] : Component type expected by the pin "
                   + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
                   + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+
+    // If the input must be a clock, we check the type of the component (so it must be a Clock).
+    if (this->pins[pin_num_this - 1].type == CLOCK && (*dynamic_cast<AComponent *>(&component)).getType() != "clock")
+        throw Error("[ " + this->_type + " " + this->_name + " | LINK] : Component type expected by the pin "
+                    + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                    + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+  }
 
   // If the pin already has a component, nothing to do.
   if (!this->pins[pin_num_this - 1].component) {
@@ -121,7 +132,8 @@ void            AComponent::SetLink(size_t pin_num_this,
       this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
     }
 
-    this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
+    if (this->pins[pin_num_this - 1].type == INPUT || this->pins[pin_num_this - 1].type == CLOCK)
+        this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
   };
 }
 

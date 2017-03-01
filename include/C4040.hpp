@@ -21,8 +21,6 @@ class   C4040 : public AComponent {
 // Basics
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
   virtual void  computeGates();
-  virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
-                       size_t pin_num_target);
 
  private:
   bool startFromGate;

@@ -11,13 +11,13 @@
 
 #include "C4094.hpp"
 
-#define STROBE 0
-#define DATA 1
-#define CLOCK 2
-#define OUTPUT_ENABLE 14
-#define SERIAL_ONE 8
-#define SERIAL_TWO 9
-#define Q7 11
+#define _STROBE_ 0
+#define _DATA_ 1
+#define _CLOCK_ 2
+#define _OUTPUT_ENABLE_ 14
+#define _SERIAL_ONE_ 8
+#define _SERIAL_TWO_ 9
+#define _Q7_ 11
 
 /*
 ** The component 4094 is composed of 14 pins. It has 4 OR gates
@@ -33,7 +33,7 @@ C4094::C4094(const std::string &name) : AComponent(name, "chipset") {
   PinType pinsTypeTab[this->_nbPins] = {
     INPUT,    // Pin 1
     INPUT,    // Pin 2
-    INPUT,    // Pin 3
+    CLOCK,    // Pin 3
     OUTPUT,   // Pin 4
     OUTPUT,   // Pin 5
     OUTPUT,   // Pin 6
@@ -97,7 +97,7 @@ void            C4094::reset() {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4094::computeGates() {
-  size_t inputs[4] = { STROBE, DATA, CLOCK, OUTPUT_ENABLE };
+  size_t inputs[4] = { _STROBE_, _DATA_, _CLOCK_, _OUTPUT_ENABLE_ };
 
   // Compute the inputs to get the new values
   for (size_t i = 0; i < 4; i++) {
@@ -106,22 +106,22 @@ void            C4094::computeGates() {
   }
 
   // If OutputEnable (pin 15) is not set to true, we reset the chipset
-  if (this->pins[OUTPUT_ENABLE].state != nts::Tristate::TRUE) {
+  if (this->pins[_OUTPUT_ENABLE_].state != nts::Tristate::TRUE) {
     reset();
   }
 
-  // If the Strobe is set to true, and Data equal TRUE or FALSE
-  else if (this->pins[STROBE].state == nts::Tristate::TRUE &&
-          this->pins[DATA].state != nts::Tristate::UNDEFINED) {
+  // If the Strobe is set to true, and _DATA_ equal TRUE or FALSE
+  else if (this->pins[_STROBE_].state == nts::Tristate::TRUE &&
+          this->pins[_DATA_].state != nts::Tristate::UNDEFINED) {
 
-    // If the Clock (pin 3) is set to true, we can shift.
-    if (this->pins[CLOCK].state == nts::Tristate::TRUE) {
+    // If the _CLOCK (pin 3) is set to true, we can shift.
+    if (this->pins[_CLOCK_].state == nts::Tristate::TRUE) {
 
       // Cascade the outputs
       for (int i = 7; i > -1; i--) {
 
-        if (i == 0) {// The first output get the value of the data.
-          this->pins[this->outputPins[i] - 1].state = this->pins[DATA].state;
+        if (i == 0) {// The first output get the value of the _DATA_.
+          this->pins[this->outputPins[i] - 1].state = this->pins[_DATA_].state;
         }
 
         else // Else, cascade the outputs.
@@ -129,59 +129,7 @@ void            C4094::computeGates() {
         }
       }
       
-    // Set the serial outputs. If the CLOCK value is true, SERIAL ONE is set with pin 12 (Q7), else it's SERIAL TWO.
-    this->pins[this->pins[CLOCK].state == nts::Tristate::TRUE ? SERIAL_ONE : SERIAL_TWO].state = this->pins[Q7].state;
+    // Set the serial outputs. If the _CLOCK value is true, SERIAL ONE is set with pin 12 (Q7), else it's SERIAL TWO.
+    this->pins[this->pins[_CLOCK_].state == nts::Tristate::TRUE ? _SERIAL_ONE_ : _SERIAL_TWO_].state = this->pins[_Q7_].state;
   }
-}
-
-/*
-** Link a pin of the chipset with a component. When it's possible,
-** also link on the other side the pin [pin_num_target] with this chipset.
-*/
-void    C4094::SetLink(size_t pin_num_this,
-                       nts::IComponent &component,
-                       size_t pin_num_target) {
-
-  // Check if the index (pin_num_this) is valid.
-  if (!pinIndexIsValid(pin_num_this))
-    throw Error("[ C4094 " + this->_name + " | LINK] : Invalid pin selected ("
-                  + std::to_string((int)pin_num_target) + ").");
-
-  // If we are linking pins in the same component.
-  if (this == &component) {
-    if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
-      throw Error("[ C4094 " + this->_name + " | LINK] : Impossible to link the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-  }
-  
-  // Check if the component type match with the type expected by the pin.
-  else {
-    if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
-      throw Error("[ C4094 " + this->_name + " | LINK] : Component type expected by the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-    if (pin_num_this == (CLOCK + 1) && (*dynamic_cast<AComponent *>(&component)).getType() != "clock") {
-      throw Error("[ C4094 " + this->_name + " | LINK] : The type of the component linked with the pin 3 must be a clock.");
-    }
-  }
-
-  // If the pin already has a component, nothing to do.
-  if (!this->pins[pin_num_this - 1].component) {
-
-    // Save the indexes
-    this->links[pin_num_this - 1].first = pin_num_this;
-    this->links[pin_num_this - 1].second = pin_num_target;
-
-    // Link the chipset with the component.
-    this->pins[pin_num_this - 1].component = dynamic_cast<AComponent *>(&component);
-
-    // Link the component with the chipset (do nothing if we are linking inside).
-    if (this != &component) {
-      this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
-    }
-
-    if (this->pins[pin_num_this - 1].type == INPUT)
-      this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
-  };
 }

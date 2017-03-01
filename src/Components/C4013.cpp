@@ -26,7 +26,7 @@ C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
   PinType pinsTypeTab[this->_nbPins] = {
     OUTPUT,  // Pin 1
     OUTPUT,  // Pin 2
-    INPUT,   // Pin 3
+    CLOCK,   // Pin 3
     INPUT,   // Pin 4
     INPUT,   // Pin 5
     INPUT,   // Pin 6
@@ -34,7 +34,7 @@ C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
     INPUT,   // Pin 8
     INPUT,   // Pin 9
     INPUT,   // Pin 10
-    INPUT,   // Pin 11
+    CLOCK,   // Pin 11
     OUTPUT,  // Pin 12
     OUTPUT,  // Pin 13
     IGNORED  // Pin 14 (VDD)
@@ -133,61 +133,4 @@ void            C4013::computeGates() {
   }
   this->tranState = true;
   this->startFromGate = false;
-}
-
-/*
-** Link a pin of the chipset with a component. When it's possible,
-** also link on the other side the pin [pin_num_target] with this chipset.
-*/
-void    C4013::SetLink(size_t pin_num_this,
-                       nts::IComponent &component,
-                       size_t pin_num_target) {
-
-  // Check if the index (pin_num_this) is valid.
-  if (!pinIndexIsValid(pin_num_this))
-    throw Error("[ C4013 " + this->_name + " | LINK] : Invalid pin selected ("
-                + std::to_string((int)pin_num_target) + ").");
-
-  // If we are linking pins in the same component.
-  if (this == &component) {
-      if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
-        throw Error("[ C4013 " + this->_name + " | LINK] : Impossible to link the pin "
-                    + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                    + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-    }
-    // Check if the component type match with the type expect<ed by the pin.
-  else
-    {
-      if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
-        {
-          throw Error("[ C4013 " + this->_name + " | LINK] : Component type expected by the pin "
-                      + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                      + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-        }
-      else if (pin_num_this == 3 || pin_num_this == 11)
-          {
-            if ((*dynamic_cast<AComponent *>(&component)).getType() != "clock")
-              throw Error("[ C4013 " + this->_name + " | LINK] : Component type expected by the pin "
-                          + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                          + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-          }
-    }
-
-  // If the pin already has a component, nothing to do.
-  if (!this->pins[pin_num_this - 1].component) {
-    
-      // Save the indexes
-      this->links[pin_num_this - 1].first = pin_num_this;
-      this->links[pin_num_this - 1].second = pin_num_target;
-
-      // Link the chipset with the component.
-      this->pins[pin_num_this - 1].component = dynamic_cast<AComponent *>(&component);
-
-      // Link the component with the chipset (do nothing if we are linking inside).
-      if (this != &component) {
-          this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
-        }
-
-      this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
-    };
 }

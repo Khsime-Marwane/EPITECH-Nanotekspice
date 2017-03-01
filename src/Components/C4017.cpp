@@ -11,11 +11,11 @@
 
 #include "C4017.hpp"
 
-# define RESET 14
-# define CLOCK 13
-# define ENABLE 12
-# define CARRY 11
-# define FIRSTPIN 2
+# define _RESET_ 14
+# define _CLOCK_ 13
+# define _ENABLE_ 12
+# define _CARRY_ 11
+# define _FIRSTPIN_ 2
 
 /*
 ** The component 4017 is composed of 14 pins. It has 4 OR gates
@@ -42,7 +42,7 @@ C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
     OUTPUT,   // Pin 11
     OUTPUT,   // Pin 12 
     INPUT,    // Pin 13
-    INPUT,    // Pin 14
+    CLOCK,    // Pin 14
     INPUT,    // Pin 15
     IGNORED   // Pin 16 (VDD)
   };
@@ -93,8 +93,8 @@ void            C4017::reset() {
     this->pins[(*it).second - 1].state = nts::Tristate::FALSE;
   }
   // Set the first pin (pin 3 with the value 0) and the carry.
-  this->pins[FIRSTPIN].state = nts::Tristate::TRUE;
-  this->pins[CARRY].state = nts::Tristate::TRUE;
+  this->pins[_FIRSTPIN_].state = nts::Tristate::TRUE;
+  this->pins[_CARRY_].state = nts::Tristate::TRUE;
   this->current = 0;
 }
 
@@ -103,18 +103,18 @@ void            C4017::reset() {
 */
 void            C4017::computeGates() {
 
-  if (this->pins[CLOCK].component)
-    this->pins[CLOCK].state = this->pins[CLOCK].component->Compute(this->links[CLOCK].second);
+  if (this->pins[_CLOCK_].component)
+    this->pins[_CLOCK_].state = this->pins[_CLOCK_].component->Compute(this->links[_CLOCK_].second);
 
   // If the reset pin is TRUE, we reset the chipset
-  if (this->pins[RESET].state == nts::Tristate::TRUE) {
+  if (this->pins[_RESET_].state == nts::Tristate::TRUE) {
     reset();
   }
 
   // If the Clock Inhibit is set to true, we can decade the counter.
-  else if (this->pins[ENABLE].state != nts::Tristate::TRUE) {
+  else if (this->pins[_ENABLE_].state != nts::Tristate::TRUE) {
     // If the Clock (pin 14) is set to true, we can increment.
-    if (this->pins[CLOCK].state == nts::Tristate::TRUE) {
+    if (this->pins[_CLOCK_].state == nts::Tristate::TRUE) {
       if (this->current == 9) {
         reset();
       }
@@ -127,56 +127,4 @@ void            C4017::computeGates() {
       }
     }
   }
-}
-
-/*
-** Link a pin of the chipset with a component. When it's possible,
-** also link on the other side the pin [pin_num_target] with this chipset.
-*/
-void    C4017::SetLink(size_t pin_num_this,
-                       nts::IComponent &component,
-                       size_t pin_num_target) {
-
-  // Check if the index (pin_num_this) is valid.
-  if (!pinIndexIsValid(pin_num_this))
-    throw Error("[ C4017 " + this->_name + " | LINK] : Invalid pin selected ("
-                  + std::to_string((int)pin_num_target) + ").");
-
-  // If we are linking pins in the same component.
-  if (this == &component) {
-    if (!doesPinsTypesMatch(pin_num_this, pin_num_target))
-      throw Error("[ C4017 " + this->_name + " | LINK] : Impossible to link the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-  }
-  
-  // Check if the component type match with the type expected by the pin.
-  else {
-    if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
-      throw Error("[ C4017 " + this->_name + " | LINK] : Component type expected by the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
-    if (pin_num_this == 14 && (*dynamic_cast<AComponent *>(&component)).getType() != "clock") {
-      throw Error("[ C4017 " + this->_name + " | LINK] : The type of the component linked with the pin 14 must be a clock.");
-    }
-  }
-
-  // If the pin already has a component, nothing to do.
-  if (!this->pins[pin_num_this - 1].component) {
-
-    // Save the indexes
-    this->links[pin_num_this - 1].first = pin_num_this;
-    this->links[pin_num_this - 1].second = pin_num_target;
-
-    // Link the chipset with the component.
-    this->pins[pin_num_this - 1].component = dynamic_cast<AComponent *>(&component);
-
-    // Link the component with the chipset (do nothing if we are linking inside).
-    if (this != &component) {
-      this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
-    }
-
-    if (this->pins[pin_num_this - 1].type == INPUT)
-      this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
-  };
 }
