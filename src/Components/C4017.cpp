@@ -16,7 +16,7 @@
 ** which works for each of them with two inputs and one output.
 */
 C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
-  this->pins = new Pin[14];
+  this->pins = new Pin[16];
 
   PinType pinsTypeTab[16] = {
     OUTPUT,   // Pin 1
