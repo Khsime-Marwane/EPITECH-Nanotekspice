@@ -6,17 +6,17 @@
 // Last Modified time: 2017-02-04 19:55:57
 //
 
-#ifndef _C4017_HPP_
-# define _C4017_HPP_
+#ifndef _C4094_HPP_
+# define _C4094_HPP_
 
 #include "AComponent.hpp"
 
-class   C4017 : public AComponent {
+class   C4094 : public AComponent {
 
 public:
 // Constructor / Destructor
-  C4017(const std::string &name);
-  virtual ~C4017() { }
+  C4094(const std::string &name);
+  virtual ~C4094() { }
 
 // Basics
   virtual nts::Tristate Compute(size_t pin_num_this = 1);
@@ -26,13 +26,12 @@ public:
   virtual void Dump() const;
 
 private:
-  size_t  current;
-// Pins Order.
-  std::map<size_t, size_t>  order;
-// Pin's Links.
+// Pins Order
+  std::map<size_t, size_t>  outputPins;
+// Pin's Links
   std::map<size_t, std::pair<size_t, size_t> > links;
-// Old state of the clock.
-  nts::Tristate oldClock;
+// Old State of the clock
+  nts::Tristate   oldClock;
 
 // Check if the index of the pin exist. return true if it's valid.
   bool            pinIndexIsValid(size_t pin_num_this);
@@ -44,4 +43,4 @@ private:
   void            reset();
 };
 
-#endif /* _C4017_HPP_ */
+#endif /* _C4094_HPP_ */

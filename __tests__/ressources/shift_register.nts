@@ -1,0 +1,42 @@
+# Admiral Business Machines 1954-2042
+# Johnson decade
+# Clockdown (/CP1) is not connected
+
+.chipsets:
+
+input       strobe
+input		output_enable
+input       data
+clock		clockup
+
+output		Q1
+output		Q2
+output		Q3
+output		Q4
+output		Q5
+output		Q6
+output		Q7
+output      Q8
+
+output		QS2
+output		QS1
+
+4094		shifter
+
+.links:
+strobe:1        shifter:1
+data:1          shifter:2
+clockup:1       shifter:3
+output_enable:1	shifter:15
+
+Q1:1		shifter:4
+Q2:1		shifter:5
+Q3:1		shifter:6
+Q4:1		shifter:7
+Q5:1		shifter:14
+Q6:1		shifter:13
+Q7:1		shifter:12
+Q8:1		shifter:11
+
+QS2:1       shifter:10
+QS1:1       shifter:9
