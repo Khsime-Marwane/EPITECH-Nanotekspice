@@ -26,6 +26,8 @@ class   C4040 : public AComponent {
   virtual void Dump() const;
 
  private:
+  bool startFromGate;
+  bool tranState;
 
 // Gates
   Gate  gate;

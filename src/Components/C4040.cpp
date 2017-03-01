@@ -17,6 +17,7 @@
 */
 C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
   pins = new Pin[16];
+  tranState = false;
 
   PinType pinsTypeTab[16] = {
           OUTPUT,    // Pin 1
@@ -69,13 +70,13 @@ nts::Tristate   C4040::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
+      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && startFromGate) {
 
           nts::Tristate clk = this->pins[9].state;
 
           if (this->pins[10].state == nts::Tristate::TRUE)
             this->pins[pin_num_this - 1].state = nts::Tristate::FALSE;
-          else
+          else if (tranState)
             this->pins[pin_num_this - 1].state = clk;
 
           if (this->pins[pin_num_this - 1].component)
@@ -107,9 +108,13 @@ void            C4040::computeGates() {
   this->pins[9].state = this->pins[9].component->getStateAtPin(1);
   this->pins[10].state = this->pins[10].component->getStateAtPin(1);
 
+  startFromGate = true;
+
   for (size_t i = 0; i < 12; i++) {
       Compute(outputPins[i]);
     }
+  tranState = true;
+  startFromGate = false;
 }
 
 /*
@@ -165,10 +170,21 @@ void    C4040::SetLink(size_t pin_num_this,
     }
     // Check if the component type match with the type expected by the pin.
   else
-    if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
-      throw Error("[ C4040 " + this->_name + " | LINK] : Component type expected by the pin "
-                  + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
-                  + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+    {
+      if (!doesComponentTypeMatch(*dynamic_cast<AComponent *>(&component), pin_num_this, pin_num_target))
+        {
+          throw Error("[ C4040 " + this->_name + " | LINK] : Component type expected by the pin "
+                      + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                      + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+        }
+      else if (pin_num_this == 10)
+          {
+            if ((*dynamic_cast<AComponent *>(&component)).getType() != "clock")
+              throw Error("[ C4040 " + this->_name + " | LINK] : Component type expected by the pin "
+                          + std::to_string((int)pin_num_target) + " doesn't correspond with the type of the component '"
+                          + (*dynamic_cast<AComponent *>(&component)).getName() + "'.");
+          }
+    }
 
   // If the pin already has a component, nothing to do.
   if (!this->pins[pin_num_this - 1].component) {
