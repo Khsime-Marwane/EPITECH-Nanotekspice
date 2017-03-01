@@ -63,7 +63,6 @@ C4094::C4094(const std::string &name) : AComponent(name, "chipset") {
   this->outputPins[6] = 12;
   this->outputPins[7] = 11;
 
-  this->oldClock = nts::Tristate::UNDEFINED;
   reset();
 }
 
@@ -95,12 +94,6 @@ void            C4094::reset() {
 */
 void            C4094::computeGates() {
   size_t inputs[4] = { STROBE, DATA, CLOCK, OUTPUT_ENABLE };
-
-  // Check it's the first simulation. The clock must change his state.
-  if (oldClock == nts::Tristate::UNDEFINED) {
-    oldClock = this->pins[CLOCK].state;
-    return ;
-  }
 
   // Compute the inputs to get the new values
   for (size_t i = 0; i < 4; i++) {

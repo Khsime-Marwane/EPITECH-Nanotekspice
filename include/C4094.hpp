@@ -30,8 +30,6 @@ private:
   std::map<size_t, size_t>  outputPins;
 // Pin's Links
   std::map<size_t, std::pair<size_t, size_t> > links;
-// Old State of the clock
-  nts::Tristate   oldClock;
 
 // Check if the index of the pin exist. return true if it's valid.
   bool            pinIndexIsValid(size_t pin_num_this);

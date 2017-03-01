@@ -65,10 +65,12 @@ void    Cli::init()
 }
 
 void    Cli::Exit() {
+    // Exit the program
     exit(EXIT_SUCCESS);
 }
 
 void    Cli::Display() {
+    // Call the dump method of each output.
     std::vector<AComponent *>::iterator it;
 
     for (it = outputs.begin(); it != outputs.end(); it++) {
@@ -92,12 +94,12 @@ void    Cli::SetInput() {
 }
 
 void    Cli::Simulate() {
-    for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
-        it->second->computeGates();
-    }
-
     for (std::vector<AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
         (*it)->setStateAtPin(1, (nts::Tristate)!(*it)->getStateAtPin(1));
+    }
+
+    for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
+            it->second->computeGates();
     }
 }
 
@@ -130,6 +132,7 @@ void    Cli::Loop() {
 }
 
 void    Cli::Dump() {
+    // Call the Dump method of each component of the circuit.
     std::map<std::string, AComponent *>::iterator it;
 
     std::cout << "\n=== DUMP ===\n" << std::endl;
@@ -141,6 +144,8 @@ void    Cli::Dump() {
 }
 
 void    Cli::Help() {
+    // Print the helper.
+
     std::cout <<
     "Usage:     ./nanotekspice [FILE] [INPUTS]" << std::endl << std::endl
     << "| CLI COMMANDS :" << std::endl
@@ -154,5 +159,6 @@ void    Cli::Help() {
 }
 
 void    Cli::Clear() {
+    // Clear the screen.
     system("clear");
 }

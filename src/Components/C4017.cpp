@@ -64,7 +64,6 @@ C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
   this->order[9] = 11;
   this->current = 0;
 
-  this->oldClock = nts::Tristate::UNDEFINED;
   reset();
 }
 
@@ -99,10 +98,6 @@ void            C4017::reset() {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4017::computeGates() {
-  if (this->oldClock == nts::Tristate::UNDEFINED) {
-    this->oldClock = this->pins[CLOCK].state;
-    return ;
-  }
 
   if (this->pins[CLOCK].component)
     this->pins[CLOCK].state = this->pins[CLOCK].component->Compute(this->links[CLOCK].second);
