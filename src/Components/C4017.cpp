@@ -49,7 +49,7 @@ C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
 
   // Create the pins of the chipset 4017 and set them.
   for (unsigned int i = 0; i < this->_nbPins; i++) {
-      this->pins[i].state = nts::UNDEFINED;
+      this->pins[i].state = nts::Tristate::FALSE;
       this->pins[i].component = NULL;
       this->pins[i].type = pinsTypeTab[i];
       this->links[i] = std::make_pair(0, 0);

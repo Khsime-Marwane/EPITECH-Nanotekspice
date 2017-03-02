@@ -160,6 +160,7 @@ void    Cli::Help() {
 }
 
 void    Cli::Clear() {
-    // Clear the screen.
-    system("clear");
+  // Clear the screen.
+  if (system("clear") == -1)
+    std::cout << "nanotekspice: failed to execute command clear." << std::endl;
 }

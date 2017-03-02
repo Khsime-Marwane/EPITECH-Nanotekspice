@@ -3,7 +3,7 @@ DEBUG=yes
 CXX		= g++
 
 # compiling flags here
-CXXFLAGS	= -W -Wall -Wextra -Werror -std=c++11 -I./include/
+CXXFLAGS	= -W -Wall -Wextra -Werror -std=c++11 -I./include/ -O2
 
 # if debug is set to yes, add -g3 flag
 ifeq ($(DEBUG),yes)
@@ -14,6 +14,10 @@ endif
 NAME   = nanotekspice
 # name of the library
 LIBNAME = libnanotekspice.a
+
+# use
+COUNT=1
+NBSOURCES= $(shell find . -type f -name '*.cpp' | wc -l)
 
 # change these to proper directories where each file should be
 SRCDIR   = src
@@ -37,7 +41,8 @@ $(BINDIR)/$(NAME):	$(OBJECTS)
 $(OBJECTS):		$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 			@mkdir -p $(dir $@)
 			@$(CXX) $(CXXFLAGS) -c $< -o $@
-			@echo "[\033[95mYankhoba\033[0m \033[93mYankhoba\033[0m .. ][\033[92m$<\033[0m]"
+			@echo "[\033[95m$(COUNT)\033[0m/\033[93m$(NBSOURCES)\033[0m][\033[92m$<\033[0m]"
+			@$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 
 .PHONY: 		clean
 

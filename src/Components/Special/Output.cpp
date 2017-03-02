@@ -15,7 +15,7 @@ Output::Output(const std::string &name) : AComponent(name, "output") {
   this->_nbPins = 1;
   this->pins = new Pin;
   this->pins[0].component = NULL;
-  this->pins[0].state = nts::Tristate::UNDEFINED;
+  this->pins[0].state = nts::Tristate::FALSE;
   this->pins[0].type = IGNORED;
   this->links[0].first = -1;
   this->links[0].second = -1;
