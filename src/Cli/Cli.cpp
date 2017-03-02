@@ -94,12 +94,13 @@ void    Cli::SetInput() {
 }
 
 void    Cli::Simulate() {
-    for (std::vector<AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
-        (*it)->setStateAtPin(1, (nts::Tristate)!(*it)->getStateAtPin(1));
-    }
 
     for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
             it->second->computeGates();
+    }
+
+    for (std::vector<AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
+        (*it)->setStateAtPin(1, (nts::Tristate)!(*it)->getStateAtPin(1));
     }
 }
 
