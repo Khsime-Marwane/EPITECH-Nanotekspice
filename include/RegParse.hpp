@@ -14,6 +14,7 @@ class RegParse {
  private:
   std::string str_match;
   void  generateAllowedVec();
+
  public:
   RegParse();
   ~RegParse(){}

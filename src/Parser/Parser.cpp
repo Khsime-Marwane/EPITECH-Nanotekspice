@@ -30,7 +30,7 @@ std::map<std::string, AComponent *> Parser::getCircuit() const {
   return this->circuit;
 }
 
-std::vector<AComponent *> Parser::getOutputs() const {
+std::map<std::string, AComponent *> Parser::getOutputs() const {
   return this->outputs;
 }
 
@@ -108,7 +108,7 @@ void    Parser::createCircuit(nts::t_ast_node &root) {
           newComponent = this->factory.create((*it)->value, (*it)->lexeme);
           this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
           if ((*it)->lexeme == "output") {
-            this->outputs.push_back(newComponent);
+            this->outputs.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
           }
         }
   }
@@ -237,23 +237,32 @@ nts::t_ast_node  *Parser::generateTree()
             {
               chipsets = 1;
               this->comps_t->children->push_back(regParse->getComps());
+              continue;
             }
           if (section == ".links:" && (*it).find('#') != 0 && regParse->exec((*it).c_str(), regParse->regex_links))
             {
               links = 1;
               this->links_t->children->push_back(regParse->getLinks());
               this->linksend_t->children->push_back(regParse->getLinks_end());
+              continue;
             }
           if ((*it).length() == 0)
             {
               nts::t_ast_node  *tmp = new nts::t_ast_node(NULL);
               tmp->type = nts::ASTNodeType::NEWLINE;
               this->newlines_t->children->push_back(tmp);
+              continue;
             }
           if (regParse->exec((*it).c_str(), regParse->regex_section_chipsets) || regParse->exec((*it).c_str(), regParse->regex_section_links))
-            this->sections_t->children->push_back(regParse->getSection(section));
+            {
+              this->sections_t->children->push_back(regParse->getSection(section));
+              continue;
+            }
           if (regParse->exec((*it).c_str(), regParse->str_comment))
-            this->strings_t->children->push_back(regParse->getString());
+            {
+              this->strings_t->children->push_back(regParse->getString());
+              continue;
+            }
           if (!regParse->checkLine((*it).c_str()))
             throw incorrectLine("Line : " + std::to_string(i) + " is incorrect.");
         }

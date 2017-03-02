@@ -62,13 +62,23 @@ bool RegParse::exec(const char* str_request, const char* str_regex)
 bool RegParse::execComps(const char* str)
 {
   int state = 0;
-
   for (std::vector<std::string>::iterator it = this->allowed_comps.begin(); it != this->allowed_comps.end(); ++it)
-    if (this->exec(str, (*it).c_str()))
-      state = 1;
+    {
+      if (this->exec(str, (*it).c_str()))
+        {
+          state = 1;
+          break;
+        }
+    }
   for (std::vector<std::string>::iterator it = this->allowed_chips.begin(); it != this->allowed_chips.end(); ++it)
-    if (this->exec(str, (*it).c_str()))
-      state = 1;
+    {
+      if (this->exec(str, (*it).c_str()))
+        {
+          state = 1;
+          break;
+        }
+    }
+
   if (state)
     return (true);
   return (false);

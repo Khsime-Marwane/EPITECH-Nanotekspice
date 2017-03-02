@@ -71,10 +71,10 @@ void    Cli::Exit() {
 
 void    Cli::Display() {
     // Call the dump method of each output.
-    std::vector<AComponent *>::iterator it;
+    std::map<std::string, AComponent *>::iterator it;
 
     for (it = outputs.begin(); it != outputs.end(); it++) {
-        (*it)->Dump();
+        it->second->Dump();
     }
 }
 
