@@ -89,8 +89,10 @@ nts::Tristate   C4094::Compute(size_t pin_num_this) {
 void            C4094::reset() {
   // Set all outputs pins to false.
   for (std::map<size_t, size_t>::iterator it = outputPins.begin(); it != outputPins.end(); it++) {
-    this->pins[(*it).second - 1].state = nts::Tristate::UNDEFINED;
+    this->pins[(*it).second - 1].state = nts::Tristate::FALSE;
   }
+  this->pins[_SERIAL_ONE_].state = nts::Tristate::FALSE;
+  this->pins[_SERIAL_TWO_].state = nts::Tristate::FALSE;  
 }
 
 /*
