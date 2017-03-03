@@ -48,6 +48,11 @@ C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
       this->links[i] = std::make_pair(0, 0);
     }
 
+  this->pins[0].state = nts::Tristate::UNDEFINED;
+  this->pins[1].state = nts::Tristate::UNDEFINED;
+  this->pins[11].state = nts::Tristate::UNDEFINED;
+  this->pins[12].state = nts::Tristate::UNDEFINED;
+
   // Output pins with their inputs index.
   this->gateLinks[1] = std::make_pair(4, 6);
   this->gateLinks[12] = std::make_pair(10, 8);

@@ -17,7 +17,7 @@ LIBNAME = libnanotekspice.a
 
 # use
 COUNT=1
-NBSOURCES= $(shell find . -type f -name '*.cpp' | wc -l)
+NBSOURCES= $(shell find src/ -type f -name '*.cpp' | wc -l)
 
 # change these to proper directories where each file should be
 SRCDIR   = src
