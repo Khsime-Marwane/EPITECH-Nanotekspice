@@ -102,6 +102,8 @@ nts::t_ast_node* RegParse::getComps()
   tmp->lexeme = this->str_match.substr(0, pos);
   pos = ((int)this->str_match.rfind('\t') > 0) ? this->str_match.rfind('\t') : this->str_match.rfind(' ');
   tmp->value = this->str_match.substr(pos + 1);
+  tmp->lexeme.erase(std::remove(tmp->lexeme.begin(), tmp->lexeme.end(), ' '), tmp->lexeme.end());
+  tmp->value.erase(std::remove(tmp->value.begin(), tmp->value.end(), ' '), tmp->value.end());
   if (tmp->lexeme == "input" || tmp->lexeme == "clock")
     this->nb_inputs++;
   return (tmp);
