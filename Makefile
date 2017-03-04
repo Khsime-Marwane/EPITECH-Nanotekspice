@@ -3,7 +3,7 @@ DEBUG=no
 CXX		= g++
 
 # compiling flags here
-CXXFLAGS	= -W -Wall -Wextra -Werror -std=c++11 -I./include/
+CXXFLAGS	= -W -Wall -Wextra -Werror -std=c++11 -I./include/ -O2
 
 # if debug is set to yes, add -g3 flag
 ifeq ($(DEBUG),yes)
