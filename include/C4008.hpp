@@ -24,6 +24,8 @@ class   C4008 : public AComponent {
   virtual void  computeGates();
 
  private:
+  bool startFromGate;
+  bool firstComp;
 
 // Gates
   Gate  gate;

@@ -22,7 +22,8 @@ C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
   this->_VDD = 16;
 
   this->pins = new Pin[this->_nbPins];
-  this->tranState = false;
+  this->current = 0;
+  this->previous = false;
 
   PinType pinsTypeTab[this->_nbPins] = {
           OUTPUT,   // Pin 1
@@ -64,6 +65,21 @@ C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
   this->gateLinks[13] = std::make_pair(0, 0);
   this->gateLinks[14] = std::make_pair(0, 0);
   this->gateLinks[15] = std::make_pair(0, 0);
+
+  // Pin index with the decimal value associated.
+  this->order[0] = 9;
+  this->order[1] = 7;
+  this->order[2] = 6;
+  this->order[3] = 5;
+  this->order[4] = 3;
+  this->order[5] = 2;
+  this->order[6] = 4;
+  this->order[7] = 13;
+  this->order[8] = 12;
+  this->order[9] = 14;
+  this->order[10] = 15;
+  this->order[11] = 1;
+
 }
 
 /*
@@ -76,18 +92,26 @@ nts::Tristate   C4040::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && startFromGate) {
+      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
 
           nts::Tristate clk = this->pins[9].state;
 
           if (this->pins[10].state == nts::Tristate::TRUE)
             this->pins[pin_num_this - 1].state = nts::Tristate::FALSE;
-          else if (tranState)
-            this->pins[pin_num_this - 1].state = clk;
+          else
+            {
+              if (this->previous)
+                this->pins[this->order[current - 1] - 1].state = nts::Tristate::FALSE;
+              if (clk == nts::Tristate::FALSE)
+                {
+                  this->pins[this->order[current] - 1].state = nts::Tristate::TRUE;
 
-          if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
-                                                                  this->pins[pin_num_this - 1].state);
+                  if (this->pins[this->order[current] - 1].component)
+                    this->pins[this->order[current] - 1].component->setStateAtPin(this->links[this->order[current] - 1].second,
+                                                                                  this->pins[this->order[current] - 1].state);
+                  this->previous = true;
+                }
+            }
         }
 
         // If the pin selected is an Input.
@@ -109,16 +133,13 @@ nts::Tristate   C4040::Compute(size_t pin_num_this) {
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4040::computeGates() {
-  size_t        outputPins[] = { 9, 7, 6, 5, 3, 2, 4, 13, 12, 14, 15, 1 };
+//  size_t        outputPins[] = { 9, 7, 6, 5, 3, 2, 4, 13, 12, 14, 15, 1 };
 
   this->pins[9].state = this->pins[9].component->getStateAtPin(1);
   this->pins[10].state = this->pins[10].component->getStateAtPin(1);
 
-  startFromGate = true;
-
   for (size_t i = 0; i < 12; i++) {
-      Compute(outputPins[i]);
+      Compute(this->order[i]);
     }
-  tranState = true;
-  startFromGate = false;
+  this->current++;
 }

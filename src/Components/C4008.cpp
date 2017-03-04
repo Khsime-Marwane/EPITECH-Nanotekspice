@@ -21,6 +21,7 @@ C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
   this->_VDD = 16;
 
   this->pins = new Pin[this->_nbPins];
+  this->firstComp = true;
 
   PinType pinsTypeTab[this->_nbPins] = {
           INPUT,    // Pin 1
@@ -65,7 +66,7 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
+      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && startFromGate) {
 
           // Get the indexes of the pins linked with the output.
           size_t  firstPinLinked = this->gateLinks[pin_num_this].first;
@@ -74,17 +75,36 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
           // Compute the inputs
           nts::Tristate v1 = Compute(firstPinLinked);
           nts::Tristate v2 = Compute(secondPinLinked);
-          nts::Tristate cinp = (this->pins[13].component->getStateAtPin(1) == nts::Tristate::UNDEFINED) ? Compute(9) : Compute(14);
+          nts::Tristate cinp = (firstComp) ? Compute(9) : Compute(14);
 
 
           // Call the door Or with v1 and v2 as parameters.
+
+//          std::cout << "state pin 14 : " << this->pins[13].component->getStateAtPin(1) << std::endl;
+//          std::cout << "A = " << v1 << std::endl;
+//          std::cout << "B = " << v2 << std::endl;
+//          std::cout << "CARRY IN = " << cinp << std::endl;
+//          std::cout << "PIN " << pin_num_this << std::endl;
           this->pins[pin_num_this - 1].state = this->gate.compute("SUM", v1, v2, cinp);
+//          std::cout << "SUM = " << this->pins[pin_num_this - 1].state << std::endl;
+
+          // CARRY IN
+          /*if (this->pins[13].component->getStateAtPin(1) == nts::Tristate::UNDEFINED)
+            {
+              this->pins[8].state = this->gate.compute("SUMC", v1, v2, cinp);
+              this->pins[8].component->setStateAtPin(1, this->gate.compute("SUMC", v1, v2, cinp));
+            }*/
+
+          // CARRY OUT
           this->pins[13].state = this->gate.compute("SUMC", v1, v2, cinp);
           this->pins[13].component->setStateAtPin(1, this->gate.compute("SUMC", v1, v2, cinp));
 
-          if (this->pins[pin_num_this - 1].component)
-            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
-                                                                  this->pins[pin_num_this - 1].state);
+//          std::string toto;
+//          std::cin >> toto;
+//          (void)toto;
+//          if (this->pins[pin_num_this - 1].component)
+//            this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
+//                                                                  this->pins[pin_num_this - 1].state);
       }
 
       // If the pin selected is an Input.
@@ -108,7 +128,10 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
 void            C4008::computeGates() {
   size_t        outputPins[] = { 10, 11, 12, 13};
 
+  this->startFromGate = true;
   for (size_t i = 0; i < 4; i++) {
     Compute(outputPins[i]);
+      this->firstComp = false;
   }
+  this->startFromGate = false;
 }

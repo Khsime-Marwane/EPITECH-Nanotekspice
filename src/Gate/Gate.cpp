@@ -122,12 +122,35 @@ nts::Tristate Gate::computeLATCH(nts::Tristate v1, nts::Tristate v2)
 
 nts::Tristate Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
 {
-  return (computeXOR(computeXOR(v1, v2), cinp));
+  int i = 0;
+  if (v1 == nts::Tristate::TRUE)
+    i++;
+  if (v2 == nts::Tristate::TRUE)
+    i++;
+  if (cinp == nts::Tristate::TRUE)
+    i++;
+
+  if (i == 1 || i == 3)
+    return (nts::Tristate::TRUE);
+  return (nts::Tristate::FALSE);
+//  return (computeXOR(computeXOR(v1, v2), computeAND(computeAND(v1, v2), cinp)));
 }
 
 nts::Tristate Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
 {
-  return (computeOR(computeAND(computeXOR(v1, v2), cinp), computeAND(v1, v2)));
+  int i = 0;
+  if (v1 == nts::Tristate::TRUE)
+    i++;
+  if (v2 == nts::Tristate::TRUE)
+    i++;
+  if (cinp == nts::Tristate::TRUE)
+    i++;
+
+  if (i > 1)
+    return (nts::Tristate::TRUE);
+  return (nts::Tristate::FALSE);
+
+//  return (computeOR(computeAND(computeXOR(v1, v2), cinp), computeAND(v1, v2)));
 }
 
 nts::Tristate Gate::getTmpQ()

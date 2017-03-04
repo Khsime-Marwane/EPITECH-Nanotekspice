@@ -123,7 +123,7 @@ void            C4017::computeGates() {
         this->current++;
         this->pins[this->order[current] - 1].state = nts::Tristate::TRUE;
         if (this->current >= 5)
-          this->pins[12 - 1].state = nts::Tristate::FALSE;
+          this->pins[_CARRY_].state = nts::Tristate::FALSE;
       }
     }
   }

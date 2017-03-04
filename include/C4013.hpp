@@ -26,6 +26,10 @@ class   C4013 : public AComponent {
 
   bool  tranState;
   bool  startFromGate;
+
+  nts::Tristate old;
+  nts::Tristate nold;
+
 // Gates
   Gate  gate;
   std::map<size_t, std::pair<size_t, size_t> > gateLinks;

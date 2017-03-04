@@ -51,7 +51,7 @@ C4514::C4514(const std::string &name) : AComponent(name, "chipset") {
 
   // Create the pins of the chipset 4514 and set them.
   for (unsigned int i = 0; i < this->_nbPins; i++) {
-      this->pins[i].state = nts::Tristate::FALSE;
+      this->pins[i].state = nts::Tristate::UNDEFINED;
       this->pins[i].component = NULL;
       this->pins[i].type = pinsTypeTab[i];
       this->links[i] = std::make_pair(0, 0);
@@ -88,7 +88,7 @@ nts::Tristate   C4514::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
     {
        // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && this->pins[0].state) {
+      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && this->pins[0].state == nts::Tristate::TRUE) {
 
           nts::Tristate A = (valOutputs["A"][pin_num_this - 1]) ? middleInputs["A"] : (nts::Tristate)(!middleInputs["A"]);
           nts::Tristate B = (valOutputs["B"][pin_num_this - 1]) ? middleInputs["B"] : (nts::Tristate)(!middleInputs["B"]);

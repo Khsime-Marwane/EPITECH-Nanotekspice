@@ -23,10 +23,11 @@ class   C4040 : public AComponent {
   virtual void  computeGates();
 
  private:
-  bool startFromGate;
-  bool tranState;
+  bool  previous;
+  int   current;
+  std::map<size_t, size_t>  order;
 
-// Gates
+  // Gates
   Gate  gate;
   std::map<size_t, std::pair<size_t, size_t> > gateLinks;
 
