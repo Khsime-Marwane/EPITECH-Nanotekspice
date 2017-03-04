@@ -148,15 +148,13 @@ if (this->_nbPins == 1) {
     if (this->pins[0].state == nts::Tristate::UNDEFINED)
         std::cout << "U" << std::endl;
     else
-        std::cout << (int)this->pins[0].state << std::endl;
-
+        std::cout << this->pins[0].state << std::endl;
 } else {
     for (unsigned int i = 0; i < this->_nbPins; i++) {
         std::cout << this->_name << "[" << i + 1 << "] = ";
         if (this->pins[i].component) {
-            if (this->pins[i].state == nts::Tristate::UNDEFINED) {
+            if ((int)this->pins[i].state == nts::Tristate::UNDEFINED)
                 std::cout << "U" << std::endl;
-            }
             else
                 std::cout << (int)this->pins[i].state << std::endl;
         }
