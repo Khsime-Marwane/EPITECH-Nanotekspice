@@ -1,7 +1,7 @@
 # Nanotekspice
 A digital electronic simulator.
 
-See the Helper for more informations about the usage.
+Execute the --help option for more informations about the usage.
 
 ```
 Make
