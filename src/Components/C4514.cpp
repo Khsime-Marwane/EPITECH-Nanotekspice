@@ -97,11 +97,16 @@ nts::Tristate   C4514::Compute(size_t pin_num_this) {
 
 //          std::cout << "valueOut : " << this->valOutputs["A"][pin_num_this - 1] << std::endl;
 //          std::cout << "A = " << A << " | B = " << B << " | C = " << C << " | D = " << D << std::endl;
-
-          if (this->pins[22].state)
+/*
+          std::cout << "pin 22 : " << this->pins[22].state << " | A : " << middleInputs["A"] << " | B : "
+                    << middleInputs["B"] << " | C : "
+                    << middleInputs["C"] << " | D : "
+                    << middleInputs["D"] << std::endl;*/
+          if (this->pins[22].state == nts::Tristate::TRUE)
             this->pins[pin_num_this - 1].state = nts::Tristate::FALSE;
           else
-            this->pins[pin_num_this - 1].state = gate.compute("NAND", gate.compute("AND", A, B), gate.compute("AND", C, D), this->pins[22].state);
+            this->pins[pin_num_this - 1].state = gate.compute("AND", gate.compute("AND", A, B), gate.compute("AND", C, D));
+
           if (this->pins[pin_num_this - 1].component)
             this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
                                                                   this->pins[pin_num_this - 1].state);
@@ -131,6 +136,7 @@ void            C4514::computeGates() {
   this->pins[0].state = this->pins[0].component->getStateAtPin(1);
   this->pins[22].state = this->pins[22].component->getStateAtPin(1);
 
+//  std::cout << "pin 0 : " << this->pins[0].state << std::endl;
   this->middleInputs["A"] = gate.compute("LATCH", this->pins[1].state, this->pins[0].state);
   this->middleInputs["B"] = gate.compute("LATCH", this->pins[2].state, this->pins[0].state);
   this->middleInputs["C"] = gate.compute("LATCH", this->pins[20].state, this->pins[0].state);

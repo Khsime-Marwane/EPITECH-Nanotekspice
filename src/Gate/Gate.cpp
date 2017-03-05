@@ -110,13 +110,9 @@ nts::Tristate Gate::computeLATCH(nts::Tristate v1, nts::Tristate v2)
   nts::Tristate inpS = computeAND(v1, v2);
   nts::Tristate inpR = computeAND(inpS, v2);
 
-  if (inpS == nts::Tristate::FALSE && inpR == nts::Tristate::FALSE)
-    {
-      inpS = tmpQ;
-      inpR = tmpQ2;
-    }
   this->tmpQ = inpS;
   this->tmpQ2 = inpR;
+
   return (inpS);
 }
 

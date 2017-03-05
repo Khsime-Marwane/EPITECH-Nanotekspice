@@ -117,13 +117,12 @@ void            C4040::computeGates() {
   if (this->pins[9].state == nts::Tristate::TRUE && this->first)
     this->current++;
   int tmp = this->current/2;
-      for (int i = 0; i < 12; ++i)
-        {
-          int bite = tmp % 2;
-          this->pins[this->order[i] - 1].state = (nts::Tristate)(bite);
-          tmp /= 2;
-        }
-
+  for (int i = 0; i < 12; ++i)
+    {
+      int bite = tmp % 2;
+      this->pins[this->order[i] - 1].state = (nts::Tristate)(bite);
+      tmp /= 2;
+    }
   this->current++;
   this->first = false;
 }
