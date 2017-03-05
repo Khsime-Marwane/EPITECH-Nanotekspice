@@ -186,6 +186,8 @@ void  nts::Parser::loadFile_c(char *file_content)
             this->file.push_back(line);
         }
     }
+  else
+    throw Error("This file doesn't exist.");
   file_c.close();
 }
 
