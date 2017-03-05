@@ -15,28 +15,28 @@
 ** The component 4081 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4081::C4081(const std::string &name) : AComponent(name, "chipset") {
+nts::C4081::C4081(const std::string &name) : nts::AComponent(name, "chipset") {
   this->_nbPins = 14;
   this->_VSS = 7;
   this->_VDD = 14;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
-    INPUT,    // Pin 1
-    INPUT,    // Pin 2
-    OUTPUT,   // Pin 3
-    OUTPUT,   // Pin 4
-    INPUT,    // Pin 5
-    INPUT,    // Pin 6
-    IGNORED,  // Pin 7  (VSS)
-    INPUT,    // Pin 8
-    INPUT,    // Pin 9
-    OUTPUT,   // Pin 10
-    OUTPUT,   // Pin 11
-    INPUT,    // Pin 12
-    INPUT,    // Pin 13
-    IGNORED   // Pin 14 (VDD)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                INPUT,    // Pin 1
+                INPUT,    // Pin 2
+                OUTPUT,   // Pin 3
+                OUTPUT,   // Pin 4
+                INPUT,    // Pin 5
+                INPUT,    // Pin 6
+                IGNORED,  // Pin 7  (VSS)
+                INPUT,    // Pin 8
+                INPUT,    // Pin 9
+                OUTPUT,   // Pin 10
+                OUTPUT,   // Pin 11
+                INPUT,    // Pin 12
+                INPUT,    // Pin 13
+                IGNORED   // Pin 14 (VDD)
   };
 
   // Create the pins of the chipset 4081 and set them.
@@ -59,7 +59,7 @@ C4081::C4081(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4081::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4081::Compute(size_t pin_num_this) {
 
   if (pinIndexIsValid(pin_num_this))
     {
@@ -96,7 +96,7 @@ nts::Tristate   C4081::Compute(size_t pin_num_this) {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4081::computeGates() {
+void            nts::C4081::computeGates() {
   size_t        outputPins[] = { 3, 4, 10, 11 };
 
   for (size_t i = 0; i < 4; i++) {

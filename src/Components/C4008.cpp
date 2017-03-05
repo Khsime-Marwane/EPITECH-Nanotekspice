@@ -15,31 +15,31 @@
 ** The component 4008 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
+nts::C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
   this->_nbPins = 16;
   this->_VSS = 8;
   this->_VDD = 16;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
   this->firstComp = true;
 
-  PinType pinsTypeTab[this->_nbPins] = {
-          INPUT,    // Pin 1
-          INPUT,    // Pin 2
-          INPUT,    // Pin 3
-          INPUT,    // Pin 4
-          INPUT,    // Pin 5
-          INPUT,    // Pin 6
-          INPUT,    // Pin 7
-          IGNORED,  // Pin 8 (VSS)
-          INPUT,    // Pin 9
-          OUTPUT,   // Pin 10
-          OUTPUT,   // Pin 11
-          OUTPUT,   // Pin 12
-          OUTPUT,   // Pin 13
-          OUTPUT,   // Pin 14
-          INPUT,    // Pin 15
-          IGNORED   // Pin 16 (VDD)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                INPUT,    // Pin 1
+                INPUT,    // Pin 2
+                INPUT,    // Pin 3
+                INPUT,    // Pin 4
+                INPUT,    // Pin 5
+                INPUT,    // Pin 6
+                INPUT,    // Pin 7
+                IGNORED,  // Pin 8 (VSS)
+                INPUT,    // Pin 9
+                OUTPUT,   // Pin 10
+                OUTPUT,   // Pin 11
+                OUTPUT,   // Pin 12
+                OUTPUT,   // Pin 13
+                OUTPUT,   // Pin 14
+                INPUT,    // Pin 15
+                IGNORED   // Pin 16 (VDD)
   };
   // Create the pins of the chipset 4008 and set them.
   for (unsigned int i = 0; i < this->_nbPins; i++) {
@@ -61,7 +61,7 @@ C4008::C4008(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4008::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4008::Compute(size_t pin_num_this) {
 
   if (pinIndexIsValid(pin_num_this))
     {
@@ -125,7 +125,7 @@ nts::Tristate   C4008::Compute(size_t pin_num_this) {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4008::computeGates() {
+void            nts::C4008::computeGates() {
   size_t        outputPins[] = { 10, 11, 12, 13};
 
   this->startFromGate = true;

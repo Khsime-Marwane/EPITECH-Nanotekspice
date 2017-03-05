@@ -25,12 +25,12 @@ int   nanotekspice(int  ac, char *av[])
   if(ac > 1) {
     // Try to launch the init.
     try {
-      Parser  parser(ac, av);
+      nts::Parser  parser(ac, av);
 
       parser.createTree();
       parser.parseTree(*parser.getRoot());
 
-      Cli     cli(parser);
+      nts::Cli     cli(parser);
 
       cli.init();
     }

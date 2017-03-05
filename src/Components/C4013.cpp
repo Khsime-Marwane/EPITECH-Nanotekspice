@@ -15,7 +15,7 @@
 ** The component 4013 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
+nts::C4013::C4013(const std::string &name) : nts::AComponent(name, "chipset") {
   this->tranState = false;
   this->_nbPins = 14;
   this->_VSS = 7;
@@ -23,23 +23,23 @@ C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
   this->old = nts::Tristate::UNDEFINED;
   this->nold = nts::Tristate::UNDEFINED;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
-    OUTPUT,  // Pin 1
-    OUTPUT,  // Pin 2
-    CLOCK,   // Pin 3
-    INPUT,   // Pin 4
-    INPUT,   // Pin 5
-    INPUT,   // Pin 6
-    IGNORED, // Pin 7  (VSS)
-    INPUT,   // Pin 8
-    INPUT,   // Pin 9
-    INPUT,   // Pin 10
-    CLOCK,   // Pin 11
-    OUTPUT,  // Pin 12
-    OUTPUT,  // Pin 13
-    IGNORED  // Pin 14 (VDD)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                OUTPUT,  // Pin 1
+                OUTPUT,  // Pin 2
+                CLOCK,   // Pin 3
+                INPUT,   // Pin 4
+                INPUT,   // Pin 5
+                INPUT,   // Pin 6
+                IGNORED, // Pin 7  (VSS)
+                INPUT,   // Pin 8
+                INPUT,   // Pin 9
+                INPUT,   // Pin 10
+                CLOCK,   // Pin 11
+                OUTPUT,  // Pin 12
+                OUTPUT,  // Pin 13
+                IGNORED  // Pin 14 (VDD)
   };
 
   // Create the pins of the chipset 4013 and set them.
@@ -65,7 +65,7 @@ C4013::C4013(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4013::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4013::Compute(size_t pin_num_this) {
 
   if (pinIndexIsValid(pin_num_this))
     {
@@ -150,7 +150,7 @@ nts::Tristate   C4013::Compute(size_t pin_num_this) {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4013::computeGates() {
+void            nts::C4013::computeGates() {
   size_t        outputPins[] = {1, 12};
 
   this->startFromGate = true;

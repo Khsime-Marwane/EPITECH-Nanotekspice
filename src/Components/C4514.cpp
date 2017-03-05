@@ -15,38 +15,38 @@
 ** The component 4514 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4514::C4514(const std::string &name) : AComponent(name, "chipset") {
+nts::C4514::C4514(const std::string &name) : nts::AComponent(name, "chipset") {
   this->_nbPins = 24;
   this->_VSS = 12;
   this->_VDD = 24;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[24] = {
-          INPUT,    // Pin 1
-          INPUT,    // Pin 2
-          INPUT,    // Pin 3
-          OUTPUT,   // Pin 4
-          OUTPUT,   // Pin 5
-          OUTPUT,   // Pin 6
-          OUTPUT,   // Pin 7
-          OUTPUT,   // Pin 8
-          OUTPUT,   // Pin 9
-          OUTPUT,   // Pin 10
-          OUTPUT,   // Pin 11
-          IGNORED,  // Pin 12 (VSS)
-          OUTPUT,   // Pin 13
-          OUTPUT,   // Pin 14
-          OUTPUT,   // Pin 15
-          OUTPUT,   // Pin 16
-          OUTPUT,   // Pin 17
-          OUTPUT,   // Pin 18
-          OUTPUT,   // Pin 19
-          OUTPUT,   // Pin 20
-          INPUT,    // Pin 21
-          INPUT,    // Pin 22
-          INPUT,    // Pin 23
-          IGNORED,  // Pin 24 (VDD)
+  nts::PinType  pinsTypeTab[24] = {
+                INPUT,    // Pin 1
+                INPUT,    // Pin 2
+                INPUT,    // Pin 3
+                OUTPUT,   // Pin 4
+                OUTPUT,   // Pin 5
+                OUTPUT,   // Pin 6
+                OUTPUT,   // Pin 7
+                OUTPUT,   // Pin 8
+                OUTPUT,   // Pin 9
+                OUTPUT,   // Pin 10
+                OUTPUT,   // Pin 11
+                IGNORED,  // Pin 12 (VSS)
+                OUTPUT,   // Pin 13
+                OUTPUT,   // Pin 14
+                OUTPUT,   // Pin 15
+                OUTPUT,   // Pin 16
+                OUTPUT,   // Pin 17
+                OUTPUT,   // Pin 18
+                OUTPUT,   // Pin 19
+                OUTPUT,   // Pin 20
+                INPUT,    // Pin 21
+                INPUT,    // Pin 22
+                INPUT,    // Pin 23
+                IGNORED,  // Pin 24 (VDD)
   };
 
   // Create the pins of the chipset 4514 and set them.
@@ -83,7 +83,7 @@ C4514::C4514(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4514::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4514::Compute(size_t pin_num_this) {
 
   if (pinIndexIsValid(pin_num_this))
     {
@@ -130,7 +130,7 @@ nts::Tristate   C4514::Compute(size_t pin_num_this) {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4514::computeGates() {
+void            nts::C4514::computeGates() {
   size_t        outputPins[] = {4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20};
 
   this->pins[0].state = this->pins[0].component->getStateAtPin(1);
@@ -147,7 +147,7 @@ void            C4514::computeGates() {
   }
 }
 
-void  C4514::initValuesOutputs()
+void              nts::C4514::initValuesOutputs()
 {
   std::vector<int> vec1(20);
   std::vector<int> vec2(20);

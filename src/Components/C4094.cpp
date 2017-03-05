@@ -24,30 +24,30 @@
 ** The component 4094 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4094::C4094(const std::string &name) : AComponent(name, "chipset") {
+nts::C4094::C4094(const std::string &name) : nts::AComponent(name, "chipset") {
   this->_nbPins = 16;
   this->_VSS = 8;
   this->_VDD = 16;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
-    INPUT,    // Pin 1
-    INPUT,    // Pin 2
-    CLOCK,    // Pin 3
-    OUTPUT,   // Pin 4
-    OUTPUT,   // Pin 5
-    OUTPUT,   // Pin 6
-    OUTPUT,   // Pin 7
-    IGNORED,  // Pin 8  (VSS)
-    OUTPUT,   // Pin 9
-    OUTPUT,   // Pin 10
-    OUTPUT,   // Pin 11
-    OUTPUT,   // Pin 12 
-    OUTPUT,   // Pin 13
-    OUTPUT,   // Pin 14
-    INPUT,    // Pin 15
-    IGNORED   // Pin 16 (VDD)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                INPUT,    // Pin 1
+                INPUT,    // Pin 2
+                CLOCK,    // Pin 3
+                OUTPUT,   // Pin 4
+                OUTPUT,   // Pin 5
+                OUTPUT,   // Pin 6
+                OUTPUT,   // Pin 7
+                IGNORED,  // Pin 8  (VSS)
+                OUTPUT,   // Pin 9
+                OUTPUT,   // Pin 10
+                OUTPUT,   // Pin 11
+                OUTPUT,   // Pin 12 
+                OUTPUT,   // Pin 13
+                OUTPUT,   // Pin 14
+                INPUT,    // Pin 15
+                IGNORED   // Pin 16 (VDD)
   };
 
   // Create the pins of the chipset 4094 and set them.
@@ -82,7 +82,7 @@ C4094::C4094(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4094::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4094::Compute(size_t pin_num_this) {
 
   // If the pin selected is valid.
   if (pinIndexIsValid(pin_num_this))
@@ -93,7 +93,7 @@ nts::Tristate   C4094::Compute(size_t pin_num_this) {
   return nts::Tristate::UNDEFINED;
 }
 
-void            C4094::reset() {
+void            nts::C4094::reset() {
   // Set all outputs pins to false.
   for (std::map<size_t, size_t>::iterator it = outputPins.begin(); it != outputPins.end(); it++) {
     this->pins[(*it).second - 1].state = nts::Tristate::UNDEFINED;
@@ -103,7 +103,7 @@ void            C4094::reset() {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4094::computeGates() {
+void            nts::C4094::computeGates() {
   size_t inputs[4] = { _STROBE_, _DATA_, _CLOCK_, _OUTPUT_ENABLE_ };
 
   if (this->first) { this->first = false; return; }

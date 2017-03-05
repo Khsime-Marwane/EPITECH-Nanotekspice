@@ -10,7 +10,7 @@
 #include "Parser.hpp"
 #include "Errors.hpp"
 
-Parser::Parser(int ac, char **av) {
+nts::Parser::Parser(int ac, char **av) {
   this->regParse = new RegParse();
   this->loadFile_c(av[1]);
   this->loadComp_values(ac,av);
@@ -23,33 +23,33 @@ Parser::Parser(int ac, char **av) {
   };
 }
 
-Parser::~Parser() {}
+nts::Parser::~Parser() {}
 
 // GETTERS
-std::map<std::string, AComponent *> Parser::getCircuit() const {
+std::map<std::string, nts::AComponent *> nts::Parser::getCircuit() const {
   return this->circuit;
 }
 
-std::map<std::string, AComponent *> Parser::getOutputs() const {
+std::map<std::string, nts::AComponent *> nts::Parser::getOutputs() const {
   return this->outputs;
 }
 
-std::vector<AComponent *> Parser::getClocks() const {
+std::vector<nts::AComponent *> nts::Parser::getClocks() const {
   return this->clocks;
 }
 
-nts::t_ast_node *Parser::getRoot() const {
+nts::t_ast_node *nts::Parser::getRoot() const {
   return this->treeRoot;
 }
 
 // FEED Part
-void    Parser::feed(std::string const& input) {
+void    nts::Parser::feed(std::string const& input) {
   if (!input.empty())
     this->file.push_back(input);
 }
 
 // PARSE TREE PART
-void    Parser::parseTree(nts::t_ast_node &root) {
+void    nts::Parser::parseTree(nts::t_ast_node &root) {
 
   // Basic Checks
   basicChecks(root);
@@ -61,7 +61,7 @@ void    Parser::parseTree(nts::t_ast_node &root) {
   checkLinksInCircuit();
 }
 
-void    Parser::basicChecks(const nts::t_ast_node &root) {
+void    nts::Parser::basicChecks(const nts::t_ast_node &root) {
   // If the tree's base is correct.
   if (!root.children || root.children->size() != 6)
       throw Error("Can't parse the tree, the root is incomplete.");
@@ -73,7 +73,7 @@ void    Parser::basicChecks(const nts::t_ast_node &root) {
       throw Error("Can't parse the tree, there is no components and/or links.");
 }
 
-const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &components) {
+const std::string nts::Parser::getCircuitType(std::vector<nts::t_ast_node *> &components) {
   unsigned int index = 0;
   std::string ret;
 
@@ -88,7 +88,7 @@ const std::string Parser::getCircuitType(std::vector<nts::t_ast_node *> &compone
   return "";
 }
 
-void    Parser::createCircuit(nts::t_ast_node &root) {
+void    nts::Parser::createCircuit(nts::t_ast_node &root) {
 
   for (std::vector<nts::t_ast_node *>::iterator it = root.children->at(2)->children->begin();
        it != root.children->at(2)->children->end(); ++it) {
@@ -100,21 +100,21 @@ void    Parser::createCircuit(nts::t_ast_node &root) {
             throw Error("Error on parseTree : Input/Clock '" + (*it)->value + "' isn't set.");
           }
           newComponent = this->factory.create((*it)->value, (*it)->lexeme, this->comp_values[(*it)->value]);
-          this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
+          this->circuit.insert(std::pair<std::string, nts::AComponent *>((*it)->value, newComponent));
           if ((*it)->lexeme == "clock")
             this->clocks.push_back(newComponent);
         } else 
         {
           newComponent = this->factory.create((*it)->value, (*it)->lexeme);
-          this->circuit.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
+          this->circuit.insert(std::pair<std::string, nts::AComponent *>((*it)->value, newComponent));
           if ((*it)->lexeme == "output") {
-            this->outputs.insert(std::pair<std::string, AComponent *>((*it)->value, newComponent));
+            this->outputs.insert(std::pair<std::string, nts::AComponent *>((*it)->value, newComponent));
           }
         }
   }
 }
 
-void    Parser::linkComponents(nts::t_ast_node &root) {
+void    nts::Parser::linkComponents(nts::t_ast_node &root) {
   std::vector<nts::t_ast_node *> *Left = root.children->at(3)->children;
   std::vector<nts::t_ast_node *> *Right = root.children->at(4)->children;
 
@@ -139,11 +139,11 @@ void    Parser::linkComponents(nts::t_ast_node &root) {
     }
 }
 
-void      Parser::checkLinksInCircuit() const {
+void      nts::Parser::checkLinksInCircuit() const {
   std::string errMsg;
   bool    isError = false;
 
-  for (std::map<std::string, AComponent *>::const_iterator it = circuit.begin(); it != circuit.end(); it++) {
+  for (std::map<std::string, nts::AComponent *>::const_iterator it = circuit.begin(); it != circuit.end(); it++) {
     if (it->second->getType() == "output" && !it->second->pins[0].component) {
       if (!isError) errMsg += "Some Outputs are not linked :\n";
       errMsg += ("Output '" + it->second->getName() + "' is not linked to anything.\n");
@@ -156,14 +156,14 @@ void      Parser::checkLinksInCircuit() const {
 }
 
 // CREATE TREE PART
-nts::t_ast_node *Parser::createTree() {
+nts::t_ast_node *nts::Parser::createTree() {
   nts::t_ast_node *tmp;
   tmp = this->generateTree();
   this->checkTree();
   return (tmp);
 }
 
-void  Parser::loadFile_c(char *file_content)
+void  nts::Parser::loadFile_c(char *file_content)
 {
   std::string tmp(file_content);
   if (((int)tmp.find(".nts") <= 0) && (tmp.find(".nts") != (tmp.length() - 4)))
@@ -189,7 +189,7 @@ void  Parser::loadFile_c(char *file_content)
   file_c.close();
 }
 
-void  Parser::loadComp_values(int ac, char **av)
+void  nts::Parser::loadComp_values(int ac, char **av)
 {
   if (ac > 2)
     {
@@ -204,7 +204,7 @@ void  Parser::loadComp_values(int ac, char **av)
     }
 }
 
-void  Parser::setDefaultTree()
+void  nts::Parser::setDefaultTree()
 {
   this->treeRoot = new nts::t_ast_node(new std::vector<nts::t_ast_node*>);
   this->treeRoot->lexeme = "Default";
@@ -224,7 +224,7 @@ void  Parser::setDefaultTree()
   this->sections_t = this->treeRoot->children->at(5);
 }
 
-nts::t_ast_node  *Parser::generateTree()
+nts::t_ast_node  *nts::Parser::generateTree()
 {
   if (this->file.size() > 0) {
       std::string section;
@@ -277,7 +277,7 @@ nts::t_ast_node  *Parser::generateTree()
   return NULL;
 }
 
-void  Parser::checkTree()
+void  nts::Parser::checkTree()
 {
   int same = 0;
   int i = 0;
@@ -302,7 +302,7 @@ void  Parser::checkTree()
   this->checkLinks();
 }
 
-void  Parser::checkLinks()
+void  nts::Parser::checkLinks()
 {
   for (std::vector<struct nts::s_ast_node*>::iterator it = this->links_t->children->begin(); it != this->links_t->children->end(); ++it)
     {
@@ -328,7 +328,7 @@ void  Parser::checkLinks()
     }
 }
 
-bool  Parser::checkComp_value(const char* str)
+bool  nts::Parser::checkComp_value(const char* str)
 {
   int i = 0;
 

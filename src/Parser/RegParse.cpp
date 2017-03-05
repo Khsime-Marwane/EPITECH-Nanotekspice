@@ -9,7 +9,7 @@
 #include <regex>
 #include "RegParse.hpp"
 
-RegParse::RegParse()
+nts::RegParse::RegParse()
 {
   this->regex_section_chipsets = "(^.chipsets:)(\\s)?$";
   this->regex_section_links = "(^.links:)(\\s)?$";
@@ -21,7 +21,7 @@ RegParse::RegParse()
   this->generateAllowedVec();
 }
 
-void  RegParse::generateAllowedVec()
+void  nts::RegParse::generateAllowedVec()
 {
   this->allowed_chips.push_back("(^4001\\s+[_[:alnum:]]+)(\\s+)?$");
   this->allowed_chips.push_back("(^4008\\s+[_[:alnum:]]+)(\\s+)?$");
@@ -46,7 +46,7 @@ void  RegParse::generateAllowedVec()
   this->allowed_comps.push_back("(^output\\s+[_[:alnum:]]+)(\\s+)?$");
 }
 
-bool RegParse::exec(const char* str_request, const char* str_regex)
+bool nts::RegParse::exec(const char* str_request, const char* str_regex)
 {
   std::smatch m;
   std::string tmp(str_request);
@@ -59,7 +59,7 @@ bool RegParse::exec(const char* str_request, const char* str_regex)
   return (false);
 }
 
-bool RegParse::execComps(const char* str)
+bool nts::RegParse::execComps(const char* str)
 {
   int state = 0;
   for (std::vector<std::string>::iterator it = this->allowed_comps.begin(); it != this->allowed_comps.end(); ++it)
@@ -84,7 +84,7 @@ bool RegParse::execComps(const char* str)
   return (false);
 }
 
-std::pair<std::string, int> RegParse::getInpValue()
+std::pair<std::string, int> nts::RegParse::getInpValue()
 {
   int pos = this->str_match.find('=');
   std::string name = this->str_match.substr(0, pos);
@@ -93,7 +93,7 @@ std::pair<std::string, int> RegParse::getInpValue()
   return (std::make_pair(name, value));
 }
 
-nts::t_ast_node* RegParse::getComps()
+nts::t_ast_node* nts::RegParse::getComps()
 {
   int pos = ((int)this->str_match.find('\t') > 0) ? this->str_match.find('\t') : this->str_match.find(' ');
 
@@ -109,7 +109,7 @@ nts::t_ast_node* RegParse::getComps()
   return (tmp);
 }
 
-nts::t_ast_node* RegParse::getLinks()
+nts::t_ast_node* nts::RegParse::getLinks()
 {
   int pos = ((int)this->str_match.find('\t') > 0) ? this->str_match.find('\t') : this->str_match.find(' ');
 
@@ -122,7 +122,7 @@ nts::t_ast_node* RegParse::getLinks()
   return (tmp);
 }
 
-nts::t_ast_node* RegParse::getLinks_end()
+nts::t_ast_node* nts::RegParse::getLinks_end()
 {
   int pos = ((int)this->str_match.rfind('\t') > 0) ? this->str_match.rfind('\t') : this->str_match.rfind(' ');
 
@@ -133,7 +133,7 @@ nts::t_ast_node* RegParse::getLinks_end()
   return (tmp);
 }
 
-nts::t_ast_node*  RegParse::getSection(std::string &section)
+nts::t_ast_node*  nts::RegParse::getSection(std::string &section)
 {
   nts::t_ast_node  *tmp = new nts::t_ast_node(NULL);
   tmp->type = nts::ASTNodeType::SECTION;
@@ -142,7 +142,7 @@ nts::t_ast_node*  RegParse::getSection(std::string &section)
   return (tmp);
 }
 
-nts::t_ast_node*  RegParse::getString()
+nts::t_ast_node*  nts::RegParse::getString()
 {
   nts::t_ast_node *tmp = new nts::t_ast_node(NULL);
   tmp->type = nts::ASTNodeType::STRING;
@@ -150,7 +150,7 @@ nts::t_ast_node*  RegParse::getString()
   return (tmp);
 }
 
-bool  RegParse::checkLine(const char* str)
+bool  nts::RegParse::checkLine(const char* str)
 {
   if (this->execComps(str) || this->exec(str, this->regex_section_chipsets) || this->exec(str, this->regex_section_links)
       || this->exec(str, this->regex_links) || this->exec(str, this->str_comment) || strlen(str) == 0)

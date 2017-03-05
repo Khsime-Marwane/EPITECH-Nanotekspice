@@ -8,7 +8,7 @@
 
 #include "Cli.hpp"
 
-Cli::Cli(const Parser &parser) {
+nts::Cli::Cli(const Parser &parser) {
 
   this->regParse = parser.regParse;
   this->circuit = parser.getCircuit();
@@ -28,9 +28,9 @@ Cli::Cli(const Parser &parser) {
     throw Error("CLI cannot be setted because the circuit is empty or there is no output.\n");
 }
 
-Cli::~Cli() {}
+nts::Cli::~Cli() {}
 
-void    Cli::init()
+void    nts::Cli::init()
 {
   // To store the command lines.
   std::string cmd;
@@ -64,13 +64,13 @@ void    Cli::init()
   // std::cout << "> ";
 }
 
-void    Cli::Exit() {
+void    nts::Cli::Exit() {
   // Exit the program
   std::cout << "> ";
   exit(EXIT_SUCCESS);
 }
 
-void    Cli::Display() {
+void    nts::Cli::Display() {
   // Call the dump method of each output.
   std::map<std::string, AComponent *>::iterator it;
 
@@ -79,7 +79,7 @@ void    Cli::Display() {
     }
 }
 
-void    Cli::SetInput() {
+void    nts::Cli::SetInput() {
   std::pair<std::string, int> tmp = this->regParse->getInpValue();
 
   // Check if the component exist.
@@ -94,7 +94,7 @@ void    Cli::SetInput() {
     std::cout << "nanotekspice: " << tmp.first << " doesn't exist." << std::endl;
 }
 
-void    Cli::Simulate() {
+void    nts::Cli::Simulate() {
 
   for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
       if (it->second->getType() != "output")
@@ -115,12 +115,12 @@ static bool isLooping = false;
 
 // For Loop(), on SIGINT, change the value of the variable isLooping
 // to break the loop.
-void    Cli::signalHandler(int signum) {
+void    nts::Cli::signalHandler(int signum) {
   isLooping = false;
   (void)signum;
 }
 
-void    Cli::Loop() {
+void    nts::Cli::Loop() {
   // Create and set the sigaction handler.
   struct  sigaction   sigintHandler;
 
@@ -138,7 +138,7 @@ void    Cli::Loop() {
   sigintHandler.sa_handler = NULL;
 }
 
-void    Cli::Dump() {
+void    nts::Cli::Dump() {
   // Call the Dump method of each component of the circuit.
   std::map<std::string, AComponent *>::iterator it;
 
@@ -150,7 +150,7 @@ void    Cli::Dump() {
     }
 }
 
-void    Cli::Help() {
+void    nts::Cli::Help() {
   // Print the helper.
 
   std::cout <<
@@ -165,7 +165,7 @@ void    Cli::Help() {
             << "|__ help\t\tdisplay this help." << std::endl;
 }
 
-void    Cli::Clear() {
+void    nts::Cli::Clear() {
   // Clear the screen.
   if (system("clear") == -1)
     std::cout << "nanotekspice: failed to execute command clear." << std::endl;

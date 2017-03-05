@@ -8,7 +8,7 @@
 #include "IParser.hpp"
 
 #ifndef REGPARSE_H_
-  #define REGPARSE_H_
+# define REGPARSE_H_
 namespace nts
 {
   class RegParse {

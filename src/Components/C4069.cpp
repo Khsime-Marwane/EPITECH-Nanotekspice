@@ -15,14 +15,14 @@
 ** The component 4069 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4069::C4069(const std::string &name) : AComponent(name, "chipset") {
+nts::C4069::C4069(const std::string &name) : nts::AComponent(name, "chipset") {
   this->_nbPins = 14;
   this->_VSS = 7;
   this->_VDD = 14;
 
   this->pins = new Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
+  nts::PinType pinsTypeTab[this->_nbPins] = {
     INPUT,    // Pin 1
     OUTPUT,   // Pin 2
     INPUT,    // Pin 3
@@ -61,7 +61,7 @@ C4069::C4069(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4069::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4069::Compute(size_t pin_num_this) {
 
   if (pinIndexIsValid(pin_num_this))
     {
@@ -95,7 +95,7 @@ nts::Tristate   C4069::Compute(size_t pin_num_this) {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4069::computeGates() {
+void            nts::C4069::computeGates() {
   size_t        outputPins[] = { 2, 4, 6, 8, 10, 12};
 
   for (size_t i = 0; i < 6; i++) {
