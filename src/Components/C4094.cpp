@@ -18,6 +18,7 @@
 #define _QPRIME_ 8
 #define _QS_ 9
 #define _Q7_ 11
+#define _Q8_ 10
 
 /*
 ** The component 4094 is composed of 14 pins. It has 4 OR gates
@@ -118,8 +119,10 @@ void            C4094::computeGates() {
       this->pins[_CLOCK_].state == nts::Tristate::FALSE)) {
 
     // IF CLOCK IS TRUE
-    if (this->pins[_CLOCK_].state == nts::Tristate::TRUE)
+    if (this->pins[_CLOCK_].state == nts::Tristate::TRUE) {
       this->pins[_QS_].state = this->pins[_Q7_].state;
+      this->pins[_Q8_].state = this->pins[_Q7_].state;
+    }
     else // IF CLOCK IS FALSE
       this->pins[_QPRIME_].state = this->pins[_Q7_].state;
 
@@ -132,6 +135,7 @@ void            C4094::computeGates() {
            this->pins[_OUTPUT_ENABLE_].state == nts::Tristate::TRUE &&
            this->pins[_CLOCK_].state == nts::Tristate::TRUE) {
       this->pins[_QS_].state = this->pins[_Q7_].state;
+      this->pins[_Q8_].state = this->pins[_Q7_].state;
     return ;
   }
 
@@ -149,6 +153,7 @@ void            C4094::computeGates() {
           this->pins[this->outputPins[i] - 1].state = this->pins[this->outputPins[i - 1] - 1].state;
       }
       this->pins[_QS_].state = this->pins[_Q7_].state;
+      this->pins[_Q8_].state = this->pins[_Q7_].state;
   }
 
   else if (this->pins[_OUTPUT_ENABLE_].state == nts::Tristate::TRUE &&
