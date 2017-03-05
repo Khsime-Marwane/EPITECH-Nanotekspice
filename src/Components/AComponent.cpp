@@ -131,8 +131,7 @@ void            AComponent::SetLink(size_t pin_num_this,
     if (this != &component) {
       this->pins[pin_num_this - 1].component->SetLink(pin_num_target, *this, pin_num_this);
     }
-
-    if (this->pins[pin_num_this - 1].type == INPUT || this->pins[pin_num_this - 1].type == CLOCK)
+    if (this->pins[pin_num_this - 1].type != OUTPUT)
         this->pins[pin_num_this - 1].state = dynamic_cast<AComponent *>(&component)->pins[pin_num_target - 1].state;
   };
 }

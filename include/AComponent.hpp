@@ -70,6 +70,10 @@ struct s_pin        *pins;
 
 };
 
+/*
+**  Note: An Hybrid component can simulate an input or an output
+*/
+
 enum PinType { IGNORED = (-true), INPUT = 0, CLOCK = 1, OUTPUT = 2 };
 
 // Pin Node

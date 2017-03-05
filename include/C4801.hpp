@@ -11,6 +11,14 @@
 
 #include "AComponent.hpp"
 
+# define _WRITE_ENABLE_ 20
+# define _OUTPUT_ENABLE_ 19
+# define _NO_CONNECTION_ 18
+# define _CHIP_ENABLE_ 17
+# define _SIZE_ 1024
+# define _COLUMNS_ 128
+# define _HYBRID_ IGNORED
+
 class   C4801 : public AComponent {
 
 public:
@@ -23,10 +31,17 @@ public:
   virtual void computeGates();
 
 private:
+  int      memory[1024];
+  
 
-// Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+  size_t   getX() const;
+  size_t   getY() const;
+
+  void  refreshInputs();
+  void  refreshOutputs();
+  void  resetOutputs();
+  void  setValueOnOutputs(int value);
+  int   getValueFromOutputs();
 };
 
 #endif /* _C4801_HPP_ */
