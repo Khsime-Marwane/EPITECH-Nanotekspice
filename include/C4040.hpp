@@ -9,6 +9,7 @@
 #ifndef _C4040_HPP_
 # define _C4040_HPP_
 
+#include <math.h>
 #include "AComponent.hpp"
 
 class   C4040 : public AComponent {
@@ -23,8 +24,9 @@ class   C4040 : public AComponent {
   virtual void  computeGates();
 
  private:
-  bool  previous;
+  bool  first;
   int   current;
+  int   pow_fact;
   std::map<size_t, size_t>  order;
 
   // Gates

@@ -23,7 +23,8 @@ C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
 
   this->pins = new Pin[this->_nbPins];
   this->current = 0;
-  this->previous = false;
+  this->pow_fact = 1;
+  this->first = true;
 
   PinType pinsTypeTab[this->_nbPins] = {
           OUTPUT,   // Pin 1
@@ -89,29 +90,13 @@ C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
 */
 nts::Tristate   C4040::Compute(size_t pin_num_this) {
 
-  if (pinIndexIsValid(pin_num_this))
+ /* if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
       if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
 
           nts::Tristate clk = this->pins[9].state;
 
-          if (this->pins[10].state == nts::Tristate::TRUE)
-            this->pins[pin_num_this - 1].state = nts::Tristate::FALSE;
-          else
-            {
-              if (this->previous)
-                this->pins[this->order[current - 1] - 1].state = nts::Tristate::FALSE;
-              if (clk == nts::Tristate::FALSE)
-                {
-                  this->pins[this->order[current] - 1].state = nts::Tristate::TRUE;
-
-                  if (this->pins[this->order[current] - 1].component)
-                    this->pins[this->order[current] - 1].component->setStateAtPin(this->links[this->order[current] - 1].second,
-                                                                                  this->pins[this->order[current] - 1].state);
-                  this->previous = true;
-                }
-            }
         }
 
         // If the pin selected is an Input.
@@ -122,11 +107,11 @@ nts::Tristate   C4040::Compute(size_t pin_num_this) {
       
       // Return the value of the computed Pin.
       return (this->pins[pin_num_this - 1].state);
-    }
-
+    }*/
+  (void)pin_num_this;
   // If the pin doesn't exist, throw an error.
-  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
-  return nts::Tristate::UNDEFINED;
+//  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
+  return (this->pins[pin_num_this - 1].state);
 }
 
 /*
@@ -138,8 +123,31 @@ void            C4040::computeGates() {
   this->pins[9].state = this->pins[9].component->getStateAtPin(1);
   this->pins[10].state = this->pins[10].component->getStateAtPin(1);
 
-  for (size_t i = 0; i < 12; i++) {
-      Compute(this->order[i]);
+  if (this->pow_fact == 12 || this->pins[10].state == nts::Tristate::TRUE)
+    {
+      this->pow_fact = 1;
+      this->current = 0;
+      for (unsigned int i = 0; i < this->_nbPins; i++)
+        this->pins[i].state = nts::Tristate::FALSE;
     }
+
+  if (this->pins[9].state == nts::Tristate::TRUE && this->first)
+    this->current++;
+//  std::cout << "pow_fact : " << this->pow_fact << " | current : " << this->current << std::endl;
+  int tmp = this->current/2;
+  std::cout << "CURRENT -----------> " << current << "| pow_fact : " << pow_fact << std::endl;
+  if (this->current == pow(2, this->pow_fact))
+    {
+      for (int i = 0; i < 12; ++i)
+        {
+          int bite = tmp % 2;
+          std::cout << "tmp : " << tmp << " | bite : " << bite << " | pin : " << this->order[i] << std::endl;
+          this->pins[this->order[i] - 1].state = (nts::Tristate)(bite);
+          tmp /= 2;
+        }
+      this->pow_fact++;
+    }
+
   this->current++;
+  this->first = false;
 }
