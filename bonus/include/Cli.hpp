@@ -12,6 +12,8 @@
 #include <csignal>
 #include <cstdlib>
 #include <cstdio>
+#include <iostream>
+#include <fstream>
 
 #include "Parser.hpp"
 
@@ -34,8 +36,10 @@
 **
 */
 #include <sstream>
+#include <cstring>
 
 class   Cli {
+
 public:
     // Constructor / Destructor
     Cli(const Parser &parser);
@@ -53,6 +57,18 @@ public:
     void        Dump();
     void        Help();
     void        Clear();
+    void        Load(const std::string &cmd);
+
+    // Tools
+    static std::string  EpurString(const std::string &str,
+                                   const std::string &fill = " ",
+                                   const std::string &whitespace = " \t");
+    static std::string  Trim(const std::string& str, const std::string &whitespace = " \t");
+    static bool FileExist(const char *filename);
+    static std::vector<std::string> split(const std::string &s, char delim);
+    static char **VectorToDoubeTab(const std::vector<std::string> &vector);
+    template<typename Out>
+    static void split(const std::string &s, char delim, Out result);
 
 private:
     // Private Methods

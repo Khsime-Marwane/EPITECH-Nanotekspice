@@ -25,6 +25,7 @@ public:
 private:
 // Pins Order
   std::map<size_t, size_t>  outputPins;
+  bool            first;
 
   void            reset();
 };

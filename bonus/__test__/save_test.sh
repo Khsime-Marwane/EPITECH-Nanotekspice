@@ -11,7 +11,7 @@ echo -e "" | ../nanotekspice resources/4001.nts a=0 b=0 a2=0 b2=1 a3=1 b3=1 a4=1
 #
 # TESTING COMPONENT 4008
 #
-echo -e "" | ../nanotekspice resources/4008.nts a=0 b=0 a2=1 b2=1 a3=1 b3=1 a4=1 b4=1 cin=0 > .tmp4008;
+echo -e "" | ../nanotekspice resources/4008.nts a=0 b=0 a2=1 b2=1ca a3=1 b3=1 a4=1 b4=1 cin=0 > .tmp4008;
 echo -e "" | ../nanotekspice resources/4008.nts a=0 b=0 a2=1 b2=1 a3=1 b3=1 a4=1 b4=1 cin=1 >> .tmp4008;
 echo -e "" | ../nanotekspice resources/4008.nts a=0 b=1 a2=1 b2=1 a3=1 b3=1 a4=1 b4=1 cin=0 >> .tmp4008;
 echo -e "" | ../nanotekspice resources/4008.nts a=1 b=0 a2=1 b2=1 a3=1 b3=1 a4=1 b4=1 cin=0 >> .tmp4008;

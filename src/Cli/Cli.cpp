@@ -61,11 +61,12 @@ void    Cli::init()
       std::cout << "> ";
     }
   // Exit the Cli.
-//  std::cout << "exit" << std::endl;
+  // std::cout << "> ";
 }
 
 void    Cli::Exit() {
   // Exit the program
+  std::cout << "> ";
   exit(EXIT_SUCCESS);
 }
 

@@ -167,7 +167,11 @@ void  Parser::loadFile_c(char *file_content)
 {
   std::string tmp(file_content);
   if (((int)tmp.find(".nts") <= 0) && (tmp.find(".nts") != (tmp.length() - 4)))
+   {
+     std::cout << "FIND = " << (int)tmp.find(".nts") << std::endl;
+     std::cout << "POS = " << (int)(tmp.find(".nts") != (tmp.length() - 4)) << std::endl;
     throw badExtensionFile("Bad extension of file.");
+   }
 
   std::ifstream file_c(file_content);
   std::string   line;

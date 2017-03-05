@@ -17,6 +17,7 @@ void  Helper() {
   << "|__ dump\t\tcall the Dump method of every component." << std::endl
   << "|__ [INPUT]=[VALUE]\tchanges the value of an input. (Not a clock)" << std::endl
   << "|__ exit\t\tcloses the program." << std::endl
+  << "|__ clear\t\tclear the screen." << std::endl
   << "|__ help\t\tdisplay this help." << std::endl;
 }
 
