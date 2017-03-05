@@ -12,8 +12,6 @@
 #include <csignal>
 #include <cstdlib>
 #include <cstdio>
-#include <iostream>
-#include <fstream>
 
 #include "Parser.hpp"
 
@@ -36,43 +34,28 @@
 **
 */
 #include <sstream>
-#include <cstring>
-
-namespace nts {
-
+namespace nts
+{
   class   Cli {
-
-  public:
+   public:
     // Constructor / Destructor
     Cli(const Parser &parser);
     ~Cli();
 
     // The init initialize the Cli and launch it.
-    void        init();
+    int        init();
 
     // Commands avalaible
-    void        Exit();
+    int         Exit(bool = true);
     void        Display();
     void        SetInput();
     void        Simulate();
-    void        Loop();
+    void        Loop(int i);
     void        Dump();
     void        Help();
     void        Clear();
-    void        Load(const std::string &cmd);
 
-    // Tools
-    static std::string  EpurString(const std::string &str,
-                                   const std::string &fill = " ",
-                                   const std::string &whitespace = " \t");
-    static std::string  Trim(const std::string& str, const std::string &whitespace = " \t");
-    static bool FileExist(const char *filename);
-    static std::vector<std::string> split(const std::string &s, char delim);
-    char **VectorToDoubleTab(const std::vector<std::string> &vector);
-    template<typename Out>
-    static void split(const std::string &s, char delim, Out result);
-
-  private:
+   private:
     // Private Methods
     static void        signalHandler(int signum);
     bool                looping;

@@ -16,10 +16,10 @@ nts::Cli::Cli(const Parser &parser) {
   this->clocks = parser.getClocks();
   this->looping = false;
 
-  this->func["exit"] = std::bind(&Cli::Exit, this);
+  this->func["exit"] = std::bind(&Cli::Exit, this, true);
   this->func["display"] = std::bind(&Cli::Display, this);
   this->func["simulate"] = std::bind(&Cli::Simulate, this);
-  this->func["loop"] = std::bind(&Cli::Loop, this);
+//  this->func["loop"] = std::bind(&Cli::Loop, this);
   this->func["dump"] = std::bind(&Cli::Dump, this);
   this->func["help"] = std::bind(&Cli::Help, this);
   this->func["clear"] = std::bind(&Cli::Clear, this);
@@ -30,7 +30,7 @@ nts::Cli::Cli(const Parser &parser) {
 
 nts::Cli::~Cli() {}
 
-void    nts::Cli::init()
+int    nts::Cli::init()
 {
   // To store the command lines.
   std::string cmd;
@@ -45,39 +45,43 @@ void    nts::Cli::init()
   // Get Commands Lines.
   while (getline(std::cin, cmd)) {
 
-      cmd = EpurString(cmd);
+      if (!cmd.compare("exit")) {
+        return Exit(false);
+      }
       // If the command is known by 'func' map, execute it.
       if (this->func.find(cmd) != this->func.end())
         this->func[cmd]();
-      
-      // If it's a Load
-      else if (cmd.substr(0, cmd.find(' ')) == "load") {
-          Load(cmd.substr(cmd.find(" ") + 1));
-      }
 
-      // If it's a SetInput
+        // If it's a SetInput
       else if (this->regParse->exec(cmd.c_str(), this->regParse->cli_value))
           SetInput();
-
-      // The commandline is empty, or invalid.
-      else {
-          if (!(!cmd.size()))
-            std::cout << "nanotekspice : command not found: " << cmd << std::endl;
-        }
+        else if (this->regParse->exec(cmd.c_str(), this->regParse->loop_func))
+            {
+              int nb_loop = this->regParse->getloopValue();
+              this->Loop(nb_loop);
+            }
+            // The commandline is empty, or invalid.
+        else {
+            if (!(!cmd.size()))
+              std::cout << "nanotekspice : command not found: " << cmd << std::endl;
+          }
       std::cout << "> ";
     }
+
   // Exit the Cli.
-  Exit();
+  return Exit(true);
 }
-void    nts::Cli::Exit() {
+
+int    nts::Cli::Exit(bool value) {
   // Exit the program
-  std::cout << "exit" << std::endl;
-  exit(EXIT_SUCCESS);
+  if (value)
+    std::cout << "exit" << std::endl;  
+  return EXIT_SUCCESS;
 }
 
 void    nts::Cli::Display() {
   // Call the dump method of each output.
-  std::map<std::string, nts::AComponent *>::iterator it;
+  std::map<std::string, AComponent *>::iterator it;
 
   for (it = outputs.begin(); it != outputs.end(); it++) {
       it->second->Dump();
@@ -101,16 +105,16 @@ void    nts::Cli::SetInput() {
 
 void    nts::Cli::Simulate() {
 
-  for (std::map<std::string, nts::AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
+  for (std::map<std::string, AComponent *>::iterator it = this->circuit.begin(); it != this->circuit.end(); it++) {
       if (it->second->getType() != "output")
         it->second->computeGates();
     }
 
-  for (std::map<std::string, nts::AComponent *>::iterator it = this->outputs.begin(); it != this->outputs.end(); it++) {
+  for (std::map<std::string, AComponent *>::iterator it = this->outputs.begin(); it != this->outputs.end(); it++) {
       it->second->computeGates();
     }
 
-  for (std::vector<nts::AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
+  for (std::vector<AComponent *>::iterator it = this->clocks.begin(); it != this->clocks.end(); it++) {
       (*it)->setStateAtPin(1, (nts::Tristate)!(*it)->getStateAtPin(1));
     }
 }
@@ -125,7 +129,7 @@ void    nts::Cli::signalHandler(int signum) {
   (void)signum;
 }
 
-void    nts::Cli::Loop() {
+void    nts::Cli::Loop(int nb_loop) {
   // Create and set the sigaction handler.
   struct  sigaction   sigintHandler;
 
@@ -136,8 +140,16 @@ void    nts::Cli::Loop() {
   isLooping = true;
 
   // Loop the Simulate function until SIGINT.
-  while (isLooping)
-    Simulate();
+  if (nb_loop > 0)
+    {
+      for(int i = 0; i < nb_loop; ++i)
+        Simulate();
+    }
+  else
+    while (isLooping)
+      Simulate();
+
+
 
   // Clear the Handler.
   sigintHandler.sa_handler = NULL;
@@ -145,7 +157,7 @@ void    nts::Cli::Loop() {
 
 void    nts::Cli::Dump() {
   // Call the Dump method of each component of the circuit.
-  std::map<std::string, nts::AComponent *>::iterator it;
+  std::map<std::string, AComponent *>::iterator it;
 
   std::cout << "\n=== DUMP ===\n" << std::endl;
   for (it = this->circuit.begin(); it != this->circuit.end(); it++)
@@ -161,122 +173,17 @@ void    nts::Cli::Help() {
   std::cout <<
             "Usage:     ./nanotekspice [FILE] [INPUTS]" << std::endl << std::endl
             << "| CLI COMMANDS :" << std::endl
-            << "|__ load [PATH] [ARGS]\t\tload a config." << std::endl
             << "|__ display\t\tprints on stdout the value of all outputs sorted by name." << std::endl
             << "|__ simulate\t\tlaunches a simulation." << std::endl
             << "|__ loop\t\tlaunches simulations without prompting again until SIGINT." << std::endl
             << "|__ dump\t\tcall the Dump method of every component." << std::endl
             << "|__ [INPUT]=[VALUE]\tchanges the value of an input. (Not a clock)" << std::endl
             << "|__ exit\t\tcloses the program." << std::endl
-            << "|__ clear\t\tclear the screen." << std::endl
             << "|__ help\t\tdisplay this help." << std::endl;
 }
 
-void            nts::Cli::Clear() {
+void    nts::Cli::Clear() {
   // Clear the screen.
   if (system("clear") == -1)
     std::cout << "nanotekspice: failed to execute command clear." << std::endl;
-}
-
-// ==== Load File
-template<typename Out>
-void            nts::Cli::split(const std::string &s, char delim, Out result) {
-    std::stringstream ss;
-    ss.str(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        *(result++) = item;
-    }
-}
-
-std::vector<std::string> nts::Cli::split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, std::back_inserter(elems));
-    return elems;
-}
-
-bool            nts::Cli::FileExist(const char *filename)
-{
-  std::ifstream ifile(filename);
-
-  (void)filename;
-  if (ifile.is_open()) { ifile.close();return true; }
-  ifile.close();
-  return false;
-}
-
-std::string     nts::Cli::Trim(const std::string& str,
-                          const std::string& whitespace)
-{
-    size_t strBegin = str.find_first_not_of(whitespace);
-    if (strBegin == std::string::npos)
-        return "";
-
-    size_t strEnd = str.find_last_not_of(whitespace);
-    size_t strRange = strEnd - strBegin + 1;
-
-    return str.substr(strBegin, strRange);
-}
-
-std::string     nts::Cli::EpurString(const std::string& str,
-                                     const std::string& fill,
-                                     const std::string& whitespace)
-{
-    // trim first
-    std::string result = Trim(str, whitespace);
-
-    // replace sub ranges
-    size_t beginSpace = result.find_first_of(whitespace);
-    while (beginSpace != std::string::npos)
-    {
-        size_t endSpace = result.find_first_not_of(whitespace, beginSpace);
-        size_t range = endSpace - beginSpace;
-
-        result.replace(beginSpace, range, fill);
-
-        size_t newStart = beginSpace + fill.length();
-        beginSpace = result.find_first_of(whitespace, newStart);
-    }
-
-    return result;
-}
-
-char            **nts::Cli::VectorToDoubleTab(const std::vector<std::string> &strings) {
-  char** cstrings = new char*[strings.size()];
-
-  for(size_t i = 0; i < strings.size(); ++i)
-  {
-      cstrings[i] = new char[strings[i].size() + 1];
-      std::strcpy(cstrings[i], strings[i].c_str());
-  }
-
-  return cstrings;
-}
-
-void            nts::Cli::Load(const std::string &file) {
-  if (file == "load") { Help(); return ; }
-
-  std::vector<std::string> args = split(file, ' ');
-
-  if (!FileExist(args[0].c_str())) {
-    std::cout << "nanotekspice: " << file << " is not a file." << std::endl;
-    return ;
-  }
-
-  args.insert(args.begin(), "");
-  char **tab = VectorToDoubleTab(args);
-
-  try {
-    nts::Parser  parser(args.size(), tab);
-
-    parser.createTree();
-    parser.parseTree(*parser.getRoot());
-
-    this->circuit = parser.getCircuit();
-    this->outputs = parser.getOutputs();
-    this->clocks = parser.getClocks();
-  } catch(std::exception const &err) {
-    std::cout << "nanotekspice: " << err.what() << std::endl;
-    return ;
-  }
 }

@@ -16,6 +16,7 @@ nts::RegParse::RegParse()
   this->regex_links = "(^.*\\:[[:digit:]]*\\s+.*\\:[[:digit:]]*)(\\s+)?$";
   this->str_comment = "(#.*)";
   this->cli_value = "(^[_[:alnum:]]+=[0-1])$";
+  this->loop_func = "(^loop(\\s+)?([0-9]*)?)?$";
   this->nb_inputs = 0;
 
   this->generateAllowedVec();
@@ -91,6 +92,19 @@ std::pair<std::string, int> nts::RegParse::getInpValue()
   int value = atoi(this->str_match.substr(pos + 1).c_str());
 
   return (std::make_pair(name, value));
+}
+
+
+int nts::RegParse::getloopValue()
+{
+  std::string value;
+
+  int pos = this->str_match.rfind(' ');
+  if (pos > 0)
+    value = this->str_match.substr(pos);
+
+  int res = (pos == -1) ? pos : atoi(value.c_str());
+  return (res);
 }
 
 nts::t_ast_node* nts::RegParse::getComps()
