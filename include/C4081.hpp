@@ -10,23 +10,24 @@
 # define _C4081_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4081 : public nts::AComponent {
 
-class   C4081 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4081(const std::string &name);
-  virtual ~C4081() { }
+    C4081(const std::string &name);
+    virtual ~C4081() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
-};
-
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+  };
+}
 #endif /* _C4081_HPP_ */

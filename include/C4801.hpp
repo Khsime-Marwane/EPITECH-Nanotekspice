@@ -18,30 +18,31 @@
 # define _SIZE_ 1024
 # define _COLUMNS_ 128
 # define _HYBRID_ IGNORED
+namespace nts
+{
+  class   C4801 : public nts::AComponent {
 
-class   C4801 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4801(const std::string &name);
-  virtual ~C4801() { }
+    C4801(const std::string &name);
+    virtual ~C4801() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
-  int      memory[1024];
-  
+   private:
+    int      memory[1024];
 
-  size_t   getX() const;
-  size_t   getY() const;
 
-  void  refreshInputs();
-  void  refreshOutputs();
-  void  resetOutputs();
-  void  setValueOnOutputs(int value);
-  int   getValueFromOutputs();
-};
+    size_t   getX() const;
+    size_t   getY() const;
 
+    void  refreshInputs();
+    void  refreshOutputs();
+    void  resetOutputs();
+    void  setValueOnOutputs(int value);
+    int   getValueFromOutputs();
+  };
+}
 #endif /* _C4801_HPP_ */

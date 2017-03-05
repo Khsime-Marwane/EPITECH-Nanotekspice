@@ -11,23 +11,24 @@
 
 #include "AComponent.hpp"
 #include "Gate.hpp"
+namespace nts
+{
+  class   C4069 : public nts::AComponent {
 
-class   C4069 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4069(const std::string &name);
-  virtual ~C4069() { }
+    C4069(const std::string &name);
+    virtual ~C4069() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
- 
-private:
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
+
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<int, int> > gateLinks;
-};
-
+    Gate  gate;
+    std::map<size_t, std::pair<int, int> > gateLinks;
+  };
+}
 #endif /* _C4069_HPP_ */

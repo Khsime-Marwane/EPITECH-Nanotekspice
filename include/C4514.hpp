@@ -11,29 +11,30 @@
 
 #include "AComponent.hpp"
 #include "Gate.hpp"
+namespace nts
+{
+  class   C4514 : public nts::AComponent {
 
-class   C4514 : public AComponent {
-
- public:
+   public:
 // Constructor / Destructor
-  C4514(const std::string &name);
-  virtual ~C4514() { }
+    C4514(const std::string &name);
+    virtual ~C4514() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void  computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void  computeGates();
 
- private:
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
 
-  void            initValuesOutputs();
+    void            initValuesOutputs();
 
-  std::map<std::string, nts::Tristate> middleInputs;
-  std::map<std::string, std::vector<int> > valOutputs;
+    std::map<std::string, nts::Tristate> middleInputs;
+    std::map<std::string, std::vector<int> > valOutputs;
 
-};
-
+  };
+}
 #endif /* _C4514_HPP_ */

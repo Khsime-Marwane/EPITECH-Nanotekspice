@@ -10,24 +10,26 @@
 # define _C4030_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4030 : public nts::AComponent {
 
-class   C4030 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4030(const std::string &name);
-  virtual ~C4030() { }
+    C4030(const std::string &name);
+    virtual ~C4030() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
 
-};
+  };
 
+}
 #endif /* _C4030_HPP_ */

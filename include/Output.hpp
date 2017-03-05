@@ -13,18 +13,20 @@
 #define _OUTPUT_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class Output : public nts::AComponent {
 
-class Output : public AComponent {
+   public:
+    Output(const std::string &name);
+    virtual ~Output();
 
-public:
-  Output(const std::string &name);
-  virtual ~Output();
+    // Inherited from IComponent
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
+                         size_t pin_num_target);
+    virtual void computeGates();
+  };
 
-  // Inherited from IComponent
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
-                       size_t pin_num_target);
-  virtual void computeGates();
-};
-
+}
 #endif /* end of include guard: _OUTPUT_HPP_ */

@@ -13,17 +13,19 @@
 #define _TRUE_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class True : public nts::AComponent {
 
-class True : public AComponent {
+   public:
+    True(const std::string &name);
+    virtual ~True();
 
-public:
-  True(const std::string &name);
-  virtual ~True();
+    // Inherited from IComponent
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
+                         size_t pin_num_target);
+  };
 
-  // Inherited from IComponent
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void SetLink(size_t pin_num_this, nts::IComponent &component,
-                       size_t pin_num_target);
-};
-
+}
 #endif /* end of include guard: _TRUE_HPP_ */

@@ -34,9 +34,10 @@
 **
 */
 #include <sstream>
-
-class   Cli {
-public:
+namespace nts
+{
+  class   Cli {
+   public:
     // Constructor / Destructor
     Cli(const Parser &parser);
     ~Cli();
@@ -54,7 +55,7 @@ public:
     void        Help();
     void        Clear();
 
-private:
+   private:
     // Private Methods
     static void        signalHandler(int signum);
     bool                looping;
@@ -64,10 +65,11 @@ private:
     std::map<std::string, AComponent *> outputs;
     std::vector<AComponent *> clocks;
 
-  // Functions
-  std::map<const std::string, std::function<void ()> > func;
+    // Functions
+    std::map<const std::string, std::function<void ()> > func;
 
-  RegParse *regParse;
-};
+    RegParse *regParse;
+  };
 
+}
 #endif /* _CLI_HPP_ */
