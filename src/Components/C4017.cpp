@@ -106,6 +106,11 @@ void            C4017::computeGates() {
   if (this->pins[_CLOCK_].component)
     this->pins[_CLOCK_].state = this->pins[_CLOCK_].component->Compute(this->links[_CLOCK_].second);
 
+  if (this->pins[_RESET_].component)
+    this->pins[_RESET_].state = this->pins[_RESET_].component->Compute(this->links[_RESET_].second);
+
+  if (this->pins[_ENABLE_].component)
+    this->pins[_ENABLE_].state = this->pins[_ENABLE_].component->Compute(this->links[_ENABLE_].second);
   // If the reset pin is TRUE, we reset the chipset
   if (this->pins[_RESET_].state == nts::Tristate::TRUE) {
     reset();

@@ -89,64 +89,40 @@ C4040::C4040(const std::string &name) : AComponent(name, "chipset") {
 ** will be computed.
 */
 nts::Tristate   C4040::Compute(size_t pin_num_this) {
+  // If the pin selected is valid.
+  if (pinIndexIsValid(pin_num_this))
+    return (this->pins[pin_num_this - 1].state);
 
- /* if (pinIndexIsValid(pin_num_this))
-    {
-      // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
-
-          nts::Tristate clk = this->pins[9].state;
-
-        }
-
-        // If the pin selected is an Input.
-      else if (this->pins[pin_num_this - 1].component && this->pins[pin_num_this - 1].type == INPUT) {
-            this->pins[pin_num_this - 1].state =
-                    this->pins[pin_num_this - 1].component->Compute(this->links[pin_num_this - 1].second);
-          }
-      
-      // Return the value of the computed Pin.
-      return (this->pins[pin_num_this - 1].state);
-    }*/
-  (void)pin_num_this;
-  // If the pin doesn't exist, throw an error.
-//  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
-  return (this->pins[pin_num_this - 1].state);
+  // If the pin doesn't exist, or if it's a VSS / VDD, throw an error.
+  throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
+  return nts::Tristate::UNDEFINED;
 }
 
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
 void            C4040::computeGates() {
-//  size_t        outputPins[] = { 9, 7, 6, 5, 3, 2, 4, 13, 12, 14, 15, 1 };
 
-  this->pins[9].state = this->pins[9].component->getStateAtPin(1);
-  this->pins[10].state = this->pins[10].component->getStateAtPin(1);
+  this->pins[9].state = this->pins[9].component->Compute(this->links[9].second);
+  this->pins[10].state = this->pins[10].component->Compute(this->links[10].second);
 
   if (this->pow_fact == 12 || this->pins[10].state == nts::Tristate::TRUE)
     {
       this->pow_fact = 1;
-      this->current = 0;
+      this->current = 1;
       for (unsigned int i = 0; i < this->_nbPins; i++)
         this->pins[i].state = nts::Tristate::FALSE;
     }
 
   if (this->pins[9].state == nts::Tristate::TRUE && this->first)
     this->current++;
-//  std::cout << "pow_fact : " << this->pow_fact << " | current : " << this->current << std::endl;
   int tmp = this->current/2;
-  std::cout << "CURRENT -----------> " << current << "| pow_fact : " << pow_fact << std::endl;
-  if (this->current == pow(2, this->pow_fact))
-    {
       for (int i = 0; i < 12; ++i)
         {
           int bite = tmp % 2;
-          std::cout << "tmp : " << tmp << " | bite : " << bite << " | pin : " << this->order[i] << std::endl;
           this->pins[this->order[i] - 1].state = (nts::Tristate)(bite);
           tmp /= 2;
         }
-      this->pow_fact++;
-    }
 
   this->current++;
   this->first = false;

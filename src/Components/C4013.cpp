@@ -70,7 +70,7 @@ nts::Tristate   C4013::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
     {
       // If the pin selected is an Output.
-      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end()) {
+      if (this->gateLinks.find(pin_num_this) != this->gateLinks.end() && this->startFromGate) {
 
           // Get the indexes of the pins linked with the output.
           size_t  firstPinLinked = this->gateLinks[pin_num_this].first;
@@ -111,13 +111,22 @@ nts::Tristate   C4013::Compute(size_t pin_num_this) {
               {
                 nts::Tristate data = (pin_num_this == 1) ? Compute(5) : Compute(9);
 
-                this->pins[pin_num_this - 1].state = data;
+                if (!tranState)
+                  {
+                    this->pins[pin_num_this - 1].state = this->old;
+                    this->pins[pin_num_this].state = this->nold;
+                  }
+                else
+                  {
+                    this->pins[pin_num_this - 1].state = data;
+                    this->pins[pin_num_this].state = (nts::Tristate)(!data);
+                  }
                 if (this->pins[pin_num_this - 1].component)
-                  this->pins[pin_num_this - 1].component->setStateAtPin(1, data);
-
-                this->pins[pin_num_this].state = (nts::Tristate)(!data);
-                if (this->pins[pin_num_this ].component)
-                  this->pins[pin_num_this].component->setStateAtPin(1, (nts::Tristate)(!data));
+                  this->pins[pin_num_this - 1].component->setStateAtPin(this->links[pin_num_this - 1].second,
+                                                                        this->pins[pin_num_this - 1].state);
+                if (this->pins[pin_num_this].component)
+                  this->pins[pin_num_this].component->setStateAtPin(this->links[pin_num_this].second,
+                                                                    this->pins[pin_num_this].state);
               }
           this->old = this->pins[pin_num_this - 1].state;
           this->nold = this->pins[pin_num_this].state;
@@ -144,7 +153,12 @@ nts::Tristate   C4013::Compute(size_t pin_num_this) {
 void            C4013::computeGates() {
   size_t        outputPins[] = {1, 12};
 
+  this->startFromGate = true;
+
   for (size_t i = 0; i < 2; i++) {
     Compute(outputPins[i]);
   }
+
+  this->startFromGate = false;
+  this->tranState = true;
 }
