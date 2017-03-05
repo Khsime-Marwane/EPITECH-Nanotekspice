@@ -61,12 +61,11 @@ void    nts::Cli::init()
       std::cout << "> ";
     }
   // Exit the Cli.
-  //std::cout << "> ";
+  std::cout << "exit" << std::endl;
 }
 
 void    nts::Cli::Exit() {
   // Exit the program
-  std::cout << "> ";
   exit(EXIT_SUCCESS);
 }
 
