@@ -14,7 +14,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -30,7 +31,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -46,7 +48,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -62,7 +65,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -78,7 +82,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -94,7 +99,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=1
+> > exit
+s0=1
 s1=0
 s10=0
 s11=0
@@ -110,7 +116,8 @@ s6=0
 s7=0
 s8=0
 s9=0
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -126,7 +133,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -142,7 +150,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=0
+> > exit
+s0=0
 s1=1
 s10=0
 s11=0
@@ -158,7 +167,8 @@ s6=0
 s7=0
 s8=0
 s9=0
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -174,7 +184,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -190,7 +201,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -206,7 +218,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -222,7 +235,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -238,7 +252,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -254,7 +269,8 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > s0=U
+> > exit
+s0=U
 s1=U
 s10=U
 s11=U
@@ -270,4 +286,4 @@ s6=U
 s7=U
 s8=U
 s9=U
-> > > 
+> > exit

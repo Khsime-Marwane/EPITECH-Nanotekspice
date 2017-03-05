@@ -29,6 +29,7 @@ nts::Factory::Factory() {
   this->basicConstructors["4514"] = std::bind(&Factory::createC4514, this, std::placeholders::_1);
   this->basicConstructors["4094"] = std::bind(&Factory::createC4094, this, std::placeholders::_1);
   this->basicConstructors["4040"] = std::bind(&Factory::createC4040, this, std::placeholders::_1);
+  this->basicConstructors["2716"] = std::bind(&Factory::createC2716, this, std::placeholders::_1);
 
   this->advancedConstructors["input"] = std::bind(&Factory::createInput, this, std::placeholders::_1, std::placeholders::_2);
   this->advancedConstructors["clock"] = std::bind(&Factory::createClock, this, std::placeholders::_1, std::placeholders::_2);
@@ -126,4 +127,8 @@ nts::AComponent *nts::Factory::createC4094(const std::string &name) const {
 
 nts::AComponent *nts::Factory::createC4040(const std::string &name) const {
   return new C4040(name);
+}
+
+nts::AComponent *nts::Factory::createC2716(const std::string &name) const {
+  return new C2716(name);
 }

@@ -34,6 +34,8 @@
 #include "C4514.hpp"
 #include "C4094.hpp"
 #include "C4040.hpp"
+#include "C2716.hpp"
+
 
 namespace nts
 {
@@ -66,6 +68,7 @@ namespace nts
     AComponent *createC4514(const std::string &) const;
     AComponent *createC4094(const std::string &) const;
     AComponent *createC4040(const std::string &) const;
+    AComponent *createC2716(const std::string &) const;
 
   };
 }
