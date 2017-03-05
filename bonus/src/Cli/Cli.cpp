@@ -67,9 +67,8 @@ void    nts::Cli::init()
       std::cout << "> ";
     }
   // Exit the Cli.
-//  std::cout << "exit" << std::endl;
+  std::cout << "exit" << std::endl;
 }
-
 void    nts::Cli::Exit() {
   // Exit the program
   exit(EXIT_SUCCESS);
@@ -258,7 +257,6 @@ void            nts::Cli::Load(const std::string &file) {
 
   std::vector<std::string> args = split(file, ' ');
 
-  std::cout << "file = '" << args[0] << "'" << std::endl;
   if (!FileExist(args[0].c_str())) {
     std::cout << "nanotekspice: " << file << " is not a file." << std::endl;
     return ;
