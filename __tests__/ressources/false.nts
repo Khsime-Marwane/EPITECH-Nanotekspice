@@ -1,8 +1,0 @@
-# False
-
-.chipsets:
-input		f
-output		s
-
-.links:
-f:1		s:1

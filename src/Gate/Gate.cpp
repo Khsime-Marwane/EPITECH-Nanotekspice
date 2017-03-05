@@ -137,7 +137,6 @@ nts::Tristate nts::Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tri
   if (i == 1 || i == 3)
     return (nts::Tristate::TRUE);
   return (nts::Tristate::FALSE);
-//  return (computeXOR(computeXOR(v1, v2), computeAND(computeAND(v1, v2), cinp)));
 }
 
 nts::Tristate nts::Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
@@ -154,7 +153,6 @@ nts::Tristate nts::Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tr
     return (nts::Tristate::TRUE);
   return (nts::Tristate::FALSE);
 
-//  return (computeOR(computeAND(computeXOR(v1, v2), cinp), computeAND(v1, v2)));
 }
 
 nts::Tristate nts::Gate::getTmpQ()

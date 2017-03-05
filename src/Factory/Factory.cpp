@@ -57,91 +57,73 @@ nts::AComponent *nts::Factory::create(const std::string &name, const std::string
 }
 
 nts::AComponent *nts::Factory::createFalse(const std::string &name) const {
-  //  std::cout << "Create FALSE component named '" << name << "'" << std::endl;
   return new False(name);
 }
 
 nts::AComponent *nts::Factory::createTrue(const std::string &name) const {
-  // std::cout << "Create TRUE component named '" << name << "'" << std::endl;
   return new True(name);
 }
 
 nts::AComponent *nts::Factory::createInput(const std::string &name, size_t value) const {
-  // std::cout << "Create INPUT component named '" << name << "'" << ", value : " << value << std::endl;
   return new Input(name, value);
 }
 
 nts::AComponent *nts::Factory::createClock(const std::string &name, size_t value) const {
-  // std::cout << "Create CLOCK component named '" << name << "'" << ", value : " << value << std::endl;
   return new Clock(name, value);
 }
 
 nts::AComponent *nts::Factory::createOutput(const std::string &name) const {
-  // std::cout << "Create OUTPUT component named '" << name << "'" << std::endl;
   return new Output(name);
 }
 
 nts::AComponent *nts::Factory::createC4071(const std::string &name) const {
-  // std::cout << "Create C4071 component named '" << name << "'" << std::endl;
   return new C4071(name);
 }
 
 nts::AComponent *nts::Factory::createC4011(const std::string &name) const {
-  // std::cout << "Create C4011 component named '" << name << "'" << std::endl;
   return new C4011(name);
 }
 
 nts::AComponent *nts::Factory::createC4013(const std::string &name) const {
-  // std::cout << "Create C4013 component named '" << name << "'" << std::endl;
   return new C4013(name);
 }
 
 nts::AComponent *nts::Factory::createC4017(const std::string &name) const {
-  // std::cout << "Create C4017 component named '" << name << "'" << std::endl;
   return new C4017(name);
 }
 
 nts::AComponent *nts::Factory::createC4081(const std::string &name) const {
-  // std::cout << "Create C4081 component named '" << name << "'" << std::endl;
   return new C4081(name);
 }
 
 nts::AComponent *nts::Factory::createC4030(const std::string &name) const {
-  // std::cout << "Create C4030 component named '" << name << "'" << std::endl;
   return new C4030(name);
 }
 
 nts::AComponent *nts::Factory::createC4001(const std::string &name) const {
-  // std::cout << "Create C4001 component named '" << name << "'" << std::endl;
   return new C4001(name);
 }
 
 nts::AComponent *nts::Factory::createC4069(const std::string &name) const {
-  // std::cout << "Create C4069 component named '" << name << "'" << std::endl;
   return new C4069(name);
 }
 
 nts::AComponent *nts::Factory::createC4008(const std::string &name) const {
-  // std::cout << "Create C4008 component named '" << name << "'" << std::endl;
   return new C4008(name);
 }
 
 nts::AComponent *nts::Factory::createC4801(const std::string &name) const {
-  // std::cout << "Create C48001 component named '" << name << "'" << std::endl;
   return new C4801(name);
 }
 
 nts::AComponent *nts::Factory::createC4514(const std::string &name) const {
-  // std::cout << "Create C4514 component named '" << name << "'" << std::endl;
   return new C4514(name);
 }
 
 nts::AComponent *nts::Factory::createC4094(const std::string &name) const {
-  // std::cout << "Create C4094 component named '" << name << "'" << std::endl;
   return new C4094(name);
 }
 
 nts::AComponent *nts::Factory::createC4040(const std::string &name) const {
-  // std::cout << "Create C4040 component named '" << name << "'" << std::endl;
   return new C4040(name);
 }

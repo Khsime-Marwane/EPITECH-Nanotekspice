@@ -32,6 +32,7 @@
 **
 **  • dump - Call the Dump method of every IComponent
 **
+**  • Help - Print the Helper.
 */
 #include <sstream>
 namespace nts
