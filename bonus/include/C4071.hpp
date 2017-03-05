@@ -10,23 +10,24 @@
 # define _C4071_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4071 : public nts::AComponent {
 
-class   C4071 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4071(const std::string &name);
-  virtual ~C4071() { }
+    C4071(const std::string &name);
+    virtual ~C4071() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
-};
-
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+  };
+}
 #endif /* _C4071_HPP_ */

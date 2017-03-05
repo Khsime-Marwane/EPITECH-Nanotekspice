@@ -10,29 +10,31 @@
 # define _C4013_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4013 : public nts::AComponent {
 
-class   C4013 : public AComponent {
-
- public:
+   public:
 // Constructor / Destructor
-  C4013(const std::string &name);
-  virtual ~C4013() { }
+    C4013(const std::string &name);
+    virtual ~C4013() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void  computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void  computeGates();
 
- private:
+   private:
 
-  bool  tranState;
-  bool  startFromGate;
+    bool  tranState;
+    bool  startFromGate;
 
-  nts::Tristate old;
-  nts::Tristate nold;
+    nts::Tristate old;
+    nts::Tristate nold;
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
-};
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+  };
 
+}
 #endif /* _C4013_HPP_ */

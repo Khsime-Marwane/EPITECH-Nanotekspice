@@ -12,9 +12,9 @@
 #include "True.hpp"
 
 // TODO: Ajouter les exit (catch std::exception)
-True::True(const std::string &name) : AComponent(name, "true") {
+nts::True::True(const std::string &name) : nts::AComponent(name, "true") {
   this->_nbPins = 1;
-  this->pins = new Pin;
+  this->pins = new nts::Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::TRUE;
   this->pins[0].type = IGNORED;
@@ -22,16 +22,16 @@ True::True(const std::string &name) : AComponent(name, "true") {
   this->links[0].second = -1;
 }
 
-True::~True() {}
+nts::True::~True() {}
 
-nts::Tristate True::Compute(size_t pin_num_this) {
+nts::Tristate nts::True::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   }
   return nts::Tristate::TRUE;
 }
 
-void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
+void nts::True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_num_target) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [ " + this->_name + " | LINK] : Invalid pin selected ("
                   + std::to_string((int)pin_num_target) + ").");
@@ -42,7 +42,7 @@ void True::SetLink(size_t pin_num_this, nts::IComponent &component, size_t pin_n
     this->links[0].second = pin_num_target;
 
     // Link the chipset with the component.
-    this->pins[0].component = dynamic_cast<AComponent * >(&component);
+    this->pins[0].component = dynamic_cast<nts::AComponent * >(&component);
 
     // Link the component with the chipset.
     this->pins[0].component->SetLink(pin_num_target, *this, pin_num_this);

@@ -11,13 +11,13 @@ void  Helper() {
   std::cout <<
   "Usage:     ./nanotekspice [FILE] [INPUTS]" << std::endl << std::endl
   << "| CLI COMMANDS :" << std::endl
+  << "|__ load [PATH] [ARGS]\t\tload a config." << std::endl
   << "|__ display\t\tprints on stdout the value of all outputs sorted by name." << std::endl
   << "|__ simulate\t\tlaunches a simulation." << std::endl
   << "|__ loop\t\tlaunches simulations without prompting again until SIGINT." << std::endl
   << "|__ dump\t\tcall the Dump method of every component." << std::endl
   << "|__ [INPUT]=[VALUE]\tchanges the value of an input. (Not a clock)" << std::endl
   << "|__ exit\t\tcloses the program." << std::endl
-  << "|__ clear\t\tclear the screen." << std::endl
   << "|__ help\t\tdisplay this help." << std::endl;
 }
 
@@ -26,12 +26,12 @@ int   nanotekspice(int  ac, char *av[])
   if(ac > 1) {
     // Try to launch the init.
     try {
-      Parser  parser(ac, av);
+      nts::Parser  parser(ac, av);
 
       parser.createTree();
       parser.parseTree(*parser.getRoot());
 
-      Cli     cli(parser);
+      nts::Cli     cli(parser);
 
       cli.init();
     }

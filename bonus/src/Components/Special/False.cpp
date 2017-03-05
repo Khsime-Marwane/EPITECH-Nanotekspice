@@ -11,9 +11,9 @@
 
 #include "False.hpp"
 
-False::False(const std::string &name) : AComponent(name, "false") {
+nts::False::False(const std::string &name) : AComponent(name, "false") {
   this->_nbPins = 1;
-  this->pins = new Pin;
+  this->pins = new nts::Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = nts::Tristate::FALSE;
   this->pins[0].type = IGNORED;
@@ -21,16 +21,16 @@ False::False(const std::string &name) : AComponent(name, "false") {
   this->links[0].second = -1;
 }
 
-False::~False() {}
+nts::False::~False() {}
 
-nts::Tristate False::Compute(size_t pin_num_this) {
+nts::Tristate nts::False::Compute(size_t pin_num_this) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   }
   return this->pins[0].state;
 }
 
-void False::SetLink(size_t pin_num_this, nts::IComponent &component,
+void nts::False::SetLink(size_t pin_num_this, nts::IComponent &component,
                      size_t pin_num_target) {
   if (pin_num_this != 1) {
     throw Error("ERROR : [ " + this->_name + " | LINK] : Invalid pin selected ("
@@ -41,7 +41,7 @@ void False::SetLink(size_t pin_num_this, nts::IComponent &component,
     this->links[0].first = pin_num_this;
     this->links[0].second = pin_num_target;
     // Link the chipset with the component.
-    this->pins[0].component = dynamic_cast<AComponent *>(&component);
+    this->pins[0].component = dynamic_cast<nts::AComponent *>(&component);
     // Link the component with the chipset.
     this->pins[0].component->SetLink(pin_num_target, *this, pin_num_this);
   }

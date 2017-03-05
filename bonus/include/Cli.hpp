@@ -38,9 +38,11 @@
 #include <sstream>
 #include <cstring>
 
-class   Cli {
+namespace nts {
 
-public:
+  class   Cli {
+
+  public:
     // Constructor / Destructor
     Cli(const Parser &parser);
     ~Cli();
@@ -66,11 +68,11 @@ public:
     static std::string  Trim(const std::string& str, const std::string &whitespace = " \t");
     static bool FileExist(const char *filename);
     static std::vector<std::string> split(const std::string &s, char delim);
-    static char **VectorToDoubeTab(const std::vector<std::string> &vector);
+    char **VectorToDoubleTab(const std::vector<std::string> &vector);
     template<typename Out>
     static void split(const std::string &s, char delim, Out result);
 
-private:
+  private:
     // Private Methods
     static void        signalHandler(int signum);
     bool                looping;
@@ -80,10 +82,11 @@ private:
     std::map<std::string, AComponent *> outputs;
     std::vector<AComponent *> clocks;
 
-  // Functions
-  std::map<const std::string, std::function<void ()> > func;
+    // Functions
+    std::map<const std::string, std::function<void ()> > func;
 
-  RegParse *regParse;
-};
+    RegParse *regParse;
+  };
 
+}
 #endif /* _CLI_HPP_ */

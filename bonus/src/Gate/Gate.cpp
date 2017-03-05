@@ -1,6 +1,14 @@
+//
+// Author: Sebastien Jacobin
+// Date: 2017-03-05 13:23:47 
+//
+// Last Modified by:   Marwane Khsime 
+// Last Modified time: 2017-03-05 13:23:47
+//
+
 #include "Gate.hpp"
 
-Gate::Gate()
+nts::Gate::Gate()
 {
   this->tmpQ = nts::Tristate::UNDEFINED;
   this->tmpQ2 = nts::Tristate::UNDEFINED;
@@ -27,7 +35,7 @@ Gate::Gate()
 ** to undefined because we don't use it. If among the values needed, one or more is
 ** UNDEFINED, or if the _type is unknown, it return UNDEFINED.
 */
-nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v2, nts::Tristate v3)
+nts::Tristate nts::Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v2, nts::Tristate v3)
 {
   this->_not = (_type == "NAND" || _type == "NOR" || _type == "XNOR") ? true : false;
 
@@ -50,14 +58,14 @@ nts::Tristate Gate::compute(std::string _type, nts::Tristate v1, nts::Tristate v
 ** | 1 | 0 | 0
 ** | 1 | 1 | 1
 */
-nts::Tristate Gate::computeAND(nts::Tristate v1, nts::Tristate v2)
+nts::Tristate nts::Gate::computeAND(nts::Tristate v1, nts::Tristate v2)
 {
   if (_not)
     return ((nts::Tristate)(!(v1 && v2)));
   return ((nts::Tristate)(v1 && v2));
 }
 
-nts::Tristate Gate::computeAND2(nts::Tristate v1, nts::Tristate v2, nts::Tristate v3)
+nts::Tristate nts::Gate::computeAND2(nts::Tristate v1, nts::Tristate v2, nts::Tristate v3)
 {
   if (_not)
     return ((nts::Tristate)(!(v1 && v2 && v3)));
@@ -72,7 +80,7 @@ nts::Tristate Gate::computeAND2(nts::Tristate v1, nts::Tristate v2, nts::Tristat
 ** | 1 | 0 | 1
 ** | 1 | 1 | 1
 */
-nts::Tristate Gate::computeOR(nts::Tristate v1, nts::Tristate v2)
+nts::Tristate nts::Gate::computeOR(nts::Tristate v1, nts::Tristate v2)
 {
   if (_not)
     return ((nts::Tristate)(!(v1 || v2)));
@@ -87,7 +95,7 @@ nts::Tristate Gate::computeOR(nts::Tristate v1, nts::Tristate v2)
 ** | 1 | 0 | 1
 ** | 1 | 1 | 0
 */
-nts::Tristate Gate::computeXOR(nts::Tristate v1, nts::Tristate v2)
+nts::Tristate nts::Gate::computeXOR(nts::Tristate v1, nts::Tristate v2)
 {
   if (_not)
     return ((nts::Tristate)(!(v1 ^ v2)));
@@ -100,27 +108,23 @@ nts::Tristate Gate::computeXOR(nts::Tristate v1, nts::Tristate v2)
 ** | 0 | 1
 ** | 1 | 0
 */
-nts::Tristate Gate::computeNO(nts::Tristate v)
+nts::Tristate nts::Gate::computeNO(nts::Tristate v)
 {
   return ((nts::Tristate)(!v));
 }
 
-nts::Tristate Gate::computeLATCH(nts::Tristate v1, nts::Tristate v2)
+nts::Tristate nts::Gate::computeLATCH(nts::Tristate v1, nts::Tristate v2)
 {
   nts::Tristate inpS = computeAND(v1, v2);
   nts::Tristate inpR = computeAND(inpS, v2);
 
-  if (inpS == nts::Tristate::FALSE && inpR == nts::Tristate::FALSE)
-    {
-      inpS = tmpQ;
-      inpR = tmpQ2;
-    }
   this->tmpQ = inpS;
   this->tmpQ2 = inpR;
+
   return (inpS);
 }
 
-nts::Tristate Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
+nts::Tristate nts::Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
 {
   int i = 0;
   if (v1 == nts::Tristate::TRUE)
@@ -136,7 +140,7 @@ nts::Tristate Gate::computeSUM(nts::Tristate v1, nts::Tristate v2, nts::Tristate
 //  return (computeXOR(computeXOR(v1, v2), computeAND(computeAND(v1, v2), cinp)));
 }
 
-nts::Tristate Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
+nts::Tristate nts::Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristate cinp)
 {
   int i = 0;
   if (v1 == nts::Tristate::TRUE)
@@ -153,12 +157,12 @@ nts::Tristate Gate::computeSUMC(nts::Tristate v1, nts::Tristate v2, nts::Tristat
 //  return (computeOR(computeAND(computeXOR(v1, v2), cinp), computeAND(v1, v2)));
 }
 
-nts::Tristate Gate::getTmpQ()
+nts::Tristate nts::Gate::getTmpQ()
 {
   return (this->tmpQ);
 }
 
-nts::Tristate Gate::getTmpQ2()
+nts::Tristate nts::Gate::getTmpQ2()
 {
   return (this->tmpQ2);
 }

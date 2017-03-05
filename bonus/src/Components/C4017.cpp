@@ -21,30 +21,30 @@
 ** The component 4017 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
+nts::C4017::C4017(const std::string &name) : nts::AComponent(name, "chipset") {
   this->_nbPins = 16;
   this->_VSS = 8;
   this->_VDD = 16;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
-    OUTPUT,   // Pin 1
-    OUTPUT,   // Pin 2
-    OUTPUT,   // Pin 3
-    OUTPUT,   // Pin 4
-    OUTPUT,   // Pin 5
-    OUTPUT,   // Pin 6
-    OUTPUT,   // Pin 7
-    IGNORED,  // Pin 8  (VSS)
-    OUTPUT,   // Pin 9
-    OUTPUT,   // Pin 10
-    OUTPUT,   // Pin 11
-    OUTPUT,   // Pin 12 
-    INPUT,    // Pin 13
-    CLOCK,    // Pin 14
-    INPUT,    // Pin 15
-    IGNORED   // Pin 16 (VDD)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                OUTPUT,   // Pin 1
+                OUTPUT,   // Pin 2
+                OUTPUT,   // Pin 3
+                OUTPUT,   // Pin 4
+                OUTPUT,   // Pin 5
+                OUTPUT,   // Pin 6
+                OUTPUT,   // Pin 7
+                IGNORED,  // Pin 8  (VSS)
+                OUTPUT,   // Pin 9
+                OUTPUT,   // Pin 10
+                OUTPUT,   // Pin 11
+                OUTPUT,   // Pin 12 
+                INPUT,    // Pin 13
+                CLOCK,    // Pin 14
+                INPUT,    // Pin 15
+                IGNORED   // Pin 16 (VDD)
   };
 
   // Create the pins of the chipset 4017 and set them.
@@ -76,7 +76,7 @@ C4017::C4017(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4017::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4017::Compute(size_t pin_num_this) {
 
   // If the pin selected is valid.
   if (pinIndexIsValid(pin_num_this))
@@ -87,7 +87,7 @@ nts::Tristate   C4017::Compute(size_t pin_num_this) {
   return nts::Tristate::UNDEFINED;
 }
 
-void            C4017::reset() {
+void            nts::C4017::reset() {
   // Set all outputs pins to false.
   for (std::map<size_t, size_t>::iterator it = order.begin(); it != order.end(); it++) {
     this->pins[(*it).second - 1].state = nts::Tristate::FALSE;
@@ -101,11 +101,16 @@ void            C4017::reset() {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4017::computeGates() {
+void            nts::C4017::computeGates() {
 
   if (this->pins[_CLOCK_].component)
     this->pins[_CLOCK_].state = this->pins[_CLOCK_].component->Compute(this->links[_CLOCK_].second);
 
+  if (this->pins[_RESET_].component)
+    this->pins[_RESET_].state = this->pins[_RESET_].component->Compute(this->links[_RESET_].second);
+
+  if (this->pins[_ENABLE_].component)
+    this->pins[_ENABLE_].state = this->pins[_ENABLE_].component->Compute(this->links[_ENABLE_].second);
   // If the reset pin is TRUE, we reset the chipset
   if (this->pins[_RESET_].state == nts::Tristate::TRUE) {
     reset();

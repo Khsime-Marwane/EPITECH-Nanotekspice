@@ -20,67 +20,70 @@
 #include "Errors.hpp"
 #include "Gate.hpp"
 
-class   AComponent : public nts::IComponent {
+namespace nts
+{
+  class   AComponent : public nts::IComponent {
 
 // === FUNCTIONS
-public:
+   public:
 // Constructor and Destructor.
-AComponent(const std::string &name, const std::string &type);
-virtual ~AComponent();
+    AComponent(const std::string &name, const std::string &type);
+    virtual ~AComponent();
 
 // Methods from IComponent Interface.
-virtual nts::Tristate   Compute(size_t pin_num_this = 1) = 0;
+    virtual nts::Tristate   Compute(size_t pin_num_this = 1) = 0;
 
-virtual void            SetLink(size_t pin_num_this, nts::IComponent &component,
-                                size_t pin_num_target);
-virtual void            Dump() const;
+    virtual void            SetLink(size_t pin_num_this, nts::IComponent &component,
+                                    size_t pin_num_target);
+    virtual void            Dump() const;
 
 // ==== Additional :
-// Check if the pin we are computing exist or is valid.  
-bool            pinIndexIsValid(size_t pin_num_this) const;
+// Check if the pin we are computing exist or is valid.
+    bool            pinIndexIsValid(size_t pin_num_this) const;
 // Check, when we are linking in the same component, if we are linking an Output to an Input.
-bool            doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) const;
+    bool            doesPinsTypesMatch(size_t pin_num_this, size_t pin_num_target) const;
 // Check if the component type match with the type expected by the pin.
-bool            doesComponentTypeMatch(AComponent &component, size_t first, size_t second) const;
+    bool            doesComponentTypeMatch(AComponent &component, size_t first, size_t second) const;
 // Compute all gates in the component.
-virtual void    computeGates();
+    virtual void    computeGates();
 // Get the name of the component.
-std::string     getName() const;
+    std::string     getName() const;
 // Get the type of the component.
-std::string     getType() const;
+    std::string     getType() const;
 // Get the value of the component at the pin 'index'
-nts::Tristate   getStateAtPin(size_t target) const;
+    nts::Tristate   getStateAtPin(size_t target) const;
 // Set the value of the component at the pin 'index'.
-void            setStateAtPin(size_t index, nts::Tristate state);
+    void            setStateAtPin(size_t index, nts::Tristate state);
 
 // === VARIABLES
-protected:
+   protected:
 
 // Properties
-const std::string   _name;
-const std::string   _type;
-size_t              _VSS;
-size_t              _VDD;
-size_t              _nbPins;
-std::map<size_t, std::pair<size_t, size_t> >  links;
+    const std::string   _name;
+    const std::string   _type;
+    size_t              _VSS;
+    size_t              _VDD;
+    size_t              _nbPins;
+    std::map<size_t, std::pair<size_t, size_t> >  links;
 
-public:
+   public:
 // Pins
-struct s_pin        *pins;
+    struct s_pin        *pins;
 
-};
+  };
 
 /*
 **  Note: An Hybrid component can simulate an input or an output
 */
 
-enum PinType { IGNORED = (-true), INPUT = 0, CLOCK = 1, OUTPUT = 2 };
+  enum PinType { IGNORED = (-true), INPUT = 0, CLOCK = 1, OUTPUT = 2 };
 
 // Pin Node
-typedef struct      s_pin {
+  typedef struct      s_pin {
     AComponent      *component;
     nts::Tristate   state;
     PinType         type;
-}                   Pin;
+  }                   Pin;
 
+}
 #endif // !_ACOMPONENT_HPP_

@@ -11,22 +11,25 @@
 
 #include "AComponent.hpp"
 
-class   C4001 : public AComponent {
+namespace nts
+{
+  class   C4001 : public nts::AComponent {
 
- public:
+   public:
 // Constructor / Destructor
-  C4001(const std::string &name);
-  virtual ~C4001() { }
+    C4001(const std::string &name);
+    virtual ~C4001() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void  computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void  computeGates();
 
- private:
+   private:
 
 // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
-};
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+  };
+}
 
 #endif /* _C4001_HPP_ */

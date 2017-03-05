@@ -19,66 +19,67 @@
 
 // TODO : Pourquoi pas créer une classe CreateTree et ParseTree pour mieux
 // segmenter le code et la classe Parser
+namespace nts
+{
+  class   Parser : public nts::IParser {
+   public:
 
-class   Parser : public nts::IParser {
- public:
+    // Constructor / Destructor
+    Parser(int  ac, char **av);
+    virtual ~Parser();
 
-  // Constructor / Destructor
-  Parser(int  ac, char **av);
-  virtual ~Parser();
+    // Basics
+    void feed(std::string const& input);
+    void parseTree(nts::t_ast_node& root);
+    nts::t_ast_node *createTree();
 
-  // Basics
-  void feed(std::string const& input);
-  void parseTree(nts::t_ast_node& root);
-  nts::t_ast_node *createTree();
+    // Getters
+    nts::t_ast_node *getRoot() const;
+    std::map<std::string, AComponent *> getCircuit() const;
+    std::map<std::string, AComponent *> getOutputs() const;
+    std::vector<AComponent *> getClocks() const;
 
-  // Getters
-  nts::t_ast_node *getRoot() const;
-  std::map<std::string, AComponent *> getCircuit() const;
-  std::map<std::string, AComponent *> getOutputs() const;
-  std::vector<AComponent *> getClocks() const;
+   private:
+    // createTree's methods
+    void  loadFile_c(char *file_content);
+    void  loadComp_values(int ac, char **av);
+    void  setDefaultTree();
+    nts::t_ast_node  *generateTree();
+    void  checkNormFile();
+    void  checkTree();
+    void  checkLinks();
+    bool  checkComp_value(const char*);
 
- private:
-  // createTree's methods
-  void  loadFile_c(char *file_content);
-  void  loadComp_values(int ac, char **av);
-  void  setDefaultTree();
-  nts::t_ast_node  *generateTree();
-  void  checkNormFile();
-  void  checkTree();
-  void  checkLinks();
-  bool  checkComp_value(const char*);
-
-  // parseTree's methods
-  void    basicChecks(const nts::t_ast_node &root);
-  void    createCircuit(nts::t_ast_node &root);
-  void    linkComponents(nts::t_ast_node &root);
-  void    checkLinksInCircuit() const;
-  const std::string getCircuitType(std::vector<nts::t_ast_node *> &components);
+    // parseTree's methods
+    void    basicChecks(const nts::t_ast_node &root);
+    void    createCircuit(nts::t_ast_node &root);
+    void    linkComponents(nts::t_ast_node &root);
+    void    checkLinksInCircuit() const;
+    const std::string getCircuitType(std::vector<nts::t_ast_node *> &components);
 
 
- public:
+   public:
 
-  nts::t_ast_node *treeRoot;
-  RegParse  *regParse;
+    nts::t_ast_node *treeRoot;
+    RegParse  *regParse;
 
-  // Circuits
-  std::map<std::string, AComponent *> circuit;
-  std::map<std::string, AComponent *> outputs;
-  std::vector<AComponent *> clocks;
+    // Circuits
+    std::map<std::string, AComponent *> circuit;
+    std::map<std::string, AComponent *> outputs;
+    std::vector<AComponent *> clocks;
 
-  // Factory
-  Factory factory;
-  std::vector<std::string> availableCircuits;  
+    // Factory
+    Factory factory;
+    std::vector<std::string> availableCircuits;
 
-  std::vector<std::string> file;
-  std::map<std::string, int>  comp_values;
-  nts::t_ast_node *strings_t;
-  nts::t_ast_node *newlines_t;
-  nts::t_ast_node *comps_t;
-  nts::t_ast_node *links_t;
-  nts::t_ast_node *linksend_t;
-  nts::t_ast_node *sections_t;
-};
-
+    std::vector<std::string> file;
+    std::map<std::string, int>  comp_values;
+    nts::t_ast_node *strings_t;
+    nts::t_ast_node *newlines_t;
+    nts::t_ast_node *comps_t;
+    nts::t_ast_node *links_t;
+    nts::t_ast_node *linksend_t;
+    nts::t_ast_node *sections_t;
+  };
+}
 #endif /* _PARSER_HPP_ */

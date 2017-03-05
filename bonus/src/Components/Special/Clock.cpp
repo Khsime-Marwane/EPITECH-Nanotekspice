@@ -12,9 +12,9 @@
 #include "Clock.hpp"
 
 // TODO: A changer en std::string si on veut pas se faire chier à convertir
-Clock::Clock(const std::string &name, int _value) : AComponent(name, "clock") {
+nts::Clock::Clock(const std::string &name, int _value) : AComponent(name, "clock") {
   this->_nbPins = 1;
-  this->pins = new Pin;
+  this->pins = new nts::Pin;
   this->pins[0].component = NULL;
   this->pins[0].state = (nts::Tristate)_value;
   this->pins[0].type = IGNORED;
@@ -22,15 +22,15 @@ Clock::Clock(const std::string &name, int _value) : AComponent(name, "clock") {
   this->links[0].second = -1;
 }
 
-Clock::~Clock() {}
+nts::Clock::~Clock() {}
 
-nts::Tristate Clock::Compute(size_t pin_num_this) {
+nts::Tristate nts::Clock::Compute(size_t pin_num_this) {
   if (pin_num_this != 1)
     throw Error("ERROR : [ " + this->_name + " | COMPUTE] : Invalid pin selected.");
   return this->pins[0].state;
 }
 
-void Clock::SetLink(size_t pin_num_this,
+void nts::Clock::SetLink(size_t pin_num_this,
                     nts::IComponent &component,
                     size_t pin_num_target) {
   if (pin_num_this != 1) {
@@ -42,7 +42,7 @@ void Clock::SetLink(size_t pin_num_this,
     this->links[0].first = pin_num_this;
     this->links[0].second = pin_num_target;
     // Link the chipset with the component.
-    this->pins[0].component = dynamic_cast<AComponent * >(&component);
+    this->pins[0].component = dynamic_cast<nts::AComponent * >(&component);
     // Link the component with the chipset.
     this->pins[0].component->SetLink(pin_num_target, *this, pin_num_this);
   };

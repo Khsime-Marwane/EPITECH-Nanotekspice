@@ -10,24 +10,26 @@
 # define _C4017_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4017 : public nts::AComponent {
 
-class   C4017 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4017(const std::string &name);
-  virtual ~C4017() { }
+    C4017(const std::string &name);
+    virtual ~C4017() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
-  size_t  current;
+   private:
+    size_t  current;
 // Pins Order.
-  std::map<size_t, size_t>  order;
+    std::map<size_t, size_t>  order;
 
-  void            reset();
-};
+    void            reset();
+  };
+}
 
 #endif /* _C4017_HPP_ */

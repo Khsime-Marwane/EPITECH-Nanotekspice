@@ -10,23 +10,25 @@
 # define _C4094_HPP_
 
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4094 : public nts::AComponent {
 
-class   C4094 : public AComponent {
-
-public:
+   public:
 // Constructor / Destructor
-  C4094(const std::string &name);
-  virtual ~C4094() { }
+    C4094(const std::string &name);
+    virtual ~C4094() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void computeGates();
 
-private:
+   private:
 // Pins Order
-  std::map<size_t, size_t>  outputPins;
+    std::map<size_t, size_t>  outputPins;
+    bool            first;
 
-  void            reset();
-};
-
+    void            reset();
+  };
+}
 #endif /* _C4094_HPP_ */

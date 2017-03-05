@@ -15,38 +15,38 @@
 ** The component 4801 is composed of 14 pins. It has 4 OR gates
 ** which works for each of them with two inputs and one output.
 */
-C4801::C4801(const std::string &name) : AComponent(name, "chipset") {
+nts::C4801::C4801(const std::string &name) : AComponent(name, "chipset") {
   this->_nbPins = 24;
   this->_VSS = 12;
   this->_VDD = 24;
 
-  this->pins = new Pin[this->_nbPins];
+  this->pins = new nts::Pin[this->_nbPins];
 
-  PinType pinsTypeTab[this->_nbPins] = {
-    INPUT,    // Pin 1 A7
-    INPUT,    // Pin 2 A6
-    INPUT,    // Pin 3 A5
-    INPUT,    // Pin 4 A4
-    INPUT,    // Pin 5 A3
-    INPUT,    // Pin 6 A2
-    INPUT,    // Pin 7 A1
-    INPUT,    // Pin 8 A0
-    _HYBRID_, // Pin 9 DQ0
-    _HYBRID_, // Pin 10 DQ1
-    _HYBRID_, // Pin 11 DQ2
-    IGNORED,  // Pin 12 (VSS)
-    _HYBRID_, // Pin 13 DQ3
-    _HYBRID_, // Pin 14 DQ4
-    _HYBRID_, // Pin 15 DQ5
-    _HYBRID_, // Pin 16 DQ6
-    _HYBRID_, // Pin 17 DQ7
-    INPUT,    // Pin 18 Chipset Enable
-    INPUT,    // Pin 19 No Connection
-    INPUT,    // Pin 20 Output Enable
-    INPUT,    // Pin 21 Write Enable
-    INPUT,    // Pin 22 A8
-    INPUT,    // Pin 23 A9
-    IGNORED   // Pin 24 (VCC)
+  nts::PinType  pinsTypeTab[this->_nbPins] = {
+                INPUT,    // Pin 1 A7
+                INPUT,    // Pin 2 A6
+                INPUT,    // Pin 3 A5
+                INPUT,    // Pin 4 A4
+                INPUT,    // Pin 5 A3
+                INPUT,    // Pin 6 A2
+                INPUT,    // Pin 7 A1
+                INPUT,    // Pin 8 A0
+                _HYBRID_, // Pin 9 DQ0
+                _HYBRID_, // Pin 10 DQ1
+                _HYBRID_, // Pin 11 DQ2
+                IGNORED,  // Pin 12 (VSS)
+                _HYBRID_, // Pin 13 DQ3
+                _HYBRID_, // Pin 14 DQ4
+                _HYBRID_, // Pin 15 DQ5
+                _HYBRID_, // Pin 16 DQ6
+                _HYBRID_, // Pin 17 DQ7
+                INPUT,    // Pin 18 Chipset Enable
+                INPUT,    // Pin 19 No Connection
+                INPUT,    // Pin 20 Output Enable
+                INPUT,    // Pin 21 Write Enable
+                INPUT,    // Pin 22 A8
+                INPUT,    // Pin 23 A9
+                IGNORED   // Pin 24 (VCC)
   };
 
   // Create the pins of the chipset 4801 and set them.
@@ -68,7 +68,7 @@ C4801::C4801(const std::string &name) : AComponent(name, "chipset") {
 ** the pin selected is a succesion of computes, all of these components
 ** will be computed.
 */
-nts::Tristate   C4801::Compute(size_t pin_num_this) {
+nts::Tristate   nts::C4801::Compute(size_t pin_num_this) {
   if (pinIndexIsValid(pin_num_this))
       return this->pins[pin_num_this - 1].state;
 
@@ -77,7 +77,7 @@ nts::Tristate   C4801::Compute(size_t pin_num_this) {
   return nts::Tristate::UNDEFINED;
 }
 
-void            C4801::setValueOnOutputs(int value) {
+void            nts::C4801::setValueOnOutputs(int value) {
   size_t dqOutputs[8] = { 8, 9, 10, 12, 13, 14, 15, 16 };
 
   for (int i = 7; i >= 0; i--) {
@@ -86,7 +86,7 @@ void            C4801::setValueOnOutputs(int value) {
   }
 }
 
-int             C4801::getValueFromOutputs() {
+int             nts::C4801::getValueFromOutputs() {
   size_t        dqOutputs[8] = { 16, 15, 14, 13, 12, 10, 9, 8 };
   int           value = 0;
 
@@ -100,7 +100,7 @@ int             C4801::getValueFromOutputs() {
 /*
 ** Compute all gates (outputs) of the chipset, if it can be computed.
 */
-void            C4801::computeGates() {
+void            nts::C4801::computeGates() {
 
   refreshInputs();  
   // Check if the chipset is enable.
@@ -128,7 +128,7 @@ void            C4801::computeGates() {
     resetOutputs();
 }
 
-void            C4801::refreshInputs() {
+void            nts::C4801::refreshInputs() {
   size_t        inputs_to_refresh[14] = { 0, 1, 2, 3, 4, 5, 6, 7, 22, 21, 20, 19, 18, 17 };
 
   for (size_t i = 0; i < 14; i++) {
@@ -139,7 +139,7 @@ void            C4801::refreshInputs() {
   }
 }
 
-void            C4801::refreshOutputs() {
+void            nts::C4801::refreshOutputs() {
   size_t        outputs_to_refresh[8] = { 8, 9, 10, 16, 15, 14, 13, 12 };
 
   for (size_t i = 0; i < 8; i++) {
@@ -150,7 +150,7 @@ void            C4801::refreshOutputs() {
   }
 }
 
-void            C4801::resetOutputs() {
+void            nts::C4801::resetOutputs() {
   this->pins[8].state = nts::Tristate::UNDEFINED;
   this->pins[9].state = nts::Tristate::UNDEFINED;
   this->pins[10].state = nts::Tristate::UNDEFINED;
@@ -161,7 +161,7 @@ void            C4801::resetOutputs() {
   this->pins[12].state = nts::Tristate::UNDEFINED;
 }
 
-size_t             C4801::getY() const {
+size_t             nts::C4801::getY() const {
   int value = 0;
 
   value += 1 * this->pins[6].state;   // A1
@@ -170,7 +170,7 @@ size_t             C4801::getY() const {
   return value;
 }
 
-size_t             C4801::getX() const {
+size_t             nts::C4801::getX() const {
   int           value = 0;
 
   value += 1 * this->pins[7].state;    // A0

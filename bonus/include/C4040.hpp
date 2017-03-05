@@ -9,28 +9,32 @@
 #ifndef _C4040_HPP_
 # define _C4040_HPP_
 
+#include <math.h>
 #include "AComponent.hpp"
+namespace nts
+{
+  class   C4040 : public nts::AComponent {
 
-class   C4040 : public AComponent {
-
- public:
+   public:
 // Constructor / Destructor
-  C4040(const std::string &name);
-  virtual ~C4040() { }
+    C4040(const std::string &name);
+    virtual ~C4040() { }
 
 // Basics
-  virtual nts::Tristate Compute(size_t pin_num_this = 1);
-  virtual void  computeGates();
+    virtual nts::Tristate Compute(size_t pin_num_this = 1);
+    virtual void  computeGates();
 
- private:
-  bool  previous;
-  int   current;
-  std::map<size_t, size_t>  order;
+   private:
+    bool  first;
+    int   current;
+    int   pow_fact;
+    std::map<size_t, size_t>  order;
 
-  // Gates
-  Gate  gate;
-  std::map<size_t, std::pair<size_t, size_t> > gateLinks;
+    // Gates
+    Gate  gate;
+    std::map<size_t, std::pair<size_t, size_t> > gateLinks;
 
-};
+  };
 
+}
 #endif /* _C4040_HPP_ */
