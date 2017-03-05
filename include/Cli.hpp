@@ -43,10 +43,10 @@ namespace nts
     ~Cli();
 
     // The init initialize the Cli and launch it.
-    void        init();
+    int        init();
 
     // Commands avalaible
-    void        Exit();
+    int         Exit(bool = true);
     void        Display();
     void        SetInput();
     void        Simulate();

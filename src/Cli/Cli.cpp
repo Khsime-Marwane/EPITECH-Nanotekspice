@@ -16,7 +16,7 @@ nts::Cli::Cli(const Parser &parser) {
   this->clocks = parser.getClocks();
   this->looping = false;
 
-  this->func["exit"] = std::bind(&Cli::Exit, this);
+  this->func["exit"] = std::bind(&Cli::Exit, this, true);
   this->func["display"] = std::bind(&Cli::Display, this);
   this->func["simulate"] = std::bind(&Cli::Simulate, this);
   this->func["loop"] = std::bind(&Cli::Loop, this);
@@ -30,7 +30,7 @@ nts::Cli::Cli(const Parser &parser) {
 
 nts::Cli::~Cli() {}
 
-void    nts::Cli::init()
+int    nts::Cli::init()
 {
   // To store the command lines.
   std::string cmd;
@@ -45,6 +45,9 @@ void    nts::Cli::init()
   // Get Commands Lines.
   while (getline(std::cin, cmd)) {
 
+      if (!cmd.compare("exit")) {
+        return Exit(false);
+      }
       // If the command is known by 'func' map, execute it.
       if (this->func.find(cmd) != this->func.end())
         this->func[cmd]();
@@ -60,13 +63,16 @@ void    nts::Cli::init()
           }
       std::cout << "> ";
     }
+
   // Exit the Cli.
-  std::cout << "exit" << std::endl;
+  return Exit(true);
 }
 
-void    nts::Cli::Exit() {
+int    nts::Cli::Exit(bool value) {
   // Exit the program
-  exit(EXIT_SUCCESS);
+  if (value)
+    std::cout << "exit" << std::endl;  
+  return EXIT_SUCCESS;
 }
 
 void    nts::Cli::Display() {
