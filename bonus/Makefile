@@ -26,14 +26,16 @@ BINDIR   = .
 
 # Sources, Includes and Objects
 SOURCES  := $(wildcard $(SRCDIR)/*.cpp $(SRCDIR)/Cli/*.cpp $(SRCDIR)/Gate/*.cpp $(SRCDIR)/Components/*.cpp $(SRCDIR)/Components/Special/*.cpp $(SRCDIR)/Factory/*.cpp $(SRCDIR)/Parser/*.cpp)
+SOURCES_LIB := $(wildcard $(SRCDIR)/Cli/*.cpp $(SRCDIR)/Gate/*.cpp $(SRCDIR)/Components/*.cpp $(SRCDIR)/Components/Special/*.cpp $(SRCDIR)/Factory/*.cpp $(SRCDIR)/Parser/*.cpp)
 INCLUDES := $(wildcard $(SRCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+OBJECTS_LIB := $(SOURCES_LIB:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 RM       = rm -rf
 
 $(BINDIR)/$(NAME):	$(OBJECTS)
 			@$(CXX) -o $@ $(CXXFLAGS) $(OBJECTS)
 			@echo "\033[94mProject $(NAME) build successfully!\033[0m"
-			@ar rc $(LIBNAME) $(OBJECTS)
+			@ar rc $(LIBNAME) $(OBJECTS_LIB)
 			@ranlib $(LIBNAME)
 			@chmod 755 $(LIBNAME)
 			@echo "\033[94mLibrary $(LIBNAME) created successfully!\033[0m"
